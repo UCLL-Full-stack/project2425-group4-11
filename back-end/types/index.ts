@@ -50,5 +50,5 @@ type ArtistInput = {
 type ContactInfo = {
     email: string;
     number: string;
-    intagram: string;
+    instagram: string;
 }
