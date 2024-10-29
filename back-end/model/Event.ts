@@ -3,17 +3,15 @@ export class Event {
     private genre: string;
     private time: Date;
     private date: Date;
-    private price: number;
     private duration: number;
     private description: string;
     private status: string;
 
-    constructor(event: { id?: number; genre: string; time: string; date: Date; price: number; duration: number; description: string; status: string}) {
+    constructor(event: { id?: number; genre: string; time: string; date: Date; duration: number; description: string; status: string}) {
         this.id = event.id;
         this.genre = event.genre;
         this.time = this.parseTime(event.time);
         this.date = this.validateDate(event.date);
-        this.price = this.validatePrice(event.price);
         this.duration = this.validateDuration(event.duration);
         this.description = event.description;
         this.status = this.validateStatus(event.status);
@@ -35,13 +33,6 @@ export class Event {
             throw new Error("Ticket date must be at least one month in the future.");
         }
         return date;
-    }
-
-    private validatePrice(price: number): number {
-        if (price < 0) {
-            throw new Error("Price must be a positive number.")
-        }
-        return price;
     }
 
     private validateDuration(duration: number): number {
@@ -75,10 +66,6 @@ export class Event {
 
     getDate(): Date {
         return this.date;
-    }
-
-    getPrice(): number {
-        return this.price;
     }
 
     getDuration(): number {
