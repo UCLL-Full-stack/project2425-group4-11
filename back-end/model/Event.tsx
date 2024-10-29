@@ -92,4 +92,12 @@ export class Event {
     getStatus(): string {
         return this.status;
     }
+
+    setDescription(newDescription: string): void {
+        this.description = newDescription;
+    }
+
+    setStatus(newStatus: string): void {
+        this.status = this.validateStatus(newStatus);
+    }
 }
