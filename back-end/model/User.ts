@@ -18,9 +18,9 @@ export class User {
         this.accountStatus = user.accountStatus;
     }
 
-    // private validatePassword(password: string): string {
-    //     return `hashed_${password}`;
-    // }
+    private validatePassword(password: string): string {
+        return `hashed_${password}`;
+    }
 
     private validateEmail(email: string): string {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

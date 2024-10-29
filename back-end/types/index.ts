@@ -49,6 +49,7 @@ type ArtistInput = {
 
 type ContactInfo = {
     email: string;
+    countryCode: string;
     number: string;
-    intagram: string;
+    instagram: string;
 }
