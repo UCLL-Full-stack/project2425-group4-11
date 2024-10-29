@@ -6,7 +6,7 @@ export class Artist {
     private bookingFee: number;
     private socialMedia: string[];
 
-    constructor(artist: {id?: number; artistName: string; genre: string[]; biography: string; bookingFee: number; socialMedia: string[]}) {
+    constructor(artist: { id?: number; artistName: string; genre: string[]; biography: string; bookingFee: number; socialMedia: string[] }) {
         this.id = artist.id;
         this.artistName = artist.artistName;
         this.genre = artist.genre;
