@@ -53,3 +53,12 @@ type ContactInfo = {
     number: string;
     instagram: string;
 }
+
+type SocialMedia = {
+    instagram?: string;
+    facebook?: string;
+    discord?: string;
+    spotify: string;
+    youtube: string;
+    twitter?: string;
+}

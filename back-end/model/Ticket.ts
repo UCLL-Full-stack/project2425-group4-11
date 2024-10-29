@@ -4,15 +4,13 @@ export class Ticket {
     private status: boolean;
     private price: number;
     private seat: string;
-    private date: Date;
 
-    constructor(ticket: { id?: number; type: string; status: boolean; price: number; seat: string; date: Date }) {
+    constructor(ticket: { id?: number; type: string; status: boolean; price: number; seat: string }) {
         this.id = ticket.id;
         this.type = this.validateType(ticket.type);
         this.status = ticket.status;
         this.price = this.validatePrice(ticket.price);
         this.seat = ticket.seat;
-        this.date = this.validateDate(ticket.date);
     }
 
     private validateType(type: string): string {
@@ -28,17 +26,6 @@ export class Ticket {
             throw new Error("Price must be a positive number.")
         }
         return price;
-    }
-
-    private validateDate(date: Date): Date {
-        const now = new Date();
-        const minDate = new Date();
-        minDate.setMonth(now.getMonth() + 1);
-
-        if (date < minDate) {
-            throw new Error("Ticket date must be at least one month in the future.");
-        }
-        return date;
     }
 
     getId(): number | undefined {
@@ -59,10 +46,6 @@ export class Ticket {
 
     getSeat(): string {
         return this.seat;
-    }
-
-    getDate(): Date {
-        return this.date;
     }
 
     setStatus(newStatus: boolean): void {
