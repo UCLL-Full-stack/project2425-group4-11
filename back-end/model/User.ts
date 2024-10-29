@@ -4,17 +4,17 @@ export class User {
     private password: string;
     private firstName: string;
     private lastName: string;
-    private details: string;
+    private phoneNumber: string;
     // details: wat was dit ook alweer?
     private accountStatus: boolean;
 
-    constructor(user: { id?: number; email: string; password: string; firstName: string; lastName: string; details: string; accountStatus: boolean }) {
+    constructor(user: { id?: number; email: string; password: string; firstName: string; lastName: string; phoneNumber: string; accountStatus: boolean }) {
         this.id = user.id;
         this.email = this.validateEmail(user.email);
         this.password = user.password;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
-        this.details = user.details;
+        this.phoneNumber = user.phoneNumber;
         this.accountStatus = user.accountStatus;
     }
 
@@ -50,16 +50,16 @@ export class User {
         return this.lastName;
     }
 
-    getDetails(): string {
-        return this.details;
+    getPhoneNumber(): string {
+        return this.phoneNumber;
     }
 
     getAccountStatus(): boolean {
         return this.accountStatus;
     }
 
-    setDetails(newDetails: string): void {
-        this.details = newDetails;
+    setPhoneNumber(newPhoneNumber: string): void {
+        this.phoneNumber = newPhoneNumber;
     }
 
     setAccountStatus(newAccountStatus: boolean): void {

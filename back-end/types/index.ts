@@ -1,3 +1,6 @@
+type Role = 'admin' | 'user' | 'artist';
+
+
 type UserInput ={
     id?: number;
     email: string;
@@ -32,7 +35,7 @@ type ConcertHallInput = {
     capacity: number;
     name: string;
     facilities: string[];
-    contactInfo: string[];
+    contactInfo: ContactInfo;
 }
 
 type ArtistInput = {
@@ -42,4 +45,10 @@ type ArtistInput = {
     biography: string;
     bookingFee: number;
     socialMedia: string[];
+}
+
+type ContactInfo = {
+    email: string;
+    number: string;
+    intagram: string;
 }
