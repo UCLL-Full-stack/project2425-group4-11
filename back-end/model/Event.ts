@@ -28,9 +28,11 @@ export class Event {
         const now = new Date();
         const minDate = new Date();
         minDate.setMonth(now.getMonth() + 1);
+        minDate.setHours(0, 0, 0, 0);
+        date.setHours(0, 0, 0, 0);
 
         if (date < minDate) {
-            throw new Error("Ticket date must be at least one month in the future.");
+            throw new Error("Event date must be at least one month in the future.");
         }
         return date;
     }

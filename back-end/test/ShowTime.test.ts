@@ -1,11 +1,10 @@
-import { set } from 'date-fns';
+import { addDays, set, setDate, setMonth } from 'date-fns';
 import { User } from "../model/User";
 import { Event } from "../model/Event";
 import { Ticket } from "../model/Ticket";
 import { ConcertHall } from "../model/ConcertHall";
 import { Artist } from "../model/Artist";
 
-const eventDate = set(new Date(), { year: 2023, month: 9, date: 1, hours: 18, minutes: 0 });
 const user = new User({
     id: 1,
     email: 'john.doe@example.com',
@@ -14,16 +13,6 @@ const user = new User({
     lastName: 'doe',
     phoneNumber: '0489342809',
     accountStatus: true, 
-});
-
-const event = new Event ({
-    id: 1,
-    genre: 'pop',
-    time: '18:00',
-    date: new Date('2023-10-01'),
-    duration: 60,
-    description: 'concert',
-    status: 'Ongoing',
 });
 
 const ticket = new Ticket({
@@ -59,30 +48,32 @@ const artist = new Artist({
 
 test('given: valid values for event, when: event is created, then: event is created with those values', () => {
     //given
+    const now = new Date();
+    const eventDate = new Date();
+    eventDate.setMonth(now.getMonth() + 1);
 
     //when
     const newEvent = new Event({
-        id: 2,
         genre: 'rock',
         time: '20:00',
-        date: new Date('2023-11-01'),
+        date: eventDate,
         duration: 90,
         description: 'rock concert',
-        status: 'Scheduled',
+        status: 'Upcoming',
     });
 
     // then
     expect(newEvent.getGenre()).toEqual('rock');
     expect(newEvent.getTime()).toEqual('20:00');
-    expect(newEvent.getDate()).toEqual(new Date('2023-11-01'));
+    expect(newEvent.getDate().getTime()).toEqual(eventDate.getTime());
     expect(newEvent.getDuration()).toEqual(90);
     expect(newEvent.getDescription()).toEqual('rock concert');
-    expect(newEvent.getStatus()).toEqual('Scheduled');
+    expect(newEvent.getStatus()).toEqual('Upcoming');
 });
 
 test('given: end date is before start date, when: event is created, then: an error is thrown', () => {
     // given
-    const invalidEndDate = set(new Date(), { year: 2023, month: 8, date: 30 });
+    const invalidEndDate = addDays(new Date(), 15);
 
     // when
     const createEvent = () => new Event({
@@ -92,11 +83,11 @@ test('given: end date is before start date, when: event is created, then: an err
         date: invalidEndDate,
         duration: 120,
         description: 'jazz concert',
-        status: 'Scheduled',
+        status: 'Upcoming',
     });
 
     // then
-    expect(createEvent).toThrow('Event date cannot be before the current date');
+    expect(createEvent).toThrow('Event date must be at least one month in the future.');
 });
 
 test('given: an existing event, when: adding a ticket that is already registered, then: that ticket is registered only once', () => {
@@ -107,6 +98,7 @@ test('given: an existing event, when: adding a ticket that is already registered
         status: true,
         price: 50,
         seat: 'A1',
+        //date: eventDate,
     });
     //event.addTicket(newTicket);
 
