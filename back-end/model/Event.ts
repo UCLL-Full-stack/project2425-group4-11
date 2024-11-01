@@ -9,18 +9,42 @@ export class Event {
 
     constructor(event: { id?: number; genre: string; time: string; date: Date; duration: number; description: string; status: string}) {
         this.id = event.id;
-        this.genre = event.genre;
-        this.time = this.parseTime(event.time);
+        this.genre = this.validateGenre(event.genre);
+        this.time = this.parseAndValidateTime(event.time);
         this.date = this.validateDate(event.date);
         this.duration = this.validateDuration(event.duration);
-        this.description = event.description;
+        this.description = this.validateDescription(event.description);
         this.status = this.validateStatus(event.status);
     }
 
-    private parseTime(timeString: string): Date {
+    private validateGenre(genre: string): string {
+        if (!genre || genre.trim() === "") {
+            throw new Error("Genre cannot be empty.");
+        }
+        return genre;
+    }
+
+    private parseAndValidateTime(timeString: string): Date {
+        if (!timeString.match(/^\d{2}:\d{2}$/)) {
+            throw new Error("Time must be in the format 'HH:MM'.");
+        }        
+        
+        if (parseInt(timeString.slice(0, 2)) >= 24) {
+            throw new Error("Invalid time provided.");
+        }
+
+        if (parseInt(timeString.slice(3)) >= 60) {
+            throw new Error("Invalid time provided.");
+        }
+
         const [hours, minutes] = timeString.split(":").map(Number);
         const time = new Date();
         time.setHours(hours, minutes, 0, 0);
+
+        if (isNaN(time.getTime())) {
+            throw new Error("Invalid time provided.");
+        }
+
         return time;
     }
 
@@ -44,10 +68,17 @@ export class Event {
         return duration;
     }
 
+    private validateDescription(description: string): string {
+        if (!description || description.trim() === "") {
+            throw new Error("Description cannot be empty.")
+        }
+        return description
+    }
+
     private validateStatus(status: string): string {
         const allowedStatuses = ["Upcoming", "Ongoing", "Past"];
         if (allowedStatuses.indexOf(status) === -1) {
-            throw new Error(`Invalid event status. Allowed statuses are: ${allowedStatuses.join(", ")}`);
+            throw new Error(`Invalid event status. Allowed statuses are: ${allowedStatuses.join(", ")}.`);
         }
         return status;
     }
@@ -83,7 +114,7 @@ export class Event {
     }
 
     setDescription(newDescription: string): void {
-        this.description = newDescription;
+        this.description = this.validateDescription(newDescription);
     }
 
     setStatus(newStatus: string): void {
