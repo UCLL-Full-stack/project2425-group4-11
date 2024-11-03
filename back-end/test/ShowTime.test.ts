@@ -5,10 +5,14 @@ import { Ticket } from "../model/Ticket";
 import { ConcertHall } from "../model/ConcertHall";
 import { Artist } from "../model/Artist";
 
+const now = new Date();
+const eventDate = new Date();
+eventDate.setMonth(now.getMonth() + 1);
+
 const event = new Event({
     genre: 'rock',
     time: '20:00',
-    date: new Date('2024-12-02'),
+    date: eventDate,
     duration: 90,
     description: 'rock concert',
     status: 'Upcoming',
@@ -27,9 +31,6 @@ const artist = new Artist({
     // event
     test('given: valid values for event, when: event is created, then: event is created with those values', () => {
         //given
-        const now = new Date();
-        const eventDate = new Date();
-        eventDate.setMonth(now.getMonth() + 1);
 
         //when
         const newEvent = new Event({
@@ -71,6 +72,47 @@ const artist = new Artist({
         expect(newArtist.getSocialMedia()).toEqual(['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/']);
     });
 
+    // user
+    test("given valid user details, when creating a user, then the user is created successfully", () => {
+        // given
+
+        // when
+        const newUser = new User({
+            email: "user@example.com",
+            password: "password123",
+            firstName: "John",
+            lastName: "Doe",
+            phoneNumber: "+1234567890",
+            accountStatus: true,
+        });
+        
+        // then 
+        expect(newUser.getEmail()).toEqual("user@example.com");
+        expect(newUser.getPassword()).toEqual("hashed_password123");
+        expect(newUser.getFirstName()).toEqual("John");
+        expect(newUser.getLastName()).toEqual("Doe");
+        expect(newUser.getPhoneNumber()).toEqual("+1234567890");
+        expect(newUser.getAccountStatus()).toEqual(true);
+    });
+
+    // ticket
+    test("given valid ticket details, when creating a ticket, then the ticket is created successfully", () => {
+        // given
+
+        // when
+        const newTicket = new Ticket({
+            type: "VIP",
+            status: "available",
+            price: 100,
+            seat: "A1",
+        });
+        
+        expect(newTicket.getType()).toEqual("VIP");
+        expect(newTicket.getStatus()).toEqual("available");
+        expect(newTicket.getPrice()).toEqual(100);
+        expect(newTicket.getSeat()).toEqual("A1");
+    });
+
 // unhappy cases
 
     // event
@@ -82,7 +124,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: '    ',
                 time: '20:00',
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
@@ -100,7 +142,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: '25:020', // Invalid time format
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
@@ -119,7 +161,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: '25:00', // Invalid time format
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
@@ -137,7 +179,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: '19:79', // Invalid time format
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
@@ -155,7 +197,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: 'rt:00', // Invalid time format
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
@@ -193,7 +235,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: '20:00',
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: -5, // Negative duration
                 description: 'rock concert',
                 status: 'Upcoming',
@@ -211,7 +253,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: '20:00',
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 0, // Zero duration
                 description: 'rock concert',
                 status: 'Upcoming',
@@ -229,7 +271,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: '20:00',
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 90,
                 description: '', // Empty description
                 status: 'Upcoming',
@@ -247,7 +289,7 @@ const artist = new Artist({
             const createEvent = () => new Event({
                 genre: 'rock',
                 time: '20:00',
-                date: new Date('2024-12-02'),
+                date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Scheduled', // Invalid status
@@ -408,4 +450,148 @@ const artist = new Artist({
                 
             // then
             expect(addSocialMedia).toThrow("Social media links must be valid URLs (starting with 'http').")
+        });
+    
+    // user
+        // email
+        test("given invalid email, when creating a user, then an error is thrown", () => {
+            // given
+
+            // when
+            const createUser = () => new User({
+                email: "invalid-email",
+                password: "password123",
+                firstName: "John",
+                lastName: "Doe",
+                phoneNumber: "+1234567890",
+                accountStatus: true,
+            });
+
+            // then
+            expect(createUser).toThrow("Invalid email format.");
+        });
+
+        // password
+        test("given password less than 8 characters, when creating a user, then an error is thrown", () => {
+            // given
+
+            // when
+            const createUser = () => new User({
+                email: "user@example.com",
+                password: "short",
+                firstName: "John",
+                lastName: "Doe",
+                phoneNumber: "+1234567890",
+                accountStatus: true,
+            });
+
+            // then
+            expect(createUser).toThrow("Password must be at least 8 characters long.");
+        });
+
+        // first name
+        test("given empty first name, when creating a user, then an error is thrown", () => {
+            // given
+            
+            // when
+            const createUser = () => new User({
+                email: "user@example.com",
+                password: "password123",
+                firstName: "",
+                lastName: "Doe",
+                phoneNumber: "+1234567890",
+                accountStatus: true,
+            });
+
+            // then
+            expect(createUser).toThrow("First name cannot be empty and must contain only alphabetic characters.");
+        });
+
+        // first name
+        test("given non-alphabetic characters in first name, when creating a user, then an error is thrown", () => {
+            // given
+            
+            // when
+            const createUser = () => new User({
+                email: "user@example.com",
+                password: "password123",
+                firstName: "J0hn",
+                lastName: "Doe",
+                phoneNumber: "+1234567890",
+                accountStatus: true,
+            });
+
+            // then
+            expect(createUser).toThrow("First name cannot be empty and must contain only alphabetic characters.");
+        });
+
+        // last name
+        test("given empty last name, when creating a user, then an error is thrown", () => {
+            // given
+
+            // when
+            const createUser = () => new User({
+                email: "user@example.com",
+                password: "password123",
+                firstName: "John",
+                lastName: "",
+                phoneNumber: "+1234567890",
+                accountStatus: true,
+            });
+
+            expect(createUser).toThrow("Last name cannot be empty and must contain only alphabetic characters.");
+        });
+    
+        // last name
+        test("given non-alphabetic characters in last name, when creating a user, then an error is thrown", () => {
+            // given
+            
+            // when
+            const createUser = ()=> new User({
+                email: "user@example.com",
+                password: "password123",
+                firstName: "John",
+                lastName: "Doe123",
+                phoneNumber: "+1234567890",
+                accountStatus: true,
+            });
+
+            // then
+            expect(createUser).toThrow("Last name cannot be empty and must contain only alphabetic characters.");
+        });
+
+        // phone number
+        test("given invalid phone number format, when creating a user, then an error is thrown", () => {
+            // given
+            
+            // when
+            const createUser = () => new User({
+                email: "user@example.com",
+                password: "password123",
+                firstName: "John",
+                lastName: "Doe",
+                phoneNumber: "123-456",
+                accountStatus: true,
+            });
+
+            // then
+            expect(createUser).toThrow("Invalid phone number format.");
+        });
+
+        // account status
+        test("given non-boolean account status, when creating a user, then an error is thrown", () => {
+            // given
+
+            // when
+            const createUser = () => new User({
+                email: "user@example.com",
+                password: "password123",
+                firstName: "John",
+                lastName: "Doe",
+                phoneNumber: "+1234567890",
+                accountStatus: "active" as unknown as boolean,
+            });
+
+            // then
+            expect(createUser).toThrow("Account status must be a boolean.");
         });

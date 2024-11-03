@@ -1,16 +1,16 @@
 export class Ticket {
     private id?: number;
     private type: string;
-    private status: boolean;
+    private status: string;
     private price: number;
     private seat: string;
 
-    constructor(ticket: { id?: number; type: string; status: boolean; price: number; seat: string }) {
+    constructor(ticket: { id?: number; type: string; status: string; price: number; seat: string }) {
         this.id = ticket.id;
         this.type = this.validateType(ticket.type);
-        this.status = ticket.status;
+        this.status = this.validateStatus(ticket.status);
         this.price = this.validatePrice(ticket.price);
-        this.seat = ticket.seat;
+        this.seat = this.validateSeat(ticket.seat);
     }
 
     private validateType(type: string): string {
@@ -21,11 +21,26 @@ export class Ticket {
         return type;
     }
 
+    private validateStatus(status: string): string {
+        const allowedStatuses = ["available", "sold"];
+        if (!status || allowedStatuses.indexOf(status) === -1) {
+            throw new Error(`Invalid ticket status. Allowed statuses are: ${allowedStatuses.join(", ")}`);
+        }
+        return status;
+    }
+
     private validatePrice(price: number): number {
         if (price < 0) {
             throw new Error("Price must be a positive number.")
         }
         return price;
+    }
+
+    private validateSeat(seat: string): string {
+        if (!seat || seat.trim() === "") {
+            throw new Error("Seat cannot be empty.");
+        }
+        return seat;
     }
 
     getId(): number | undefined {
@@ -36,7 +51,7 @@ export class Ticket {
         return this.type;
     }
 
-    getStatus(): boolean {
+    getStatus(): string {
         return this.status;
     }
 
@@ -48,7 +63,7 @@ export class Ticket {
         return this.seat;
     }
 
-    setStatus(newStatus: boolean): void {
+    setStatus(newStatus: string): void {
         this.status = newStatus;
     }
 
