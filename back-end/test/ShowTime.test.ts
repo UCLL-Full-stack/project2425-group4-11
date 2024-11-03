@@ -110,13 +110,13 @@ const validContactInfo: ContactInfo = {
         // when
         const newTicket = new Ticket({
             type: "VIP",
-            status: "available",
+            status: "Available",
             price: 100,
             seat: "A1",
         });
         
         expect(newTicket.getType()).toEqual("VIP");
-        expect(newTicket.getStatus()).toEqual("available");
+        expect(newTicket.getStatus()).toEqual("Available");
         expect(newTicket.getPrice()).toEqual(100);
         expect(newTicket.getSeat()).toEqual("A1");
     });
@@ -648,13 +648,13 @@ const validContactInfo: ContactInfo = {
             // when
             const createTicket = () => new Ticket({
                 type: "VIP",
-                status: "reserved",
+                status: "Reserved",
                 price: 100,
                 seat: "A1",
             });
 
             // then
-            expect(createTicket).toThrow("Invalid ticket status. Allowed statuses are: available, sold");
+            expect(createTicket).toThrow("Invalid ticket status. Allowed statuses are: Available, Sold");
         });
 
         // price
@@ -664,7 +664,7 @@ const validContactInfo: ContactInfo = {
             // when
             const createTicket = () => new Ticket({
                 type: "Regular",
-                status: "available",
+                status: "Available",
                 price: -10,
                 seat: "C3",
             });
@@ -680,7 +680,7 @@ const validContactInfo: ContactInfo = {
             // when
             const createTicket = () => new Ticket({
                 type: "Student",
-                status: "available",
+                status: "Available",
                 price: 30,
                 seat: "",
             });

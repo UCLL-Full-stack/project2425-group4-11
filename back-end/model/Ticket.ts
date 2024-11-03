@@ -22,7 +22,7 @@ export class Ticket {
     }
 
     private validateStatus(status: string): string {
-        const allowedStatuses = ["available", "sold"];
+        const allowedStatuses = ["Available", "Sold"];
         if (!status || allowedStatuses.indexOf(status) === -1) {
             throw new Error(`Invalid ticket status. Allowed statuses are: ${allowedStatuses.join(", ")}`);
         }
