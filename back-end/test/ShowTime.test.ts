@@ -133,9 +133,9 @@ const validContactInfo: ContactInfo = {
             contactInfo: validContactInfo,
         });
         
-        expect(newConcertHall.getLocation()).toBe("New York");
-        expect(newConcertHall.getCapacity()).toBe(2000);
-        expect(newConcertHall.getName()).toBe("Madison Square Garden");
+        expect(newConcertHall.getLocation()).toEqual("New York");
+        expect(newConcertHall.getCapacity()).toEqual(2000);
+        expect(newConcertHall.getName()).toEqual("Madison Square Garden");
         expect(newConcertHall.getFacilities()).toEqual(["WiFi", "Parking"]);
         expect(newConcertHall.getContactInfo()).toEqual(validContactInfo);
     });
