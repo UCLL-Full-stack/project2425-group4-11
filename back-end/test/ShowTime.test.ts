@@ -26,6 +26,13 @@ const artist = new Artist({
     socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
 });
 
+const validContactInfo: ContactInfo = {
+    email: "contact@venue.com",
+    countryCode: "+1",
+    number: "1234567890",
+    instagram: "@concertvenue"
+};
+
 // happy cases
 
     // event
@@ -111,6 +118,26 @@ const artist = new Artist({
         expect(newTicket.getStatus()).toEqual("available");
         expect(newTicket.getPrice()).toEqual(100);
         expect(newTicket.getSeat()).toEqual("A1");
+    });
+
+    // concert hall
+    test("given valid concert hall details, when creating a concert hall, then the concert hall is created successfully", () => {
+        // given
+
+        // when
+        const newConcertHall = new ConcertHall({
+            location: "New York",
+            capacity: 2000,
+            name: "Madison Square Garden",
+            facilities: ["WiFi", "Parking"],
+            contactInfo: validContactInfo,
+        });
+        
+        expect(newConcertHall.getLocation()).toBe("New York");
+        expect(newConcertHall.getCapacity()).toBe(2000);
+        expect(newConcertHall.getName()).toBe("Madison Square Garden");
+        expect(newConcertHall.getFacilities()).toEqual(["WiFi", "Parking"]);
+        expect(newConcertHall.getContactInfo()).toEqual(validContactInfo);
     });
 
 // unhappy cases
@@ -595,3 +622,257 @@ const artist = new Artist({
             // then
             expect(createUser).toThrow("Account status must be a boolean.");
         });
+
+    // ticket
+        // type
+        test("given invalid ticket type, when creating a ticket, then an error is thrown", () => {
+            // given
+
+            // when
+            const createTicket = () => new Ticket({
+                type: "Economy",
+                status: "available",
+                price: 50,
+                seat: "B2",
+            });
+
+            // then
+            expect(createTicket).toThrow("Invalid ticket type. Allowed types are: VIP, Regular, Student");
+        });
+
+        // status
+        test("given invalid ticket status, when creating a ticket, then an error is thrown", () => {
+            // given
+
+            // when
+            const createTicket = () => new Ticket({
+                type: "VIP",
+                status: "reserved",
+                price: 100,
+                seat: "A1",
+            });
+
+            // then
+            expect(createTicket).toThrow("Invalid ticket status. Allowed statuses are: available, sold");
+        });
+
+        // price
+        test("given negative price, when creating a ticket, then an error is thrown", () => {
+            // given
+
+            // when
+            const createTicket = () => new Ticket({
+                type: "Regular",
+                status: "available",
+                price: -10,
+                seat: "C3",
+            });
+
+            // then
+            expect(createTicket).toThrow("Price must be a positive number.");
+        });
+
+        // seat
+        test("given empty seat, when creating a ticket, then an error is thrown", () => {
+            // given
+
+            // when
+            const createTicket = () => new Ticket({
+                type: "Student",
+                status: "available",
+                price: 30,
+                seat: "",
+            });
+
+            // then
+            expect(createTicket).toThrow("Seat cannot be empty.");
+        });
+
+    // concert hall
+        // location
+        test('given empty location, when creating a concert hall, then an error is thrown', () => {
+            // given
+
+            // when
+            const createConcertHall = () => new ConcertHall({
+                location: '',
+                capacity: 5000,
+                name: 'Main Hall',
+                facilities: ['Parking', 'Restrooms'],
+                contactInfo: validContactInfo,
+            });
+
+            // then
+            expect(createConcertHall).toThrow("Location cannot be empty.");
+        });
+
+        // capacity
+        test('given negative value for capacity, when creating concert hall, then an error is thrown', () => {
+            // given
+
+            // when
+            const createConcertHall = () => new ConcertHall({
+                location: 'City Center',
+                capacity: -100,
+                name: 'Main Hall',
+                facilities: ['Parking', 'Restrooms'],
+                contactInfo: validContactInfo,
+            });
+
+            // then
+            expect(createConcertHall).toThrow("Capacity must be a positive number.");
+        });
+
+        // capacity
+        test('given an unrealistically large value for capacity, when creating concert hall, then an error should be thrown', () => {
+            const createConcertHall = () => new ConcertHall({
+                location: 'City Center',
+                capacity: 150000,
+                name: 'Main Hall',
+                facilities: ['Parking', 'Restrooms'],
+                contactInfo: validContactInfo
+            });
+
+            // then
+            expect(createConcertHall).toThrow("Capacity seems unrealistically large.");
+        });
+
+        // name
+        test('given an empty name, when creating concert hall, then an error should be thrown', () => {
+            // given
+
+            // when
+            const createConcertHall = () => new ConcertHall({
+                location: 'City Center',
+                capacity: 5000,
+                name: '',
+                facilities: ['Parking', 'Restrooms'],
+                contactInfo: validContactInfo,
+            });
+
+            // then
+            expect(createConcertHall).toThrow("Name cannot be empty.");
+        });
+
+        // name
+        test('given a name that is too long, when creating concert hall, then an error is thrown', () => {
+            // given
+            const longName = 'A'.repeat(101);
+
+            // when
+            const createConcertHall = () => new ConcertHall({
+                location: 'City Center',
+                capacity: 5000,
+                name: longName,
+                facilities: ['Parking', 'Restrooms'],
+                contactInfo: validContactInfo,
+            });
+
+            // then
+            expect(createConcertHall).toThrow("Name is too long. It should be under 100 characters.");
+        });
+        
+        // facilities
+        test('should throw error if any facility is empty', () => {
+            // given
+
+            // when
+            const createConcertHall = () => new ConcertHall({
+                location: 'City Center',
+                capacity: 5000,
+                name: 'Main Hall',
+                facilities: ['Parking', ''],
+                contactInfo: validContactInfo
+            });
+
+            // then
+            expect(createConcertHall).toThrow("Facility at index 1 cannot be empty.");
+        });
+
+        // contact info
+            // email address
+            test('should throw error if email format is invalid', () => {
+                // given
+
+                // when
+                const createConcertHall = () => new ConcertHall({
+                    location: 'City Center',
+                    capacity: 5000,
+                    name: 'Main Hall',
+                    facilities: ['Parking', 'Restrooms'],
+                    contactInfo: {
+                        email: 'invalid-email',
+                        countryCode: '+1',
+                        number: '1234567890',
+                        instagram: '@venue'
+                    }
+                });
+
+                // then
+                expect(createConcertHall).toThrow("Invalid email format.");
+            });
+
+            // country code
+            test('should throw error if country code format is invalid', () => {
+                // given
+
+                // when
+                const createConcertHall = () => new ConcertHall({
+                    location: 'City Center',
+                    capacity: 5000,
+                    name: 'Main Hall',
+                    facilities: ['Parking', 'Restrooms'],
+                    contactInfo: {
+                        email: 'info@venue.com',
+                        countryCode: '123',
+                        number: '1234567890',
+                        instagram: '@venue'
+                    }
+                });
+
+                // then
+                expect(createConcertHall).toThrow("Invalid country code. It should start with '+' followed by 1 to 3 digits.");
+            });
+
+            // phone number
+            test('should throw error if phone number format is invalid', () => {
+                // given
+
+                // when
+                const createConcertHall = () => new ConcertHall({
+                    location: 'City Center',
+                    capacity: 5000,
+                    name: 'Main Hall',
+                    facilities: ['Parking', 'Restrooms'],
+                    contactInfo: {
+                        email: 'info@venue.com',
+                        countryCode: '+1',
+                        number: 'phone1234',
+                        instagram: '@venue'
+                    }
+                });
+
+                // then
+                expect(createConcertHall).toThrow("Invalid phone number. It should contain only numbers and be between 7 and 15 digits.");
+            });
+
+            // instagram
+            test('should throw error if Instagram handle format is invalid', () => {
+                // given
+
+                // when
+                const createConcertHall = () => new ConcertHall({
+                    location: 'City Center',
+                    capacity: 5000,
+                    name: 'Main Hall',
+                    facilities: ['Parking', 'Restrooms'],
+                    contactInfo: {
+                        email: 'info@venue.com',
+                        countryCode: '+1',
+                        number: '1234567890',
+                        instagram: 'venue_handle'
+                    }
+                });
+
+                expect(createConcertHall).toThrow("Invalid Instagram handle. It should start with '@' and be between 2 and 30 characters long.");
+            });

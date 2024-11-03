@@ -8,11 +8,18 @@ export class ConcertHall {
 
     constructor(concertHall: { id?: number; location: string; capacity: number; name: string; facilities: string[]; contactInfo: ContactInfo }) {
         this.id = concertHall.id;
-        this.location = concertHall.location;
+        this.location = this.validateLocation(concertHall.location);
         this.capacity = this.validateCapacity(concertHall.capacity);
-        this.name = concertHall.name;
-        this.facilities = concertHall.facilities;
+        this.name = this.validateName(concertHall.name);
+        this.facilities = this.validateFacilities(concertHall.facilities);
         this.contactInfo = this.validateContactInfo(concertHall.contactInfo);
+    }
+
+    private validateLocation(location: string): string {
+        if (!location || location.trim() === '') {
+            throw new Error("Location cannot be empty.");
+        }
+        return location;
     }
 
     private validateCapacity(capacity: number): number {
@@ -23,6 +30,28 @@ export class ConcertHall {
             throw new Error("Capacity seems unrealistically large.");
         }
         return capacity;
+    }
+
+    private validateName(name: string): string {
+        if (!name || name.trim() === '') {
+            throw new Error("Name cannot be empty.");
+        }
+        if (name.length > 100) {
+            throw new Error("Name is too long. It should be under 100 characters.");
+        }
+        return name;
+    }
+
+    private validateFacilities(facilities: string[]): string[] {
+        if (!Array.isArray(facilities)) {
+            throw new Error("Facilities must be an array.");
+        }
+        facilities.forEach((facility, index) => {
+            if (!facility || facility.trim() === '') {
+                throw new Error(`Facility at index ${index} cannot be empty.`);
+            }
+        });
+        return facilities;
     }
 
     private validateContactInfo(contactInfo: ContactInfo): ContactInfo {
