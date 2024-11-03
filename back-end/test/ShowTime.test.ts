@@ -773,7 +773,7 @@ const validContactInfo: ContactInfo = {
         });
         
         // facilities
-        test('should throw error if any facility is empty', () => {
+        test('given empty facility, when creating concert hall, then an error is thrown', () => {
             // given
 
             // when
@@ -791,7 +791,7 @@ const validContactInfo: ContactInfo = {
 
         // contact info
             // email address
-            test('should throw error if email format is invalid', () => {
+            test('given invalid email address, when creating concert hall, then an error is thrown', () => {
                 // given
 
                 // when
@@ -813,7 +813,7 @@ const validContactInfo: ContactInfo = {
             });
 
             // country code
-            test('should throw error if country code format is invalid', () => {
+            test('given invalid country code, when creating concert hall, then an error is thrown', () => {
                 // given
 
                 // when
@@ -835,7 +835,7 @@ const validContactInfo: ContactInfo = {
             });
 
             // phone number
-            test('should throw error if phone number format is invalid', () => {
+            test('given invalid phone number, when creating concert hall, then an error is thrown', () => {
                 // given
 
                 // when
@@ -857,7 +857,7 @@ const validContactInfo: ContactInfo = {
             });
 
             // instagram
-            test('should throw error if Instagram handle format is invalid', () => {
+            test('given invalid instagram, when creating concert hall, then an error is thrown', () => {
                 // given
 
                 // when
