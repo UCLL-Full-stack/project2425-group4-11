@@ -4,6 +4,7 @@ import { Event } from "../model/Event";
 import { Ticket } from "../model/Ticket";
 import { ConcertHall } from "../model/ConcertHall";
 import { Artist } from "../model/Artist";
+import { ContactInfo } from '../types';
 
 const now = new Date();
 const eventDate = new Date();

@@ -62,3 +62,14 @@ type SocialMedia = {
     youtube: string;
     twitter?: string;
 }
+
+export {
+    Role,
+    UserInput,
+    TicketInput,
+    EventInput,
+    ConcertHallInput,
+    ArtistInput,
+    ContactInfo,
+    SocialMedia
+}

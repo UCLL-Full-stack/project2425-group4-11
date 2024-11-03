@@ -20,7 +20,18 @@ const getUserById = ({ id }: { id: number }): User | null => {
     return users.find((user) => user.getId() === id) || null;
 }
 
+const getUserByEmail = ({ email }: { email: string }): User | null => {
+    return users.find((user) => user.getEmail() === email) || null;
+}
+
+const createUser = (user: User): User => {
+    users.push(user);
+    return user;
+}
+
 export default {
     getAllUsers,
     getUserById,
+    getUserByEmail,
+    createUser,
 }
