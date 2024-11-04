@@ -113,6 +113,7 @@ const validContactInfo: ContactInfo = {
             status: "Available",
             price: 100,
             seat: "A1",
+            generalAdmission: false,
         });
         
         expect(newTicket.getType()).toEqual("VIP");
@@ -635,6 +636,7 @@ const validContactInfo: ContactInfo = {
                 status: "available",
                 price: 50,
                 seat: "B2",
+                generalAdmission: false,
             });
 
             // then
@@ -651,6 +653,7 @@ const validContactInfo: ContactInfo = {
                 status: "Reserved",
                 price: 100,
                 seat: "A1",
+                generalAdmission: false,
             });
 
             // then
@@ -667,6 +670,7 @@ const validContactInfo: ContactInfo = {
                 status: "Available",
                 price: -10,
                 seat: "C3",
+                generalAdmission: false,
             });
 
             // then
@@ -674,7 +678,7 @@ const validContactInfo: ContactInfo = {
         });
 
         // seat
-        test("given empty seat, when creating a ticket, then an error is thrown", () => {
+        test("given empty seat when no general admission, when creating a ticket, then an error is thrown", () => {
             // given
 
             // when
@@ -683,11 +687,29 @@ const validContactInfo: ContactInfo = {
                 status: "Available",
                 price: 30,
                 seat: "",
+                generalAdmission: false,
             });
 
             // then
             expect(createTicket).toThrow("Seat cannot be empty.");
         });
+
+        // general admission
+        test("given a seat when general admission, when creating a ticket, then an error is thrown", () => {
+            // given
+
+            // when
+            const createTicket = () => new Ticket({
+                type: "Regular",
+                status: "Available",
+                price: 50,
+                seat: "S32",
+                generalAdmission: true,
+            });
+
+            // then
+            expect(createTicket).toThrow("There are no seats in a general admission.");
+        })
 
     // concert hall
         // location

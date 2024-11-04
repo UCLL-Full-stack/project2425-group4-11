@@ -1,3 +1,5 @@
+import { ContactInfo } from "../types";
+
 export class ConcertHall {
     private id?: number;
     private location: string;

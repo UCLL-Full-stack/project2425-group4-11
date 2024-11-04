@@ -2,15 +2,17 @@ export class Ticket {
     private id?: number;
     private type: string;
     private status: string;
-    private price: number;
-    private seat: string;
+    private price: number;    
+    private generalAdmission: boolean;
+    private seat: string | null;
 
-    constructor(ticket: { id?: number; type: string; status: string; price: number; seat: string }) {
+    constructor(ticket: { id?: number; type: string; status: string; price: number; generalAdmission: boolean; seat: string | null }) {
         this.id = ticket.id;
         this.type = this.validateType(ticket.type);
         this.status = this.validateStatus(ticket.status);
-        this.price = this.validatePrice(ticket.price);
-        this.seat = this.validateSeat(ticket.seat);
+        this.price = this.validatePrice(ticket.price);        
+        this.generalAdmission = this.validateAdmission(ticket.generalAdmission);
+        this.seat = this.validateSeat(ticket.seat, ticket.generalAdmission);
     }
 
     private validateType(type: string): string {
@@ -36,11 +38,23 @@ export class Ticket {
         return price;
     }
 
-    private validateSeat(seat: string): string {
+    private validateSeat(seat: string | null, generalAdmission: boolean): string | null {
+        if (this.getGeneralAdmission()) {
+            if (seat !== null ) {
+                throw new Error('There are no seats in a general admission.');
+            }
+        }
         if (!seat || seat.trim() === "") {
             throw new Error("Seat cannot be empty.");
         }
         return seat;
+    }
+
+    private validateAdmission(generalAdmission: boolean): boolean {
+        if (typeof generalAdmission !== 'boolean') {
+            throw new Error('General Admission must be a boolean.');
+        }
+        return generalAdmission;
     }
 
     getId(): number | undefined {
@@ -59,15 +73,19 @@ export class Ticket {
         return this.price;
     }
 
-    getSeat(): string {
+    getSeat(): string | null{
         return this.seat;
     }
 
+    getGeneralAdmission(): boolean {
+        return this.generalAdmission;
+    }
+
     setStatus(newStatus: string): void {
-        this.status = newStatus;
+        this.status = this.validateStatus(newStatus);
     }
 
     setSeat(newSeat: string): void {
-        this.seat = newSeat;
+        this.seat = this.validateSeat(newSeat, this.generalAdmission);
     }
 }
