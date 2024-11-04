@@ -7,7 +7,7 @@
  *      scheme: bearer
  *      bearerFormat: JWT
  *    schemas:
- *      User:
+ *      Ticket:
  *          type: object
  *          properties:
  *            id:
