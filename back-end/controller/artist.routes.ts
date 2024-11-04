@@ -144,4 +144,4 @@ artistRouter.post('/', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
-export default { artistRouter }
+export { artistRouter }
