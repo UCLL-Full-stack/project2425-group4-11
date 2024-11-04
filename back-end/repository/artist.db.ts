@@ -15,6 +15,11 @@ const getAllArtists = (): Artist[] => {
     return artists;
 }
 
+const getArtistById = ({ id }: { id: number }): Artist | null => {
+    return artists.find((artist) => artist.getId() === id) || null;
+}
+
 export default {
     getAllArtists,
+    getArtistById,
 }

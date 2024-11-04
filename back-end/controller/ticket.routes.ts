@@ -34,7 +34,7 @@ const ticketRouter = express.Router();
 
 /**
  * @swagger
- * /users:
+ * /tickets:
  *   get:
  *     summary: Get a list of all tickets.
  *     responses:
@@ -58,7 +58,7 @@ ticketRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
 
 /**
  * @swagger
- * /users/{id}:
+ * /tickets/{id}:
  *  get:
  *      summary: Get a ticket by id.
  *      parameters:

@@ -37,23 +37,52 @@ const artistRouter = express.Router();
 
 /**
  * @swagger
- * /users:
+ * /artists:
  *   get:
- *     summary: Get a list of all tickets.
+ *     summary: Get a list of all artists.
  *     responses:
  *       200:
- *         description: A list of tickets.
+ *         description: A list of artists.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                  $ref: '#/components/schemas/Ticket'
+ *                  $ref: '#/components/schemas/Artist'
  */
 artistRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await artistService.getAllArtists();
         res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /artists/{id}:
+ *  get:
+ *      summary: Get an artist by id.
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: integer
+ *              required: true
+ *              description: The artist id.
+ *      responses:
+ *          200:
+ *              description: An artist object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Artist'
+ */
+artistRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await artistService.getArtistById(Number(req.params.id));
+        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
