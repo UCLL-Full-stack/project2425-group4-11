@@ -19,7 +19,18 @@ const getArtistById = ({ id }: { id: number }): Artist | null => {
     return artists.find((artist) => artist.getId() === id) || null;
 }
 
+const createArtist = (artist: Artist): Artist => {
+    artists.push(artist);
+    return artist;
+}
+
+const getArtistByArtistName = ({ artistName }: { artistName: string }): Artist | null => {
+    return artists.find((artist) => artist.getArtistName() === artistName) || null;
+}
+
 export default {
     getAllArtists,
     getArtistById,
+    createArtist,
+    getArtistByArtistName,
 }

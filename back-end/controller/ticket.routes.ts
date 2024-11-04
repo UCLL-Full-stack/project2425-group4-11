@@ -29,6 +29,7 @@
 
 import express, { NextFunction, Request, Response } from "express";
 import ticketService from "../service/ticket.service";
+import { TicketInput } from "../types";
 
 const ticketRouter = express.Router();
 
@@ -80,6 +81,61 @@ ticketRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
     try {
         const user = await ticketService.getTicketById(Number(req.params.id));
         res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /tickets:
+ *  post:
+ *      summary: Create a new ticket.
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          type:
+ *                              type: string
+ *                              description: The ticket type.
+ *                              example: "VIP"
+ *                          status:
+ *                              type: string
+ *                              description: The ticket status.
+ *                              example: "Sold"
+ *                          price:
+ *                              type: number
+ *                              description: The ticket price.
+ *                              example: "65"
+ *                          generalAdmission:
+ *                              type: boolean
+ *                              description: The place of the user in the hall (standing;true/seat;false).
+ *                              example: "false"
+ *                          seat:
+ *                              type: string | null
+ *                              description: The user's seat.
+ *                              example: "S21"
+ *      responses:
+ *          201:
+ *              description: The created ticket object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Ticket'
+ *          400:
+ *              description: Invalid input.
+ *          500:
+ *              description: Internal server error.
+ */
+
+ticketRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const ticket = <TicketInput>req.body;
+        const result = await ticketService.createTicket(ticket);
+        res.status(201).json(result);
     } catch (error) {
         next(error);
     }
