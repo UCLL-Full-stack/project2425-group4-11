@@ -39,7 +39,7 @@ export class Ticket {
     }
 
     private validateSeat(seat: string | null, generalAdmission: boolean): string | null {
-        if (this.getGeneralAdmission()) {
+        if (generalAdmission) {
             if (seat !== null ) {
                 throw new Error('There are no seats in a general admission.');
             }
