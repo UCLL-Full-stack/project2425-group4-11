@@ -13,10 +13,10 @@ type UserInput ={
 type TicketInput= {
     id?: number;
     type: string;
-    status: boolean;
+    status: string;
     price: number;
     seat: string;
-    date: Date;
+    generalAdmission: boolean;
 }
 type EventInput = {
     id?: number;
