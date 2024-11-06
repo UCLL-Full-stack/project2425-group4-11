@@ -17,7 +17,9 @@
  *              type: string
  *              description: Artist name.
  *            genres:
- *              type: stringArray
+ *              type: array
+ *              items:
+ *                type: string
  *              description: Artist genres.
  *            biography:
  *              type: string
@@ -26,7 +28,9 @@
  *              type: number
  *              description: Artist booking fee.
  *            socialMedia:
- *              type: stringArray
+ *              type: array
+ *              items:
+ *                type: string
  *              description: Artist social media.
  */
 
