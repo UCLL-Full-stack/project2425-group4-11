@@ -1,0 +1,29 @@
+.page{
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    height: 100vh;
+    color: black;
+    padding: 2rem;
+}
+
+
+.loginContainer {
+    width: 300px;
+    padding: 2rem;
+    border: 5px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    border-radius: 0.8rem;
+    height: 70vh;
+  }
+  
+  .signupButton {
+    margin-left: 0.5rem;
+    font-weight: bold;
+  }
+
+
+
+  

@@ -5,6 +5,19 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
+  background-color: whitesmoke;
+  color: black;
+}
+
+.filterButton {
+  display: flex;
+  align-self: flex-end;
+}
+
+.events {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
 }
 
 .description {
