@@ -17,16 +17,6 @@ const Navbar: React.FC = () => {
         <Typography variant="h6" component="a" href="/" className={styles.logo}>
           ShowTime
         </Typography>
-
-        <Box className={styles.searchContainer}>
-          <TextField
-            variant="outlined"
-            placeholder="Search Artists/Genre"
-            size="small"
-            fullWidth
-          />
-        </Box>
-
         <Box>
           <Button color="inherit" href="/login" sx={{ marginRight: 1 }}>
             Login/Sign Up

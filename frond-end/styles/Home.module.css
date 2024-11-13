@@ -3,7 +3,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
+  padding: 20px;
+  text-align: center;
   min-height: 100vh;
   background-color: whitesmoke;
   color: black;
@@ -240,3 +241,75 @@
     transform: rotate(0deg);
   }
 }
+
+/* Hero Section */
+.heroSection {
+  width: 100vw; 
+  height: 40vh;
+  position: relative;
+  left: 50%; 
+  transform: translateX(-50%);
+  background-image: url('/images/stage-background.jpg'); /* Add your background image */
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 50px 0;
+  text-align: center;
+}
+
+.heroSection h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.searchBar {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc; 
+  border-radius: 5px 0 0 5px;
+  width: 300px;
+  background-color: transparent;
+}
+
+.searchButton {
+  padding: 10px 15px;
+  font-size: 1rem;
+  background-color: #FF5733;
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  background-color: white;
+}
+
+/* Categories */
+.categories {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.categoryButton {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s;
+}
+
+.categoryButton:hover {
+  background-color: #e0e0e0;
+}
+
+
+
