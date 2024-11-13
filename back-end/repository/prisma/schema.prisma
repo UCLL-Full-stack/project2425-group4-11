@@ -1,0 +1,72 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+    id          Int       @id @default(autoincrement())
+    genre       String
+    time        DateTime   
+    date        DateTime
+    duration    Int
+    description String
+    status      String
+
+}
+
+model Artist {
+    id              Int       @id @default(autoincrement())
+    artistName      String      
+    genres          String[]
+    biography       String
+    bookingFee      Int 
+    socialMedia     String[]
+}
+
+model ConcertHall {
+    id              Int         @id @default(autoincrement())
+    location        String
+    capacity        Int
+    name            String
+    facilities      String[]
+    contactInfo     ContactInfo @relation(fields: [contactInfoId], references: [id])
+    contactInfoId   Int         @unique
+}
+
+model ContactInfo {
+    id              Int             @id @default(autoincrement())
+    email           String
+    countryCode     String
+    number          String
+    instagram       String
+    concertHall     ConcertHall?    @relation
+}
+
+model Ticket {
+    id                      Int       @id @default(autoincrement())
+    type                    String
+    status                  String
+    price                   Int    
+    generalAdmission        Boolean
+    seat                    String 
+}
+
+model User {
+    id              Int       @id @default(autoincrement())
+    email           String
+    password        String
+    firstName       String
+    lastName        String
+    phoneNumber     String
+    accountStatus   Boolean
+}
+
+enum Role {
+    ADMIN
+    USER
+    ARTIST
+}

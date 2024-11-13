@@ -9,18 +9,9 @@ type EventProps = {
 const EventFrame: React.FC<EventProps> = ({ title, time, imageUrl }) => {
     return (
         <Paper sx={{ padding: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', width: 230 }}>
-            <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: 1}}>
-                {title}
-            </Typography>
-
-            <Typography variant="body2" sx={{ marginBottom: 1 }}>
-                {time}
-            </Typography>
-
             <Box
                 sx={{
-                width: 80,
-                height: 80,
+                height: 100,
                 backgroundColor: '#e0e0e0',
                 display: 'flex',
                 justifyContent: 'center',
@@ -32,7 +23,14 @@ const EventFrame: React.FC<EventProps> = ({ title, time, imageUrl }) => {
                 ) : (
                     <Typography variant="caption">No Image</Typography>
                 )}
-            </Box>
+            </Box>            
+            <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: 1}}>
+                {title}
+            </Typography>
+
+            <Typography variant="body2" sx={{ marginBottom: 1 }}>
+                {time}
+            </Typography>
         </Paper>
     );
 };

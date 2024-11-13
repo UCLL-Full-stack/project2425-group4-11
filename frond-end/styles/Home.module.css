@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
   text-align: center;
   min-height: 100vh;
   background-color: whitesmoke;
@@ -13,6 +12,7 @@
 .filterButton {
   display: flex;
   align-self: flex-end;
+  padding-right: 5rem;
 }
 
 .events {
