@@ -27,17 +27,19 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         <AccountCircle fontSize="large" />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={handleClose}>View My Events</MenuItem>
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
         {loggedInUser ? (
-          <MenuItem
-            onClick={() => {
-              handleLogout();
-              handleClose();
-            }}
-          >
-            Logout
-          </MenuItem>
+          <>
+            <MenuItem onClick={handleClose}>View My Events</MenuItem>
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleLogout();
+                handleClose();
+              }}
+            >
+              Logout
+            </MenuItem>
+          </>
         ) : (
           <MenuItem component="a" href="/login" onClick={handleClose}>
             Login
