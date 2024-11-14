@@ -36,6 +36,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                 handleLogout();
                 handleClose();
               }}
+              style={{ color: "red" }}
             >
               Logout
             </MenuItem>

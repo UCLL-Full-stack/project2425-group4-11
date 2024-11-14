@@ -30,7 +30,10 @@ const Navbar: React.FC = () => {
               Welcome, {loggedInUser}
             </Typography>
           )}
-          <DropdownMenu loggedInUser={loggedInUser} handleLogout={handleLogout} />
+          <DropdownMenu
+            loggedInUser={loggedInUser}
+            handleLogout={handleLogout}
+          />
         </Box>
       </Toolbar>
     </AppBar>

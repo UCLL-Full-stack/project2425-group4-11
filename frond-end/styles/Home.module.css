@@ -249,7 +249,7 @@
   position: relative;
   left: 50%; 
   transform: translateX(-50%);
-  background-image: url('/images/stage-background.jpg'); /* Add your background image */
+  background-image: url('/images/stage-background.jpg');
   background-size: cover;
   background-position: center;
   color: white;
