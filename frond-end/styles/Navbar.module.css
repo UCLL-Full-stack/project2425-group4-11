@@ -1,18 +1,21 @@
 .navbar {
-    background-color: white;
-    color: royalblue;
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: royalblue;
-    text-decoration: none;
-  }
-  
-  .searchContainer {
-    flex: 1;
-    max-width: 300px;
-    margin: 0 1rem;
-  }
-  
+  background-color: white;
+  color: royalblue;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: royalblue;
+  text-decoration: none;
+}
+
+.searchContainer {
+  flex: 1;
+  max-width: 300px;
+  margin: 0 1rem;
+}
+
+.welcomeMessage {
+  margin-left: 16px; /* Adjust this value to increase or decrease the spacing */
+}
