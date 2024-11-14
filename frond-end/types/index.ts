@@ -72,3 +72,8 @@ export type SocialMedia = {
     youtube: string;
     twitter?: string;
 }
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};

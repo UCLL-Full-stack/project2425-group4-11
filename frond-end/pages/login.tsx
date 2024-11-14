@@ -1,54 +1,96 @@
-import React from 'react';
-import { Checkbox, FormControlLabel, TextField, Button, Typography, Box } from '@mui/material';
-import styles from '@styles/Login.module.css';
-import Navbar from '../components/navbar';
+import { StatusMessage } from "../types";
+import classNames from "classnames";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
-const Login: React.FC = () => {
+const UserLoginForm: React.FC = () => {
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [nameError, setNameError] = useState<String>(null);
+
+  const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+
+  const clearErrors = () => {
+    //reset errors and status messages
+    setNameError(null);
+    setStatusMessages([]);
+  };
+
+  const validate = (): boolean => {
+    let result = true;
+
+    if (!name || name.trim() === "") {
+      setNameError("Name is required.");
+      result = false;
+    }
+
+    return result;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    clearErrors();
+    if (!validate()) {
+      return;
+    }
+    setStatusMessages([
+      ...statusMessages,
+      {
+        type: "success",
+        message: "Login successful. Redirecting to homepage...",
+      },
+    ]);
+
+    sessionStorage.setItem("loggedInUser", name);
+
+    setTimeout(() => router.push("/"), 2000);
+  };
+
   return (
     <>
-      <Navbar/>
-      <Box className = {styles.page}>
-        <Box className={styles.loginContainer}>
-          <Typography variant="h4" gutterBottom align="center">
-            Login
-          </Typography>
-
-          <TextField 
-            label="Email" 
-            variant="outlined" 
-            fullWidth 
-            margin="normal"
+      <h3 className="px-0">Login</h3>
+      {statusMessages && (
+        <div className="row">
+          <ul className="list-none mb-3 mx-auto ">
+            {statusMessages.map(({ message, type }, index) => (
+              <li
+                key={index}
+                className={classNames({
+                  "text-red-800": type === "error",
+                  "text-green-800": type === "success",
+                })}
+              >
+                {message}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <form onSubmit={(event) => handleSubmit(event)}>
+        <label htmlFor="nameInput" className="block mb-2 text-sm font-medium">
+          Username:
+        </label>
+        <div className="block mb-2 text-sm font-medium">
+          <input
+            id="nameInput"
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue:500 block w-full p-2.5"
           />
+          {nameError && <div className="text-red-800">{nameError}</div>}
+        </div>
 
-          <TextField 
-            label="Password" 
-            type="password" 
-            variant="outlined" 
-            fullWidth 
-            margin="normal"
-          />
-
-          <FormControlLabel
-            control={<Checkbox name="remember" color="primary" />}
-            label="Remember me"
-          />
-
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button variant="contained" color="primary" fullWidth>
-              Login
-            </Button>
-          </Box>
-
-          <Typography align="center" mt={2}>
-            Don’t have an account?{' '}
-            <Button color="primary" href="/signup" variant="outlined" className={styles.signupButton}>
-              Sign up
-            </Button>
-          </Typography>
-        </Box>
-      </Box>
+        <button
+          className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+      {/* <p id="test-tag">name: {name}</p> */}
     </>
   );
 };
 
-export default Login;
+export default UserLoginForm;
