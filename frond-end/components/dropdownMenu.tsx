@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { Menu, MenuItem, IconButton } from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
+import React, { useState } from "react";
+import { Menu, MenuItem, IconButton } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
 
-const DropdownMenu: React.FC = () => {
+interface DropdownMenuProps {
+  loggedInUser: string | null;
+  handleLogout: () => void;
+}
+
+const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  loggedInUser,
+  handleLogout,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -18,14 +26,23 @@ const DropdownMenu: React.FC = () => {
       <IconButton edge="end" color="inherit" onClick={handleClick}>
         <AccountCircle fontSize="large" />
       </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={handleClose}>View My Events</MenuItem>
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        {loggedInUser ? (
+          <MenuItem
+            onClick={() => {
+              handleLogout();
+              handleClose();
+            }}
+          >
+            Logout
+          </MenuItem>
+        ) : (
+          <MenuItem component="a" href="/login" onClick={handleClose}>
+            Login
+          </MenuItem>
+        )}
       </Menu>
     </>
   );

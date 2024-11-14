@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box } from "@mui/material";
 import styles from "@styles/Navbar.module.css";
 import DropdownMenu from "./dropdownMenu";
 
@@ -25,21 +25,12 @@ const Navbar: React.FC = () => {
           ShowTime
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {loggedInUser ? (
-            <>
-              <Button color="inherit" onClick={handleLogout}>
-                Logout
-              </Button>
-              <Typography variant="body1" className={styles.welcomeMessage}>
-                Welcome, {loggedInUser}
-              </Typography>
-            </>
-          ) : (
-            <Button color="inherit" href="/login" sx={{ marginRight: 1 }}>
-              Login/Sign Up
-            </Button>
+          {loggedInUser && (
+            <Typography variant="body1" className={styles.welcomeMessage}>
+              Welcome, {loggedInUser}
+            </Typography>
           )}
-          <DropdownMenu />
+          <DropdownMenu loggedInUser={loggedInUser} handleLogout={handleLogout} />
         </Box>
       </Toolbar>
     </AppBar>
