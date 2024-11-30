@@ -3,8 +3,23 @@ import styles from "@styles/Home.module.css";
 import NavBar from "../components/navbar";
 import EventFrame from "@/components/event";
 import FilterButton from "@/components/filterButton";
+import ShowTimeService from "@/services/ShowTimeService";
+import { useState, useEffect } from "react";
 
 const Start: React.FC = () => {
+  const [events, setEvents] = useState<Array<Event>>([]);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+
+  const getEvents = async () => {
+    const response = await ShowTimeService.getAllEvents();
+    const events = await response.json();
+    setEvents(events);
+  };
+
+  useEffect(()=>{
+    getEvents();
+  }, []);
+
   return (
     <>
       <Head>
@@ -37,16 +52,16 @@ const Start: React.FC = () => {
         <section className={styles.filterButton}>
           <FilterButton
             onClick={() => {
-              /* implement filter logic */
             }}
           />
         </section>
         <section className={styles.events}>
-          {[...Array(8)].map((_, index) => (
+
+          {events.map((event, index) => (
             <EventFrame
               key={index}
-              title={"Tour is overrated"}
-              time={"20:00"}
+              title={event.title}
+              time={event.time}
             />
           ))}
         </section>

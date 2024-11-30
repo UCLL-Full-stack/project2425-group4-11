@@ -40,7 +40,7 @@ export class User {
     }
 
     private validatePhoneNumber(phoneNumber: string): string {
-        const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+        const phoneRegex = /^\+?[0-9]\d{1,14}$/;
         if (!phoneRegex.test(phoneNumber)) {
             throw new Error("Invalid phone number format.");
         }

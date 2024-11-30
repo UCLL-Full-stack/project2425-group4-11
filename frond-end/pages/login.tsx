@@ -5,11 +5,14 @@ import styles from '@styles/Login.module.css';
 import Navbar from '../components/navbar';
 import { StatusMessage } from "../types";
 import classNames from "classnames";
+import InputField from '@/components/InputField';
 
 const Login: React.FC = () => {
   const router = useRouter();
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState<String>("");
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState<String>("");
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
   const clearErrors = () => {
@@ -21,6 +24,10 @@ const Login: React.FC = () => {
     let result = true;
     if (!name || name.trim() === "") {
       setNameError("Name is required.");
+      result = false;
+    }
+    if (!password || password.trim() === "") {
+      setPasswordError("Password is required.");
       result = false;
     }
     return result;
@@ -68,15 +75,22 @@ const Login: React.FC = () => {
             </ul>
           )}
           <form onSubmit={(event) => handleSubmit(event)}>
-            <TextField
-              label="Username"
-              variant="outlined"
-              fullWidth
+            <InputField 
+              label={'Username'}
               margin="normal"
               value={name}
               onChange={(event) => setName(event.target.value)}
               error={!!nameError}
               helperText={nameError}
+            />
+            <InputField 
+              label={'Password'}
+              margin="normal"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              error={!!passwordError}
+              helperText={passwordError}
+              secure={true}
             />
             <FormControlLabel
               control={<Checkbox name="remember" color="primary" />}
