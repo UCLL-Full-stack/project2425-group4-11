@@ -5,6 +5,7 @@ import EventFrame from "@/components/event";
 import FilterButton from "@/components/filterButton";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
+//import EventOverviewTable from "@/components/events/EventOverviewTable";
 
 const Start: React.FC = () => {
   const [events, setEvents] = useState<Array<Event>>([]);
@@ -16,7 +17,7 @@ const Start: React.FC = () => {
     setEvents(events);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getEvents();
   }, []);
 
@@ -50,20 +51,15 @@ const Start: React.FC = () => {
 
         <h2>Upcoming Events</h2>
         <section className={styles.filterButton}>
-          <FilterButton
-            onClick={() => {
-            }}
-          />
+          <FilterButton onClick={() => {}} />
         </section>
         <section className={styles.events}>
-
-          {events.map((event, index) => (
-            <EventFrame
-              key={index}
-              title={event.title}
-              time={event.time}
-            />
-          ))}
+          {events.map(
+            (event, index) => (
+              console.log("event"),
+              (<EventFrame key={index} title={event.genre} time={event.time} />)
+            )
+          )}
         </section>
       </main>
 
