@@ -1,20 +1,27 @@
+import { Role } from "../types";
+import { User as UserPrisma } from '@prisma/client';
+
 export class User {
     private id?: number;
     private email: string;
     private password: string;
     private firstName: string;
     private lastName: string;
+    private username: string;
     private phoneNumber: string;
     private accountStatus: boolean;
+    private role: Role;
 
-    constructor(user: { id?: number; email: string; password: string; firstName: string; lastName: string; phoneNumber: string; accountStatus: boolean }) {
+    constructor(user: { id?: number; email: string; password: string; firstName: string; lastName: string; username: string; phoneNumber: string; accountStatus: boolean; role: Role }) {
         this.id = user.id;
         this.email = this.validateEmail(user.email);
         this.password = this.validatePassword(user.password);
         this.firstName = this.validateName(user.firstName, "First name");
         this.lastName = this.validateName(user.lastName, "Last name");
+        this.username = this.validateName(user.username, "Username");
         this.phoneNumber = this.validatePhoneNumber(user.phoneNumber);
         this.accountStatus = this.validateAccountStatus(user.accountStatus);
+        this.role = user.role;
     }
 
     private validatePassword(password: string): string {
@@ -74,6 +81,10 @@ export class User {
         return this.lastName;
     }
 
+    getUsername(): string {
+        return this.username;
+    }
+
     getPhoneNumber(): string {
         return this.phoneNumber;
     }
@@ -82,11 +93,29 @@ export class User {
         return this.accountStatus;
     }
 
+    getRole(): Role {
+        return this.role;
+    }
+
     setPhoneNumber(newPhoneNumber: string): void {
         this.phoneNumber = newPhoneNumber;
     }
 
     setAccountStatus(newAccountStatus: boolean): void {
         this.accountStatus = newAccountStatus;
+    }
+
+    static from({ id, email, password, firstName, lastName, username, phoneNumber, accountStatus, role}: UserPrisma) {
+        return new User({
+            id,
+            email,
+            password,
+            firstName,
+            lastName,
+            username,
+            phoneNumber,
+            accountStatus,
+            role: role as Role,
+        });
     }
 }

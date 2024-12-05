@@ -11,12 +11,13 @@ export type Events = {
 
 export type User = {
     id?: number;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    accountStatus: boolean;
+    email?: string;
+    password?: string;
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+    phoneNumber?: string;
+    accountStatus?: boolean;
 }
 
 export type Ticket = {

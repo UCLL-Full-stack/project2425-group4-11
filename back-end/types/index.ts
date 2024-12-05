@@ -7,8 +7,10 @@ type UserInput ={
     password: string;
     firstName: string;
     lastName: string;
+    username: string;
     phoneNumber: string;
     accountStatus: boolean;
+    role: Role;
 }
 type TicketInput= {
     id?: number;
@@ -63,6 +65,13 @@ type SocialMedia = {
     twitter?: string;
 }
 
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+    role: string;
+};
+
 export {
     Role,
     UserInput,
@@ -71,5 +80,6 @@ export {
     ConcertHallInput,
     ArtistInput,
     ContactInfo,
-    SocialMedia
+    SocialMedia,
+    AuthenticationResponse
 }

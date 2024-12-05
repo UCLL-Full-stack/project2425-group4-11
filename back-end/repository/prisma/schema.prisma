@@ -61,8 +61,10 @@ model User {
     password        String
     firstName       String
     lastName        String
+    username        String
     phoneNumber     String
     accountStatus   Boolean
+    role            String
 }
 
 enum Role {

@@ -61,7 +61,7 @@ const Start: React.FC = () => {
             <EventFrame
               key={index}
               title={event.title}
-              time={event.time}
+              time={event.getTime()}
             />
           ))}
         </section>

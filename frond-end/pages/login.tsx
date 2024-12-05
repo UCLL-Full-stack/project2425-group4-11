@@ -6,6 +6,7 @@ import Navbar from '../components/navbar';
 import { StatusMessage } from "../types";
 import classNames from "classnames";
 import InputField from '@/components/InputField';
+import UserService from '@/services/UserService';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState<String>("");
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const clearErrors = () => {
     setNameError("");
@@ -33,22 +35,55 @@ const Login: React.FC = () => {
     return result;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    
     clearErrors();
+    
     if (!validate()) {
       return;
     }
-    setStatusMessages([
-      ...statusMessages,
-      {
-        type: "success",
-        message: "Login successful. Redirecting to homepage...",
-      },
-    ]);
 
-    sessionStorage.setItem("loggedInUser", name);
-    setTimeout(() => router.push("/"), 2000);
+    setIsLoading(true);
+
+    try {
+      const response = await UserService.loginUser({ username: name, password });
+
+      if (response.status === 200) {
+        const user = await response.json();
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({
+            token: user.token,
+            fullname: user.fullname,
+            username: user.username,
+            role: user.role
+          })
+        );
+        setStatusMessages([
+          ...statusMessages,
+          {
+            type: "success",
+            message: "Login successful. Redirecting to homepage...",
+          },
+        ]);
+
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+      } else {
+        const error = await response.json();
+        setStatusMessages([
+          { message: error.message || "Login failed", type: "error"},
+        ]);
+      }
+    } catch (error) {
+      setStatusMessages([
+        { message: "An error has occurred. Please try agian later.", type: "error"},
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
