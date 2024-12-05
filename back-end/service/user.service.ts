@@ -1,7 +1,9 @@
 import userDB from '../repository/user.db';
+import bcrypt from 'bcrypt';
 import { User } from '../model/User';
 import { AuthenticationResponse, UserInput } from '../types';
 import userDb from '../repository/user.db';
+import { generateJwtToken } from '../util/jwt';
 
 const getAllUsers = (): User[] => userDB.getAllUsers();
 
@@ -58,4 +60,5 @@ const createUser = ({
 export default { getAllUsers, 
     getUserById,
     createUser,
+    authenticate
 };
