@@ -104,7 +104,7 @@ artistRouter.post('/login', async (req: Request, res: Response, next: NextFuncti
 
 /**
  * @swagger
- * /artists:
+ * /artists/signup:
  *  post:
  *      summary: Create a new artist.
  *      requestBody:
@@ -147,7 +147,7 @@ artistRouter.post('/login', async (req: Request, res: Response, next: NextFuncti
  *              description: Internal server error.
  */
 
-artistRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+artistRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const artist = <ArtistInput>req.body;
         const result = await artistService.createArtist(artist);
