@@ -54,7 +54,7 @@ const createUser = async ({
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ email, password, firstName, lastName, username, phoneNumber, accountStatus, role });
+    const user = new User({ email, password: hashedPassword, firstName, lastName, username, phoneNumber, accountStatus, role });
 
     return userDb.createUser(user);
 }
