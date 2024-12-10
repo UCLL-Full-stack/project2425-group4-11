@@ -28,7 +28,7 @@ export class User {
         if (password.length < 8) {
             throw new Error("Password must be at least 8 characters long.");
         }
-        return `hashed_${password}`;
+        return password;
     }
 
     private validateEmail(email: string): string {

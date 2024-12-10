@@ -1,36 +1,52 @@
 import { Artist } from "../model/Artist";
+import database from "./database";
 
-const artists = [
-    new Artist({
-        id: 1,
-        artistName: 'sqmmi3',
-        genres: ['indie', 'alt z', 'alt rock'],
-        biography: `sqmmi3 is a upcoming artist who makes music influenced by brakence, Jeremy Zucker, EDEN, Chelsea Cutler and bhertuy`,
-        bookingFee: 100,
-        socialMedia: ["https://www.instagram.com/sqmmi3"],
-    }),
-]
+const getAllArtists = async (): Promise<Artist[]> => {
+    try {
+        const artistsPrisma = await database.artist.findMany();
+        return artistsPrisma.map((artistPrisma) => Artist.from(artistPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-const getAllArtists = (): Artist[] => {
-    return artists;
-}
+const createArtist = async (artist: Artist): Promise<Artist> => {
+    try {
+        const artistPrisma = await database.artist.create({
+            data: {
+                artistName: artist.getArtistName(),
+                password: artist.getPassword(),
+                genres: artist.getGenres(),
+                biography: artist.getBiography(),
+                bookingFee: artist.getBookingFee(),
+                socialMedia: artist.getSocialMedia(),
+                role: artist.getRole(),
+            },
+        });
 
-const getArtistById = ({ id }: { id: number }): Artist | null => {
-    return artists.find((artist) => artist.getId() === id) || null;
-}
+        return Artist.from(artistPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-const createArtist = (artist: Artist): Artist => {
-    artists.push(artist);
-    return artist;
-}
+const getArtistByArtistName = async ({ artistName }: { artistName: string }): Promise<Artist | null> => {
+    try {
+        const artistPrisma = await database.artist.findFirst({
+            where: { artistName },
+        });
 
-const getArtistByArtistName = ({ artistName }: { artistName: string }): Artist | null => {
-    return artists.find((artist) => artist.getArtistName() === artistName) || null;
-}
+        return artistPrisma ? Artist.from(artistPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 export default {
     getAllArtists,
-    getArtistById,
     createArtist,
     getArtistByArtistName,
 }

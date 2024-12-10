@@ -21,10 +21,12 @@ const event = new Event({
 
 const artist = new Artist({
     artistName: 'Jeremy Zucker',
+    password: 'jeremy123',
     genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
     biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
     bookingFee: 1000,
     socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+    role: 'artist'
 });
 
 const validContactInfo: ContactInfo = {
@@ -66,10 +68,12 @@ const validContactInfo: ContactInfo = {
         // when
         const newArtist = new Artist({
             artistName: 'Jeremy Zucker',
+            password: 'jeremy123',
             genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
             biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
             bookingFee: 1000,
             socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+            role: 'artist'
         });
 
         // then
@@ -90,6 +94,7 @@ const validContactInfo: ContactInfo = {
             password: "password123",
             firstName: "John",
             lastName: "Doe",
+            
             phoneNumber: "+1234567890",
             accountStatus: true,
         });

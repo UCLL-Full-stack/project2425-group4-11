@@ -32,6 +32,15 @@
  *              items:
  *                type: string
  *              description: Artist social media.
+ *      AuthenticationRequest:
+ *          type: object
+ *          properties:
+ *            username:
+ *              type: string
+ *              description: User name.
+ *            password:
+ *              type: string
+ *              description: User password.
  */
 
 import express, { NextFunction, Request, Response } from "express";
@@ -66,28 +75,28 @@ artistRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
 
 /**
  * @swagger
- * /artists/{id}:
- *  get:
- *      summary: Get an artist by id.
- *      parameters:
- *          - in: path
- *            name: id
+ * /artist/login:
+ *   post:
+ *      summary: Login using username/password. Returns an object with JWT token and user name when succesful.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
  *            schema:
- *              type: integer
- *              required: true
- *              description: The artist id.
+ *              $ref: '#/components/schemas/AuthenticationRequest'
  *      responses:
- *          200:
- *              description: An artist object.
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Artist'
+ *         200:
+ *            description: The created artist object
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/AuthenticationResponse'
  */
-artistRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+artistRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = await artistService.getArtistById(Number(req.params.id));
-        res.status(200).json(user);
+        const artistInput = <ArtistInput>req.body;
+        const artist = await artistService.authenticate(artistInput);
+        res.status(200).json({ message: 'Authentication succesful', ...artist });
     } catch (error) {
         next(error);
     }

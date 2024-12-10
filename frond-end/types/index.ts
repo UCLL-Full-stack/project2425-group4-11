@@ -40,11 +40,12 @@ export type ConcertHall = {
 
 export type Artist = {
     id?: number;
-    artistName: string;
-    genres: string[];
-    biography: string;
-    bookingFee: number;
-    socialMedia: string[];
+    artistName?: string;
+    password?: string;
+    genres?: string[];
+    biography?: string;
+    bookingFee?: number;
+    socialMedia?: string[];
 }
 
 export type Event = {

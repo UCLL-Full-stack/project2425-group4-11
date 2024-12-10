@@ -1,18 +1,25 @@
+import { Role } from "../types";
+import { Artist as ArtistPrisma } from '@prisma/client';
+
 export class Artist {
     private id?: number;
     private artistName: string;
+    private password: string;
     private genres: string[];
     private biography: string;
     private bookingFee: number;
     private socialMedia: string[];
+    private role: Role;
 
-    constructor(artist: { id?: number; artistName: string; genres: string[]; biography: string; bookingFee: number; socialMedia: string[] }) {
+    constructor(artist: { id?: number; artistName: string; password: string; genres: string[]; biography: string; bookingFee: number; socialMedia: string[]; role: Role }) {
         this.id = artist.id;
         this.artistName = this.validateArtistName(artist.artistName);
+        this.password = this.validatePassword(artist.password);
         this.genres = this.validateGenres(artist.genres);
         this.biography = this.validateBiography(artist.biography);
         this.bookingFee = this.validateBookingFee(artist.bookingFee);
         this.socialMedia = this.validateSocialMedia(artist.socialMedia);
+        this.role = artist.role;
     }
 
     private validateArtistName(artistName: string): string {
@@ -20,6 +27,13 @@ export class Artist {
             throw new Error("Artist name cannot be empty.");
         }
         return artistName;
+    }
+
+    private validatePassword(password: string): string {
+        if (password.length < 8) {
+            throw new Error("Password must be at least 8 characters long.");
+        }
+        return password;
     }
 
     private validateGenres(genres: string[]): string[] {
@@ -68,6 +82,10 @@ export class Artist {
         return this.artistName;
     }
 
+    getPassword(): string {
+        return this.password;
+    }
+
     getGenres(): string[] {
         return this.genres;
     }
@@ -84,6 +102,10 @@ export class Artist {
         return this.socialMedia;
     }
 
+    getRole(): Role {
+        return this.role;
+    }
+
     setGenre(newGenre: string): void {
         this.validateGenres([newGenre]);
         this.genres.push(newGenre);
@@ -97,5 +119,18 @@ export class Artist {
     setSocialMedia(newSocialMedia: string): void {
         this.validateSocialMedia([newSocialMedia]);
         this.socialMedia.push(newSocialMedia);
+    }
+
+    static from ({ id, artistName, password, genres, biography, bookingFee, socialMedia, role}: ArtistPrisma) {
+        return new Artist({
+            id,
+            artistName,
+            password,
+            genres,
+            biography,
+            bookingFee,
+            socialMedia,
+            role: role as Role,
+        });
     }
 }

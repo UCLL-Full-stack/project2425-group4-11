@@ -23,14 +23,8 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
 
 const authenticate = async ({ username, password }: UserInput): Promise<AuthenticationResponse> => {
     const user = await getUserByUsername({ username });
-    
-    let storedPassword = user.getPassword();
 
-    if (storedPassword.startsWith('hashed_')) {
-        storedPassword = storedPassword.replace('hashed_', '');
-    }
-
-    const isValidPassword = await bcrypt.compareSync(password, storedPassword);
+    const isValidPassword = await bcrypt.compareSync(password, user.getPassword());
 
     if (!isValidPassword) {
         throw new Error('Incorrect password.');
@@ -62,7 +56,7 @@ const createUser = async ({
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({ email, password: hashedPassword, firstName, lastName, username, phoneNumber, accountStatus, role });
 
-    return userDb.createUser(user);
+    return await userDb.createUser(user);
 }
 
 export default { getAllUsers, 

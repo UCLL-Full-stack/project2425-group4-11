@@ -21,10 +21,12 @@ model Event {
 model Artist {
     id              Int       @id @default(autoincrement())
     artistName      String      
+    password        String
     genres          String[]
     biography       String
     bookingFee      Int 
     socialMedia     String[]
+    role            String
 }
 
 model ConcertHall {

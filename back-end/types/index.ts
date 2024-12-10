@@ -43,10 +43,12 @@ type ConcertHallInput = {
 type ArtistInput = {
     id?: number;
     artistName: string;
+    password: string;
     genres: string[];
     biography: string;
     bookingFee: number;
     socialMedia: string[];
+    role: Role;
 }
 
 type ContactInfo = {
