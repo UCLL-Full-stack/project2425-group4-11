@@ -37,7 +37,7 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
     };
 };
 
-const createUser = ({
+const createUser = async ({
     email,
     password,
     firstName,
@@ -46,14 +46,16 @@ const createUser = ({
     phoneNumber,
     accountStatus,
     role,
-}: UserInput): User => {
-    const existingUser = userDb.getUserByEmail({ email });
+}: UserInput): Promise<User> => {
+    const existingUser = await userDb.getUserByUsername({ username });
 
     if (existingUser) {
-        throw new Error("User with email address already exists.");
+        throw new Error(`User with username ${username} is already registered.`);
     }
 
+    const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({ email, password, firstName, lastName, username, phoneNumber, accountStatus, role });
+
     return userDb.createUser(user);
 }
 

@@ -1,31 +1,39 @@
-import React, { useState } from 'react';
-import { Checkbox, FormControlLabel, TextField, Button, Typography, Box } from '@mui/material';
-import { useRouter } from 'next/router';
-import styles from '@styles/Login.module.css';
-import Navbar from '../components/navbar';
+import React, { useState } from "react";
+import {
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Button,
+  Typography,
+  Box,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import styles from "@styles/Login.module.css";
+import Navbar from "../components/navbar";
 import { StatusMessage } from "../types";
 import classNames from "classnames";
-import InputField from '@/components/InputField';
-import UserService from '@/services/UserService';
+import InputField from "@/components/InputField";
+import UserService from "@/services/UserService";
 
 const Login: React.FC = () => {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState<String>("");
+  const [username, setUsername] = useState("");
+  const [nameError, setNameError] = useState<string | null>(null);
   const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState<String>("");
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const clearErrors = () => {
-    setNameError("");
+    setNameError(null);
+    setPasswordError(null);
     setStatusMessages([]);
   };
 
   const validate = (): boolean => {
     let result = true;
-    if (!name || name.trim() === "") {
-      setNameError("Name is required.");
+    if (!username || username.trim() === "") {
+      setNameError("Username is required.");
       result = false;
     }
     if (!password || password.trim() === "") {
@@ -35,11 +43,11 @@ const Login: React.FC = () => {
     return result;
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     clearErrors();
-    
+
     if (!validate()) {
       return;
     }
@@ -47,7 +55,10 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await UserService.loginUser({ username: name, password });
+      const response = await UserService.loginUser({
+        username: name,
+        password,
+      });
 
       if (response.status === 200) {
         const user = await response.json();
@@ -57,7 +68,7 @@ const Login: React.FC = () => {
             token: user.token,
             fullname: user.fullname,
             username: user.username,
-            role: user.role
+            role: user.role,
           })
         );
         setStatusMessages([
@@ -74,12 +85,15 @@ const Login: React.FC = () => {
       } else {
         const error = await response.json();
         setStatusMessages([
-          { message: error.message || "Login failed", type: "error"},
+          { message: error.message || "Login failed", type: "error" },
         ]);
       }
     } catch (error) {
       setStatusMessages([
-        { message: "An error has occurred. Please try agian later.", type: "error"},
+        {
+          message: "An error has occurred. Please try agian later.",
+          type: "error",
+        },
       ]);
     } finally {
       setIsLoading(false);
@@ -110,16 +124,16 @@ const Login: React.FC = () => {
             </ul>
           )}
           <form onSubmit={(event) => handleSubmit(event)}>
-            <InputField 
-              label={'Username'}
+            <InputField
+              label={"Username"}
               margin="normal"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
               error={!!nameError}
               helperText={nameError}
             />
-            <InputField 
-              label={'Password'}
+            <InputField
+              label={"Password"}
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -132,14 +146,24 @@ const Login: React.FC = () => {
               label="Remember me"
             />
             <Box display="flex" justifyContent="space-between" mt={2}>
-              <Button variant="contained" color="primary" fullWidth type="submit">
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                type="submit"
+              >
                 Login
               </Button>
             </Box>
           </form>
           <Typography align="center" mt={2}>
-            Don’t have an account?{' '}
-            <Button color="primary" href="/signup" variant="outlined" className={styles.signupButton}>
+            Don’t have an account?{" "}
+            <Button
+              color="primary"
+              href="/signup"
+              variant="outlined"
+              className={styles.signupButton}
+            >
               Sign up
             </Button>
           </Typography>
