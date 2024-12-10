@@ -43,7 +43,7 @@ const Login: React.FC = () => {
     return result;
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     clearErrors();
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
 
     try {
       const response = await UserService.loginUser({
-        username: name,
+        username: username,
         password,
       });
 

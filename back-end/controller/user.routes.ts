@@ -122,8 +122,8 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
-        const response = await userService.authenticate(userInput);
-        res.status(200).json({ message: 'Authentication succesful', ...response });
+        const user = await userService.authenticate(userInput);
+        res.status(200).json({ message: 'Authentication succesful', ...user });
     } catch (error) {
         next(error);
     }

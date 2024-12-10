@@ -24,7 +24,7 @@ const main = async () => {
             email: 'emma@showtime.com',
             password: await bcrypt.hash('emma123', 12),
             firstName: 'Emma',
-            lastName: 'Liefsoen',
+            lastName: 'Liefsoens',
             username: 'emma',
             phoneNumber: '0489007571',
             accountStatus: true,

@@ -40,7 +40,7 @@ const getUserByUsername = async ({ username }: { username: string }): Promise<Us
     }
 };
 
-const createUser = (user: User): Promise<User> => {
+const createUser = async (user: User): Promise<User> => {
     try {
         const userPrisma = await database.user.create({
             data: {

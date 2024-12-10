@@ -12,7 +12,7 @@ export type Events = {
 export type User = {
     id?: number;
     email?: string;
-    password?: string;
+    password: string;
     firstName?: string;
     lastName?: string;
     username?: string;
