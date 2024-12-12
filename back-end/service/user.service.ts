@@ -45,7 +45,6 @@ const createUser = async ({
     username,
     phoneNumber,
     accountStatus,
-    role,
 }: UserInput): Promise<User> => {
     const existingUser = await userDb.getUserByUsername({ username });
 
@@ -54,7 +53,7 @@ const createUser = async ({
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ email, password: hashedPassword, firstName, lastName, username, phoneNumber, accountStatus, role });
+    const user = new User({ email, password: hashedPassword, firstName, lastName, username, phoneNumber, accountStatus, role: 'user' });
 
     return await userDb.createUser(user);
 }

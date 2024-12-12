@@ -91,7 +91,7 @@ const Login: React.FC = () => {
     } catch (error) {
       setStatusMessages([
         {
-          message: "An error has occurred. Please try agian later.",
+          message: "An error has occurred. Please try againn later.",
           type: "error",
         },
       ]);
