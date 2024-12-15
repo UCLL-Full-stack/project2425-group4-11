@@ -48,6 +48,7 @@ const main = async () => {
 
     const event1 = await prisma.event.create({
         data: {
+            title: 'ACDC - ON TOUR',
             genre: 'Rock',
             time: new Date(),
             date: new Date(),
@@ -58,6 +59,7 @@ const main = async () => {
     });
     const event2 = await prisma.event.create({
         data: {
+            title: 'Taylor Swift - Lover Tour',
             genre: 'Pop',
             time: new Date(),            
             date: new Date,

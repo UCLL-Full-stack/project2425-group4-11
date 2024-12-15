@@ -38,17 +38,17 @@ const getEventById = ({ id }: { id: number}): Event | null => {
     return events.find((event) => event.getId() === id) || null;
 }
 
-// const getEventByTitle = async ({ title }: { title: string }): Promise<Event | null> => {
-//     try {
-//         const userPrisma = await database.event.findFirst({
-//             where: { title },
-//         });
+const getEventByTitle = async ({ title }: { title: string }): Promise<Event | null> => {
+    try {
+        const eventPrisma = await database.event.findFirst({
+            where: { title },
+        });
 
-//         return userPrisma ? Event.from(eventPrisma) : null;
-//     } catch (error) {
-//         console.error(error);
-//         throw new Error('Database error. See server log for details.');
-//     }
-// };
+        return eventPrisma ? Event.from(eventPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-export default { getAllEvents, getEventById }
+export default { getAllEvents, getEventById, getEventByTitle }

@@ -136,4 +136,17 @@ export class Event {
     setStatus(newStatus: string): void {
         this.status = this.validateStatus(newStatus);
     }
+
+    static from({ id, title, genre,  time, date, duration, description, status}: EventPrisma) {
+        return new Event({
+            id,
+            title,
+            genre,
+            time,
+            date,
+            duration,
+            description,
+            status,
+        });
+    }
 }

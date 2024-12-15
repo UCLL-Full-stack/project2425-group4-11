@@ -73,7 +73,7 @@ const PurchasePage: React.FC = () => {
 
   const handleCancelPurchase = () => {
     alert("Ticket purchase has been canceled.");
-    router.push("/index");
+    router.push("/");
   };
 
   if (!event) {
