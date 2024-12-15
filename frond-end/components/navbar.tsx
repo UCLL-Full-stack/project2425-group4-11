@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const user = localStorage.getItem("loggedInUser");
     if (user) {
-      setLoggedInUser(user);
+      setLoggedInUser(user ? JSON.parse(user).fullname : null);
     }
   }, []);
 
