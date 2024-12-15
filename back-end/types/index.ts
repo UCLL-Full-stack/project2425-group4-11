@@ -48,6 +48,7 @@ type ArtistInput = {
     biography: string;
     bookingFee: number;
     socialMedia: string[];
+    email: string;
     role: Role;
 }
 

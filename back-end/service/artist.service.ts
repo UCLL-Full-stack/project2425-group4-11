@@ -37,7 +37,7 @@ const createArtist = async ({
     biography,
     bookingFee,
     socialMedia,
-    role,
+    email,
 }: ArtistInput): Promise<Artist> => {
     const existingArtist = await artistDb.getArtistByArtistName({ artistName });
     if (existingArtist) {
@@ -45,7 +45,7 @@ const createArtist = async ({
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const artist = new Artist({ artistName, password: hashedPassword, genres, biography, bookingFee, socialMedia, role });
+    const artist = new Artist({ artistName, password: hashedPassword, genres, biography, bookingFee, socialMedia, email, role: 'artist' });
     return await artistDb.createArtist(artist);
 } 
 

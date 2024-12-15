@@ -23,7 +23,8 @@ export class Event {
         if (!title || title.trim() === "") {
             throw new Error("title cannot be empty.");
         }
-        return title;    }
+        return title;
+    }
 
     private validateGenre(genre: string): string {
         if (!genre || genre.trim() === "") {

@@ -21,6 +21,7 @@ const createArtist = async (artist: Artist): Promise<Artist> => {
                 biography: artist.getBiography(),
                 bookingFee: artist.getBookingFee(),
                 socialMedia: artist.getSocialMedia(),
+                email: artist.getEmail(),
                 role: artist.getRole(),
             },
         });

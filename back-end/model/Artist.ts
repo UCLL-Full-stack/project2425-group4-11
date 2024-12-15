@@ -9,9 +9,10 @@ export class Artist {
     private biography: string;
     private bookingFee: number;
     private socialMedia: string[];
+    private email: string;
     private role: Role;
 
-    constructor(artist: { id?: number; artistName: string; password: string; genres: string[]; biography: string; bookingFee: number; socialMedia: string[]; role: Role }) {
+    constructor(artist: { id?: number; artistName: string; password: string; genres: string[]; biography: string; bookingFee: number; socialMedia: string[]; email: string; role: Role }) {
         this.id = artist.id;
         this.artistName = this.validateArtistName(artist.artistName);
         this.password = this.validatePassword(artist.password);
@@ -19,6 +20,7 @@ export class Artist {
         this.biography = this.validateBiography(artist.biography);
         this.bookingFee = this.validateBookingFee(artist.bookingFee);
         this.socialMedia = this.validateSocialMedia(artist.socialMedia);
+        this.email = this.validateEmail(artist.email);
         this.role = artist.role;
     }
 
@@ -74,6 +76,14 @@ export class Artist {
         return socialMedia;
     }
 
+    private validateEmail(email: string): string {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            throw new Error('Invalid email format.');
+        }
+        return email;
+    }
+
     getId(): number | undefined {
         return this.id;
     }
@@ -102,6 +112,10 @@ export class Artist {
         return this.socialMedia;
     }
 
+    getEmail(): string {
+        return this.email;
+    }
+
     getRole(): Role {
         return this.role;
     }
@@ -121,7 +135,7 @@ export class Artist {
         this.socialMedia.push(newSocialMedia);
     }
 
-    static from ({ id, artistName, password, genres, biography, bookingFee, socialMedia, role}: ArtistPrisma) {
+    static from ({ id, artistName, password, genres, biography, bookingFee, socialMedia, email, role}: ArtistPrisma) {
         return new Artist({
             id,
             artistName,
@@ -130,6 +144,7 @@ export class Artist {
             biography,
             bookingFee,
             socialMedia,
+            email,
             role: role as Role,
         });
     }
