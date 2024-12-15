@@ -1,3 +1,5 @@
+import { Event as EventPrisma } from '@prisma/client';
+
 export class Event {
     private id?: number;
     private title: string;
