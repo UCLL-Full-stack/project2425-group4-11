@@ -167,14 +167,25 @@ const Login: React.FC = () => {
             </Button>
           </Typography>
           <Typography align="center" mt={2}>
-            Artist or concert hall?{" "}
+            Artist?{" "}
             <Button
               color="primary"
               href="/diffsignup"
               variant="outlined"
               className={styles.signupButton}
             >
-              Start organising
+              Log in here
+            </Button>
+          </Typography>
+          <Typography align="center" mt={2}>
+            Hall admin?{" "}
+            <Button
+              color="primary"
+              href="/diffsignup"
+              variant="outlined"
+              className={styles.signupButton}
+            >
+              Log in here
             </Button>
           </Typography>
         </Box>

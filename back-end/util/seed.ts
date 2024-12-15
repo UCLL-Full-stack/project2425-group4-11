@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import next from 'next';
 
 const prisma = new PrismaClient();
 
@@ -49,6 +48,7 @@ const main = async () => {
     const event1 = await prisma.event.create({
         data: {
             genre: 'Rock',
+            title: 'Panic Tower',
             time: new Date(),
             date: new Date(),
             duration: 60,
@@ -59,6 +59,7 @@ const main = async () => {
     const event2 = await prisma.event.create({
         data: {
             genre: 'Pop',
+            title: 'Taylor Swift Tour',
             time: new Date(),            
             date: new Date,
             duration: 120,
