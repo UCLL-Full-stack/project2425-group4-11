@@ -19,7 +19,7 @@ const EventFrame: React.FC<EventProps> = ({ id, title, time, imageUrl }) => {
         width: 230,
       }}
     >
-      <Box
+      {/* <Box
         sx={{
           height: 100,
           backgroundColor: "#e0e0e0",
@@ -37,7 +37,7 @@ const EventFrame: React.FC<EventProps> = ({ id, title, time, imageUrl }) => {
         ) : (
           <Typography variant="caption">No Image</Typography>
         )}
-      </Box>
+      </Box> */}
       <Typography
         variant="h6"
         sx={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 1 }}
