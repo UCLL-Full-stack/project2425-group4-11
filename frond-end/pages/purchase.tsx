@@ -34,6 +34,7 @@ const PurchasePage: React.FC = () => {
         const response = await ShowTimeService.getEventById(eventId as string);
         const eventData = await response.json();
         setEvent(eventData);
+        console.log(event);
       };
       fetchEvent();
     }

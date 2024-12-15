@@ -46,6 +46,7 @@ export type Artist = {
     biography?: string;
     bookingFee?: number;
     socialMedia?: string[];
+    email: string;
 }
 
 export type Event = {

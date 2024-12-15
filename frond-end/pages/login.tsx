@@ -72,7 +72,6 @@ const Login: React.FC = () => {
           })
         );
         setStatusMessages([
-          ...statusMessages,
           {
             type: "success",
             message: "Login successful. Redirecting to homepage...",
