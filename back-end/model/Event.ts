@@ -1,5 +1,6 @@
 export class Event {
     private id?: number;
+    private title: string;
     private genre: string;
     private time: Date;
     private date: Date;
@@ -7,8 +8,9 @@ export class Event {
     private description: string;
     private status: string;
 
-    constructor(event: { id?: number; genre: string; time: string; date: Date; duration: number; description: string; status: string}) {
+    constructor(event: { id?: number; title: string; genre: string; time: string; date: Date; duration: number; description: string; status: string}) {
         this.id = event.id;
+        this.title = this.validateTitle(event.title);
         this.genre = this.validateGenre(event.genre);
         this.time = this.parseAndValidateTime(event.time);
         this.date = this.validateDate(event.date);
@@ -16,6 +18,12 @@ export class Event {
         this.description = this.validateDescription(event.description);
         this.status = this.validateStatus(event.status);
     }
+
+    private validateTitle(title: string): string {
+        if (!title || title.trim() === "") {
+            throw new Error("title cannot be empty.");
+        }
+        return title;    }
 
     private validateGenre(genre: string): string {
         if (!genre || genre.trim() === "") {
@@ -82,9 +90,12 @@ export class Event {
         }
         return status;
     }
-
     getId(): number | undefined {
         return this.id;
+    }
+
+    getTitle(): string {
+        return this.title;
     }
 
     getGenre(): string {
@@ -111,6 +122,10 @@ export class Event {
 
     getStatus(): string {
         return this.status;
+    }
+
+    setTitle(newTitle: string): void {
+        this.title = this.validateTitle(newTitle);
     }
 
     setDescription(newDescription: string): void {

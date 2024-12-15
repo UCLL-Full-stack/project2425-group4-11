@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import next from 'next';
 
 const prisma = new PrismaClient();
 
@@ -43,6 +44,27 @@ const main = async () => {
             accountStatus: true,
             role: 'admin',
         },
+    });
+
+    const event1 = await prisma.event.create({
+        data: {
+            genre: 'Rock',
+            time: new Date(),
+            date: new Date(),
+            duration: 60,
+            description: 'a new band who are performing live for the first time',
+            status: 'Past', 
+        }
+    });
+    const event2 = await prisma.event.create({
+        data: {
+            genre: 'Pop',
+            time: new Date(),            
+            date: new Date,
+            duration: 120,
+            description: 'Taylor swift errors tour comes to visit',
+            status: 'Upcoming',
+        }
     });
 };
 
