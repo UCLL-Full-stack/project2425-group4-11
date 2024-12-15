@@ -11,7 +11,7 @@ model Event {
     id          Int       @id @default(autoincrement())
     title       String
     genre       String
-    time        DateTime   
+    time        String   
     date        DateTime
     duration    Int
     description String
