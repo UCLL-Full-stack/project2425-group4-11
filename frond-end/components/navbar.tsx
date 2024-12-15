@@ -7,14 +7,14 @@ const Navbar: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
 
   useEffect(() => {
-    const user = sessionStorage.getItem("loggedInUser");
+    const user = localStorage.getItem("loggedInUser");
     if (user) {
       setLoggedInUser(user);
     }
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("loggedInUser");
+    localStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
   };
 
