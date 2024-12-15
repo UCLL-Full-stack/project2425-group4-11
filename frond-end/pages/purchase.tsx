@@ -1,34 +1,45 @@
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Paper,
-  Typography,
   Divider,
-  Select,
-  MenuItem,
   FormControl,
+  IconButton,
   InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import ShowTimeService from "@/services/ShowTimeService";
 import EventFrame from "@/components/event";
 
+// Component
 const PurchasePage: React.FC = () => {
   const router = useRouter();
   const { eventId } = router.query;
+
+  // State
   const [event, setEvent] = useState<any>(null);
-  const [countdown, setCountdown] = useState<number>(600); // 10 min countdown
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [ticketQuantity, setTicketQuantity] = useState<number>(1);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [ticketQuantity, setTicketQuantity] = useState<number>(1); // Default to 1 ticket
-  const ticketPrice = 279.61; // Price for one ticket
+  const [countdown, setCountdown] = useState<number>(600); // 10 minutes countdown
 
+  // Check login status and fetch event data
   useEffect(() => {
-    // Check login status
-    const loggedIn = Boolean(localStorage.getItem("loggedInUser"));
-    setIsLoggedIn(loggedIn);
+    const checkLoginStatus = () => {
+      const loggedIn = Boolean(localStorage.getItem("loggedInUser"));
+      setIsLoggedIn(loggedIn);
+    };
 
-    // Fetch event details
+    checkLoginStatus();
+
     if (eventId) {
       const fetchEvent = async () => {
         const response = await ShowTimeService.getEventById(eventId as string);
@@ -37,53 +48,84 @@ const PurchasePage: React.FC = () => {
       };
       fetchEvent();
     }
+  }, [eventId]);
 
-    // Countdown timer logic
+  // Countdown timer
+  useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
     return () => clearInterval(timer);
-  }, [eventId]);
+  }, []);
 
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   const handlePurchase = () => {
-    alert(`Successfully purchased ${ticketQuantity} tickets!`);
+    console.log("Purchasing ticket for:", event);
+    console.log("Name:", name, "Email:", email, "Quantity:", ticketQuantity);
+    alert("Succesfully purchased ticket.");
+  };
+
+  const handleCancelPurchase = () => {
+    alert("Ticket purchase has been canceled.");
     router.push("/index");
   };
 
-  const totalPrice = (ticketQuantity * ticketPrice).toFixed(2);
+  if (!event) {
+    return <Typography>Loading...</Typography>;
+  }
 
-  if (!event) return <Typography>Loading...</Typography>;
-
+  // User needs to log in to purchase a ticket
   if (!isLoggedIn) {
     return (
-      <Box sx={{ textAlign: "center", padding: 3 }}>
-        <Typography variant="h5">Please log in to purchase tickets</Typography>
-        <Button variant="contained" onClick={() => router.push("/login")}>
-          Log In
-        </Button>
+      <Box sx={{ backgroundColor: "#fff", minHeight: "100vh", padding: 3 }}>
+        <Paper sx={{ padding: 3, maxWidth: 600, margin: "auto", marginTop: 5 }}>
+          <Typography variant="h4" gutterBottom>
+            You need to sign up or log in to purchase a ticket.
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => router.push("/login")}
+          >
+            Log In
+          </Button>
+        </Paper>
       </Box>
     );
   }
+
+  const totalPrice = ticketQuantity * 279.61;
 
   return (
     <Box sx={{ backgroundColor: "#f8f9fa", minHeight: "100vh", padding: 3 }}>
       {/* Event Details */}
       <Box sx={{ maxWidth: 800, margin: "auto", textAlign: "center" }}>
-        <Typography variant="h3">{event.title}</Typography>
-        <Typography variant="h5" color="textSecondary">
-          {event.date} • {event.time}
-        </Typography>
-        <Typography variant="subtitle1">Sportpaleis Antwerpen</Typography>
+        <EventFrame id={event.id} title={event.title} time={event.time} />
       </Box>
 
       {/* Reserved Ticket Section */}
-      <Paper sx={{ maxWidth: 800, margin: "20px auto", padding: 3 }}>
+      <Paper
+        sx={{
+          maxWidth: 800,
+          margin: "20px auto",
+          padding: 3,
+          position: "relative",
+        }}
+      >
+        {/* Cancel Button (Cross Icon) */}
+        <IconButton
+          onClick={handleCancelPurchase}
+          sx={{ position: "absolute", top: 8, right: 8 }}
+          aria-label="cancel purchase"
+        >
+          <CloseIcon />
+        </IconButton>
+
         <Typography variant="h6" color="success">
           ✅ Je tickets zijn gereserveerd!
         </Typography>
@@ -92,6 +134,7 @@ const PurchasePage: React.FC = () => {
           voltooien.
         </Typography>
 
+        {/* Countdown */}
         <Box
           sx={{
             display: "flex",
@@ -112,6 +155,7 @@ const PurchasePage: React.FC = () => {
         <Box>
           <Typography variant="h6">Tickets</Typography>
           <Typography>General Admission Ticket</Typography>
+          <Typography>Concert Hall: ....</Typography>
 
           {/* Ticket Quantity Dropdown */}
           <FormControl fullWidth sx={{ marginTop: 2 }}>
@@ -119,7 +163,9 @@ const PurchasePage: React.FC = () => {
             <Select
               labelId="ticket-quantity-label"
               value={ticketQuantity}
-              onChange={(e) => setTicketQuantity(e.target.value as number)}
+              onChange={(e: SelectChangeEvent<number>) =>
+                setTicketQuantity(Number(e.target.value))
+              }
               label="Quantity"
             >
               {Array.from({ length: 10 }, (_, i) => i + 1).map((number) => (
@@ -137,7 +183,7 @@ const PurchasePage: React.FC = () => {
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h6">Total</Typography>
           <Typography variant="h5" color="primary">
-            €{totalPrice}
+            €{totalPrice.toFixed(2)}
           </Typography>
         </Box>
 
