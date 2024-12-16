@@ -10,7 +10,13 @@ const getEventById = (eventId: string) => {
       method: "GET",
       headers: { "content-type": "application/json" },
     });
-  };
+};
+
+const deleteEvent = async (eventId: string) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${eventId}`, {
+      method: "DELETE",
+    });
+};
 
 
 const createEvent = async (eventData: any) => {
@@ -33,7 +39,8 @@ const ShowTimeService = {
     getAllEvents,
     getEventById,
     createEvent,
-    createTicket
+    createTicket,
+    deleteEvent,
 };
   
 export default ShowTimeService;

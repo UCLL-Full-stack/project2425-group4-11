@@ -30,4 +30,11 @@ const createEvent = async ({
     return await eventDB.createEvent(event);
 }
 
-export default { getAllEvents, getEventById, createEvent };
+const deleteEvent = async (id: number): Promise<void> => {
+    const event = await eventDB.getEventById({ id });
+    if (!event) {
+        throw new Error(`Event with id ${id} does not exist.`);
+    }
+    await eventDB.deleteEvent({ id });
+}
+export default { getAllEvents, getEventById, createEvent, deleteEvent };

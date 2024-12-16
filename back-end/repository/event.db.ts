@@ -57,4 +57,14 @@ const createEvent = async (event: Event): Promise<Event> => {
     }
 }
 
-export default { getAllEvents, getEventById, getEventByTitle, createEvent }
+const deleteEvent = async ({ id }: { id: number }): Promise<void> => {
+    try {
+        await database.event.delete({
+            where: { id },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+export default { getAllEvents, getEventById, getEventByTitle, createEvent, deleteEvent };

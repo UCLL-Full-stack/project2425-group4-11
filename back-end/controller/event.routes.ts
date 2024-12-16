@@ -109,4 +109,32 @@ eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
     }
 });
 
+/**
+ * @swagger
+ * /events/{id}:
+ *   delete:
+ *     summary: Delete an event by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The event ID
+ *     responses:
+ *       200:
+ *         description: The event was successfully deleted.
+ *       404:
+ *         description: Event not found.
+ */
+eventRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const eventId = Number(req.params.id);
+        await eventService.deleteEvent(eventId);
+        res.status(200).json({ message: 'Event successfully deleted' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { eventRouter };

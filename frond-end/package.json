@@ -27,6 +27,8 @@
     "use-interval": "^1.4.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.3.0",
+    "@types/next": "^8.0.7",
     "@types/node": "18.15.0",
     "@types/react-datepicker": "^4.15.0",
     "autoprefixer": "^10.4.16",
