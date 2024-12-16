@@ -59,6 +59,11 @@ const OverviewMyEvent: React.FC = () => {
             }).format(new Date(event.date));
 
             return (
+              //check for roles when rendering the event
+              // concert hall can delete
+              // artist can reschedule
+              // user can view
+              
               <MyEventFrame
                 key={index}
                 title={event.title}

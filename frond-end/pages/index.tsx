@@ -11,12 +11,15 @@ import ButtonAddEvent from "@/components/events/buttonAddEvent";
 const Start: React.FC = () => {
   const [events, setEvents] = useState<Array<Event>>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const getEvents = async () => {
     try {
       const response = await ShowTimeService.getAllEvents();
       if (!response.ok) {
-        console.error(`Failed to fetch events: ${response.status} ${response.statusText}`);
+        console.error(
+          `Failed to fetch events: ${response.status} ${response.statusText}`
+        );
         setEvents([]);
         return;
       }
@@ -37,6 +40,15 @@ const Start: React.FC = () => {
     getEvents();
   }, []);
 
+  const filteredEvents = events.filter((event) =>
+    event.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleSearch = () => {
+    // This function can be used to trigger any additional actions on search button click
+    console.log("Search button clicked");
+  };
+
   return (
     <>
       <Head>
@@ -54,8 +66,10 @@ const Start: React.FC = () => {
               type="text"
               placeholder="Search for event"
               className={styles.searchBar}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className={styles.searchButton}>
+            <button className={styles.searchButton} onClick={handleSearch}>
               <span>🔍</span>
             </button>
           </div>
@@ -68,28 +82,27 @@ const Start: React.FC = () => {
         <h2>Upcoming Events</h2>
         <section className={styles.filterButton}>
           <FilterButton onClick={() => {}} />
-          <ButtonAddEvent/>
+          <ButtonAddEvent />
         </section>
         <section className={styles.events}>
-        {events.map((event, index) => {
-          const formattedDate = new Intl.DateTimeFormat("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "2-digit",
-          }).format(new Date(event.date));
+          {filteredEvents.map((event, index) => {
+            const formattedDate = new Intl.DateTimeFormat("en-US", {
+              weekday: "short",
+              month: "short",
+              day: "2-digit",
+            }).format(new Date(event.date));
 
-        return (
-          <EventFrame
-            key={index}
-            title={event.title}
-            date={formattedDate} // Pass formatted date
-            time={event.time}
-            id={event.id}
-            genre={event.genre}
-          />
-        );
-      })}
-
+            return (
+              <EventFrame
+                key={index}
+                title={event.title}
+                date={formattedDate} // Pass formatted date
+                time={event.time}
+                id={event.id}
+                genre={event.genre}
+              />
+            );
+          })}
         </section>
       </main>
 
