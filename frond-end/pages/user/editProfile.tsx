@@ -6,6 +6,15 @@ import styles from "@styles/Login.module.css";
 import classNames from "classnames";
 import InputField from "@/components/InputField";
 
+type Error = {
+    email: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    phoneNumber: string | null,
+    password: string | null,
+    accountStatus: string | null
+}
+
 const EditProfilePage: React.FC = () => {
     const [userData, setUserData] = useState<User>({
         email: "",
@@ -24,9 +33,36 @@ const EditProfilePage: React.FC = () => {
         password: "",
         accountStatus: true,
     });
+    const [errors, setErrors] = useState<Error>({
+        email: null,
+        firstName: null,
+        lastName: null,
+        phoneNumber: null,
+        password: null,
+        accountStatus: null
+    })
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+
+    const validate = (): boolean => {
+        let result = true;
+        if (!formData.email && !userData.email) {
+            setErrors({ ...errors, email: "Email is required."});
+            result = false
+        } else {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (formData.email) {
+                if (!emailRegex.test(formData.email))
+            }
+        }
+    }
+    
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        clearErrors();
+    }
 
     return (
         <>
@@ -51,7 +87,7 @@ const EditProfilePage: React.FC = () => {
                     ))}
                     </ul>
                 )}
-                <form>
+                <form onSubmit={(event) => handleSubmit(event)}>
                     <InputField 
                         label={formData.email || "Email"}
                         margin="normal"
