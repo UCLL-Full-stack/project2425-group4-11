@@ -12,9 +12,28 @@ const getEventById = (eventId: string) => {
     });
   };
 
+
+const createEvent = async (eventData: any) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(eventData),
+    });
+};
+
+const createTicket = async (ticketData: any) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + "/tickets", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(ticketData),
+  });
+}
+
 const ShowTimeService = {
     getAllEvents,
     getEventById,
+    createEvent,
+    createTicket
 };
   
 export default ShowTimeService;

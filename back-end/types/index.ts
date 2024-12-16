@@ -21,8 +21,9 @@ type TicketInput= {
 }
 type EventInput = {
     id?: number;
+    title: string;
     genre: string;
-    time: Date;
+    time: string;
     date: Date;
     price: number;
     duration: number;

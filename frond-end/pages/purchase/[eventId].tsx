@@ -1,19 +1,23 @@
 import ShowTimeService from "@/services/ShowTimeService";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { Event } from "@/types";
+import React, { useEffect, useMemo, useState } from "react";
+import { Event, Ticket } from "@/types";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Paper, Typography, Button, IconButton, Divider, FormControl, InputLabel, Select, SelectChangeEvent, MenuItem } from "@mui/material";
 import EventDetails from "@/components/events/eventDetails";
+import TicketService from "@/services/TicketService";
 
 const PurchasePage: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ticketQuantity, setTicketQuantity] = useState<number>(1);
+  const [ticketCategory, setTicketCategory] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [countdown, setCountdown] = useState<number>(600);
+  const [ticketPrice, setTicketPrice] = useState<number>(0);
 
   const [event, setEvent] = useState<Event>();
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const router = useRouter();
   const { eventId } = router.query; // Dynamic route parameter
 
@@ -24,6 +28,25 @@ const PurchasePage: React.FC = () => {
     const eventData = await eventResponse.json();
     setEvent(eventData);
   };
+
+  const getAllTickets = async () => {
+    try {
+      const ticketResponse = await TicketService.getAllTickets();
+      if (ticketResponse.status === 200) {
+        const ticketsFound = await ticketResponse.json();
+        setTickets(ticketsFound);
+      } else {
+        const error = await ticketResponse.json();
+        console.error("Error fetching: ", error);
+      }
+    } catch (error) {
+      console.error("Error fetching: ", error);
+    }
+  }
+
+  useEffect(() => {
+    getAllTickets();
+  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -93,8 +116,6 @@ const PurchasePage: React.FC = () => {
 
   console.log(event);
 
-  const totalPrice = ticketQuantity * 279.61;
-
   return (
     <Box
     sx={{
@@ -148,7 +169,7 @@ const PurchasePage: React.FC = () => {
             marginTop: 2,
           }}
         >
-          <Typography variant="h6">Restende tijd:</Typography>
+          <Typography variant="h6">Resterende tijd:</Typography>
           <Typography variant="h3" color="error">
             {formatTime(countdown)}
           </Typography>
@@ -162,7 +183,26 @@ const PurchasePage: React.FC = () => {
           <Typography>General Admission Ticket</Typography>
           <Typography>Concert Hall: ....</Typography>
 
+          {/* Ticket Category Dropdown */}
+
+          <FormControl fullWidth sx={{ marginTop: 2 }}>
+            <InputLabel id="ticket-category-label">Category</InputLabel>
+            <Select
+              labelId="ticket-category-label"
+              value={ticketCategory}
+              onChange={(e) =>
+                setTicketCategory(( e.target.value ))
+              }
+              label="Category"
+            >
+              <MenuItem value="Regular">Regular</MenuItem>
+              <MenuItem value="VIP">VIP</MenuItem>
+              <MenuItem value="Student">Student</MenuItem>
+            </Select>
+          </FormControl>
+
           {/* Ticket Quantity Dropdown */}
+
           <FormControl fullWidth sx={{ marginTop: 2 }}>
             <InputLabel id="ticket-quantity-label">Quantity</InputLabel>
             <Select
@@ -179,7 +219,7 @@ const PurchasePage: React.FC = () => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+            </FormControl>
         </Box>
 
         <Divider sx={{ marginY: 2 }} />
@@ -187,9 +227,15 @@ const PurchasePage: React.FC = () => {
         {/* Price */}
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h6">Total</Typography>
+          {tickets ? (
           <Typography variant="h5" color="primary">
-            €{totalPrice.toFixed(2)}
+            €{(tickets?.find((ticket) => ticket.eventId.toString() === eventId?.toString())?.price || 0) * ticketQuantity}
           </Typography>
+       
+        ) : (
+          <Typography>Loading price...</Typography>
+        )}
+
         </Box>
 
         {/* Proceed Button */}

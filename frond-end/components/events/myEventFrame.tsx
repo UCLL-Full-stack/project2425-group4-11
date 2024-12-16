@@ -1,5 +1,4 @@
 import { Box, Paper, Typography } from "@mui/material";
-import PurchaseButton from "./Tickets/purchaseButton";
 
 type EventProps = {
   id: string;
@@ -10,7 +9,7 @@ type EventProps = {
   imageUrl?: string;
 };
 
-const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageUrl }) => {
+const myEventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageUrl }) => {
   return (
     <Paper
       sx={{
@@ -57,9 +56,8 @@ const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageU
         {date}, {time}
       </Typography>
 
-      <PurchaseButton eventId={id} />
     </Paper>
   );
 };
 
-export default EventFrame;
+export default myEventFrame;

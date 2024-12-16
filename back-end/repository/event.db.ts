@@ -1,12 +1,6 @@
 import { Event } from "../model/Event";
 import database from "./database";
 
-
-const now = new Date();
-const date = new Date();
-
-date.setMonth(now.getMonth() + 1)
-
 const getAllEvents = async (): Promise<Event[]> => {
     try {
         const eventsPrisma = await database.event.findMany();

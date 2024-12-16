@@ -29,7 +29,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         {loggedInUser ? (
           <>
-            <MenuItem onClick={handleClose}>View My Events</MenuItem>
+            <MenuItem component="a" href="/events/overviewEvents" onClick={handleClose}>
+              View My Events
+            </MenuItem>
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem
               onClick={() => {

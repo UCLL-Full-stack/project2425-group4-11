@@ -11,8 +11,14 @@ const tickets = [
     }),
 ]
 
-const getAllTickets = (): Ticket[] => {
-    return tickets;
+const getAllTickets = async (): Promise<Ticket[]> => {
+    try {
+        const ticketsPrisma = await database.ticket.findMany();
+        return ticketsPrisma.map((ticketPrisma) => Ticket.from(ticketPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 }
 
 const getTicketById = ({ id }: { id: number }): Ticket | null => {

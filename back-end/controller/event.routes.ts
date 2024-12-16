@@ -80,4 +80,33 @@ eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
+/**
+ * @swagger
+ * /events:
+ *   post:
+ *      summary: Create a new event.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Event'
+ *      responses:
+ *         201:
+ *            description: The created event object.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/Event'
+ */
+eventRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const eventInput = req.body;
+        const newEvent = await eventService.createEvent(eventInput);
+        res.status(201).json(newEvent);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { eventRouter };

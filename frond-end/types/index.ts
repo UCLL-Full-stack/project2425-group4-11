@@ -2,7 +2,7 @@ export type Events = {
     id?: number;
     genre: string;
     title: string;
-    time: Date;
+    time: string;
     date: Date;
     price: number;
     duration: number;
@@ -26,6 +26,7 @@ export type Ticket = {
     type: string;
     status: string;
     price: number;
+    eventId: number;
 }
 
 export type ConcertHall = {

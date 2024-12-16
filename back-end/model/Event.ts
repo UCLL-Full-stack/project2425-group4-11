@@ -4,7 +4,7 @@ export class Event {
     private id?: number;
     private title: string;
     private genre: string;
-    private time: Date;
+    private time: string;
     private date: Date;
     private duration: number;
     private description: string;
@@ -35,42 +35,51 @@ export class Event {
         return genre;
     }
 
-    private parseAndValidateTime(timeString: string): Date {
+    private parseAndValidateTime(timeString: string): string {
+        // Validate format: 'HH:MM'
         if (!timeString.match(/^\d{2}:\d{2}$/)) {
             throw new Error("Time must be in the format 'HH:MM'.");
-        }        
-        
-        if (parseInt(timeString.slice(0, 2)) >= 24) {
-            throw new Error("Invalid time provided.");
         }
-
-        if (parseInt(timeString.slice(3)) >= 60) {
-            throw new Error("Invalid time provided.");
-        }
-
+    
+        // Extract and validate hours and minutes
         const [hours, minutes] = timeString.split(":").map(Number);
-        const time = new Date();
-        time.setHours(hours, minutes, 0, 0);
-
-        if (isNaN(time.getTime())) {
-            throw new Error("Invalid time provided.");
+    
+        if (hours < 0 || hours >= 24) {
+            throw new Error("Hours must be between 00 and 23.");
         }
-
-        return time;
+    
+        if (minutes < 0 || minutes >= 60) {
+            throw new Error("Minutes must be between 00 and 59.");
+        }
+    
+        // Create a valid time string (ensure it returns 'HH:MM')
+        const validatedTime = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+        return validatedTime;
     }
+    
 
-    private validateDate(date: Date): Date {
+    private validateDate(date: Date | string): Date {
+        if (typeof date === "string") {
+            date = new Date(date); // Parse string to Date
+        }
+    
+        if (!(date instanceof Date) || isNaN(date.getTime())) {
+            throw new Error("Invalid date format.");
+        }
+    
         const now = new Date();
         const minDate = new Date();
         minDate.setMonth(now.getMonth() + 1);
         minDate.setHours(0, 0, 0, 0);
-        date.setHours(0, 0, 0, 0);
-
+    
+        date.setHours(0, 0, 0, 0); // Safe now that we confirmed it's a valid Date
+    
         if (date < minDate) {
             throw new Error("Event date must be at least one month in the future.");
         }
         return date;
     }
+    
 
     private validateDuration(duration: number): number {
         if (duration <= 0) {
@@ -106,9 +115,17 @@ export class Event {
     }
 
     getTime(): string {
-        const hours = ("0" + this.time.getHours()).slice(-2);
-        const minutes = ("0" + this.time.getMinutes()).slice(-2);
-        return `${hours}:${minutes}`;
+        if (!this.time.match(/^\d{2}:\d{2}$/)) {
+            throw new Error("Time must be in the format 'HH:MM'.");
+        }
+    
+        const [hours, minutes] = this.time.split(":");
+    
+        // Ensure hours and minutes are valid
+        const formattedHours = hours.padStart(2, "0");
+        const formattedMinutes = minutes.padStart(2, "0");
+    
+        return `${formattedHours}:${formattedMinutes}`;
     }
 
     getDate(): Date {
@@ -139,16 +156,17 @@ export class Event {
         this.status = this.validateStatus(newStatus);
     }
 
-    static from({ id, title, genre,  time, date, duration, description, status}: EventPrisma) {
+    static from({ id, title, genre, time, date, duration, description, status }: EventPrisma) {
         return new Event({
             id,
             title,
             genre,
             time,
-            date,
+            date: new Date(date), // Convert string to Date
             duration,
             description,
             status,
         });
     }
+    
 }

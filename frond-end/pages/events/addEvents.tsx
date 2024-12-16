@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
-  TextField,
   Typography,
   Paper,
   MenuItem,
@@ -14,24 +13,24 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
+import ShowTimeService from "@/services/ShowTimeService";
+import InputField from "@/components/InputField";
 
-// Ticket interface
 interface Ticket {
-  category: string;
+  type: string;
   price: number;
+  amount: number;
 }
 
-// Event interface
 interface Event {
   id?: number;
   title: string;
   genre: string;
   time: string;
-  date: string;
+  date: Date;
   duration: number;
   description: string;
   status: string;
-  tickets: Ticket[];
 }
 
 const AddEventPage: React.FC = () => {
@@ -40,190 +39,303 @@ const AddEventPage: React.FC = () => {
     title: "",
     genre: "",
     time: "",
-    date: "",
+    date: new Date(),
     duration: 0,
     description: "",
     status: "",
-    tickets: [],
   });
 
   const [ticketCategories, setTicketCategories] = useState<Ticket[]>([]);
-  const [newTicket, setNewTicket] = useState({ category: "", price: 0 });
+  const [newTicket, setNewTicket] = useState({ type: "", price: 0, amount: 0 });
+  const [loading, setLoading] = useState(false);
+  const [statusMessages, setStatusMessages] = useState<{ message: string; type: "error" | "success" }[]>([]);
+  
+  // Error state management
+  const [eventErrors, setEventErrors] = useState({
+    title: "",
+    genre: "",
+    time: "",
+    date: "",
+    duration: "",
+    description: "",
+    status: ""
+  });
+  const [ticketErrors, setTicketErrors] = useState({ type: "", price: "", amount: "" });
 
-  // Handle input changes for event details
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setEventData({ ...eventData, [name]: value });
+  const clearErrors = () => {
+    setEventErrors({
+      title: "",
+      genre: "",
+      time: "",
+      date: "",
+      duration: "",
+      description: "",
+      status: ""
+    });
+    setTicketErrors({ type: "", price: "", amount: "" });
+    setStatusMessages([]);
   };
 
-  // Handle ticket category addition
-  const handleAddTicket = () => {
-    if (newTicket.category && newTicket.price > 0) {
-      setTicketCategories([...ticketCategories, newTicket]);
-      setNewTicket({ category: "", price: 0 });
+  const validateEvent = () => {
+    let valid = true;
+    const errors = { ...eventErrors };
+
+    if (!eventData.title) {
+      errors.title = "Title is required.";
+      valid = false;
+    }
+    if (!eventData.genre) {
+      errors.genre = "Genre is required.";
+      valid = false;
+    }
+    if (!eventData.time) {
+      errors.time = "Time is required.";
+      valid = false;
+    }
+    if (!eventData.date) {
+      errors.date = "Date is required.";
+      valid = false;
+    }
+    if (eventData.duration <= 0) {
+      errors.duration = "Duration must be greater than 0.";
+      valid = false;
+    }
+    if (!eventData.description) {
+      errors.description = "Description is required.";
+      valid = false;
+    }
+    if (!eventData.status) {
+      errors.status = "Status is required.";
+      valid = false;
+    }
+
+    setEventErrors(errors);
+    return valid;
+  };
+
+  const validateTicket = () => {
+    let valid = true;
+    const errors = { ...ticketErrors };
+
+    if (!newTicket.type) {
+      errors.type = "Category is required.";
+      valid = false;
+    }
+    if (newTicket.price <= 0) {
+      errors.price = "Price must be greater than 0.";
+      valid = false;
+    }
+    if (newTicket.amount <= 0) {
+      errors.amount = "Amount must be greater than 0.";
+      valid = false;
+    }
+
+    setTicketErrors(errors);
+    return valid;
+  };
+
+  const handleSubmit = async () => {
+    clearErrors();
+
+    if (!validateEvent()) {
+      return;
+    }
+
+    const finalEvent: Event = { 
+      ...eventData, 
+      date: eventData.date instanceof Date ? eventData.date : new Date(eventData.date)
+    };
+    
+
+    try {
+      setLoading(true);
+      const eventResponse = await ShowTimeService.createEvent(finalEvent);
+
+      if (!eventResponse.ok) {
+        const errorText = await eventResponse.text();
+        setStatusMessages([{ message: `Error creating event: ${errorText}`, type: "error" }]);
+        setLoading(false);
+        return;
+      }
+
+      const eventData = await eventResponse.json();
+
+      // Handle ticket creation
+      for (const ticket of ticketCategories) {
+        const ticketPayload = { ...ticket, eventId: eventData.id };
+        const ticketResponse = await ShowTimeService.createTicket(ticketPayload);
+
+        if (!ticketResponse.ok) {
+          setStatusMessages([{ message: "Failed to create one or more tickets", type: "error" }]);
+          setLoading(false);
+          return;
+        }
+      }
+
+      setStatusMessages([{ message: "Event and tickets created successfully!", type: "success" }]);
+      router.push("/");
+    } catch (error) {
+      setStatusMessages([{ message: "An error occurred. Please try again later.", type: "error" }]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Handle form submission
-  const handleSubmit = () => {
-    const finalEvent: Event = { ...eventData, tickets: ticketCategories };
-    console.log("Event to be created:", finalEvent);
-    alert("Event Created Successfully!");
+  const handleTicketAdd = () => {
+    if (validateTicket()) {
+      // Check for duplicates
+      if (ticketCategories.some(ticket => ticket.type === newTicket.type)) {
+        setTicketErrors({ ...ticketErrors, type: "This category has already been added." });
+        return;
+      }
+
+      setTicketCategories([...ticketCategories, newTicket]);
+      setNewTicket({ type: "", price: 0, amount: 0 });
+    }
   };
 
   return (
     <Box sx={{ padding: 3, backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
       <Paper sx={{ maxWidth: 700, margin: "auto", padding: 3, position: "relative" }}>
-        {/* X Button */}
-        <IconButton
-          onClick={() => router.push("/")}
-          sx={{ position: "absolute", top: 8, right: 8 }}
-        >
+        <IconButton onClick={() => router.push("/")} sx={{ position: "absolute", top: 8, right: 8 }}>
           <CloseIcon />
         </IconButton>
-
         <Typography variant="h4" gutterBottom>
           Add New Event
         </Typography>
         <Divider sx={{ marginBottom: 2 }} />
 
-        {/* Event Title */}
-        <TextField
+        {/* Event Fields */}
+        <InputField
           label="Title"
-          name="title"
           value={eventData.title}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
+          error={!!eventErrors.title}
+          helperText={eventErrors.title}
+          onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
         />
-
-        {/* Event Genre */}
-        <TextField
+        <InputField
           label="Genre"
-          name="genre"
           value={eventData.genre}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
+          error={!!eventErrors.genre}
+          helperText={eventErrors.genre}
+          onChange={(e) => setEventData({ ...eventData, genre: e.target.value })}
         />
-
-        {/* Event Date and Time */}
-        <TextField
-          label="Date"
-          name="date"
-          type="date"
-          value={eventData.date}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{ shrink: true }}
-        />
-        <TextField
+        <InputField
           label="Time"
-          name="time"
-          type="time"
           value={eventData.time}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          InputLabelProps={{ shrink: true }}
+          error={!!eventErrors.time}
+          helperText={eventErrors.time}
+          onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
         />
-
-        {/* Event Duration */}
-        <TextField
-          label="Duration (in minutes)"
-          name="duration"
-          type="number"
+        <InputField
+          label="Date"
+          value={eventData.date.toISOString().split("T")[0]}
+          type="date"
+          error={!!eventErrors.date}
+          helperText={eventErrors.date}
+          onChange={(e) => {
+            const parsedDate = new Date(e.target.value);
+            if (isNaN(parsedDate.getTime())) {
+              setEventErrors({ ...eventErrors, date: "Invalid date format." });
+            } else {
+              setEventData({ ...eventData, date: parsedDate });
+            }
+          }}
+          
+        />
+        <InputField
+          label="Duration (minutes)"
           value={eventData.duration}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
+          type="number"
+          error={!!eventErrors.duration}
+          helperText={eventErrors.duration}
+          onChange={(e) => setEventData({ ...eventData, duration: parseInt(e.target.value) })}
         />
-
-        {/* Event Description */}
-        <TextField
+        <InputField
           label="Description"
-          name="description"
           value={eventData.description}
-          onChange={handleChange}
-          fullWidth
-          multiline
-          rows={3}
-          margin="normal"
+          error={!!eventErrors.description}
+          helperText={eventErrors.description}
+          onChange={(e) => setEventData({ ...eventData, description: e.target.value })}
         />
-
-        {/* Event Status */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Status</InputLabel>
           <Select
-            name="status"
             value={eventData.status}
-            onChange={(e) =>
-              setEventData({ ...eventData, status: e.target.value as string })
-            }
+            onChange={(e) => setEventData({ ...eventData, status: e.target.value })}
+            error={!!eventErrors.status}
           >
-            <MenuItem value="Scheduled">Scheduled</MenuItem>
-            <MenuItem value="Postponed">Postponed</MenuItem>
-            <MenuItem value="Cancelled">Cancelled</MenuItem>
+            <MenuItem value="Upcoming">Upcoming</MenuItem>
+            <MenuItem value="Ongoing">Ongoing</MenuItem>
+            <MenuItem value="Past">Past</MenuItem>
           </Select>
         </FormControl>
 
+        {/* Add Ticket */}
         <Divider sx={{ marginY: 2 }} />
-
-        {/* Add Ticket Categories */}
-        <Typography variant="h6" gutterBottom>
-          Ticket Categories
-        </Typography>
+        <Typography variant="h6">Ticket Categories</Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
-          <TextField
-            label="Category"
-            value={newTicket.category}
-            onChange={(e) =>
-              setNewTicket({ ...newTicket, category: e.target.value })
-            }
-            fullWidth
-          />
-          <TextField
+          <FormControl fullWidth>
+            <InputLabel>Category</InputLabel>
+            <Select
+              value={newTicket.type}
+              onChange={(e) => setNewTicket({ ...newTicket, type: e.target.value })}
+              error={!!ticketErrors.type}
+            >
+              <MenuItem value="Regular">Regular</MenuItem>
+              <MenuItem value="VIP">VIP</MenuItem>
+              <MenuItem value="Student">Student</MenuItem>
+            </Select>
+          </FormControl>
+          <InputField
             label="Price (€)"
-            type="number"
             value={newTicket.price}
-            onChange={(e) =>
-              setNewTicket({ ...newTicket, price: parseFloat(e.target.value) })
-            }
-            fullWidth
+            type="number"
+            error={!!ticketErrors.price}
+            helperText={ticketErrors.price}
+            onChange={(e) => setNewTicket({ ...newTicket, price: parseFloat(e.target.value) })}
           />
-          <Button
-            variant="contained"
-            onClick={handleAddTicket}
-            sx={{ alignSelf: "center" }}
-          >
-            Add
+          <InputField
+            label="Amount"
+            value={newTicket.amount}
+            type="number"
+            error={!!ticketErrors.amount}
+            helperText={ticketErrors.amount}
+            onChange={(e) => setNewTicket({ ...newTicket, amount: parseInt(e.target.value) })}
+          />
+          <Button variant="contained" onClick={handleTicketAdd}>
+            Add Ticket
           </Button>
         </Box>
 
-        {/* Display Added Tickets */}
+        {/* Display Tickets */}
         {ticketCategories.length > 0 && (
           <Box sx={{ marginY: 2 }}>
             <Typography variant="subtitle1">Added Tickets:</Typography>
             {ticketCategories.map((ticket, index) => (
               <Typography key={index}>
-                {ticket.category} - €{ticket.price.toFixed(2)}
+                {ticket.type} - €{ticket.price.toFixed(2)} ({ticket.amount} tickets)
               </Typography>
             ))}
           </Box>
         )}
 
-        <Divider sx={{ marginY: 2 }} />
-
         {/* Submit Button */}
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleSubmit}
-        >
-          Create Event
+        <Divider sx={{ marginY: 2 }} />
+        <Button variant="contained" fullWidth onClick={handleSubmit} disabled={loading}>
+          {loading ? "Creating..." : "Create Event"}
         </Button>
+
+        {/* Status Messages */}
+        {statusMessages.length > 0 && (
+          <Box sx={{ marginTop: 2 }}>
+            {statusMessages.map((msg, index) => (
+              <Typography key={index} color={msg.type === "error" ? "error" : "primary"}>
+                {msg.message}
+              </Typography>
+            ))}
+          </Box>
+        )}
       </Paper>
     </Box>
   );
