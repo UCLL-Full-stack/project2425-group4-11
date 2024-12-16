@@ -16,7 +16,7 @@ model Event {
     duration    Int
     description String
     status      String
-
+    tickets     Ticket?
 }
 
 model Artist {
@@ -54,9 +54,9 @@ model Ticket {
     id                      Int       @id @default(autoincrement())
     type                    String
     status                  String
-    price                   Int    
-    generalAdmission        Boolean
-    seat                    String 
+    price                   Int
+    event                   Event     @relation(fields: [eventId], references: [id])
+    eventId                 Int       @unique
 }
 
 model User {

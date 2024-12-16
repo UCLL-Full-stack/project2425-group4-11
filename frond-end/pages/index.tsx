@@ -5,6 +5,7 @@ import EventFrame from "@/components/event";
 import FilterButton from "@/components/filterButton";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
+import ButtonAddEvent from "@/components/events/buttonAddEvent";
 //import EventOverviewTable from "@/components/events/EventOverviewTable";
 
 const Start: React.FC = () => {
@@ -12,9 +13,24 @@ const Start: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const getEvents = async () => {
-    const response = await ShowTimeService.getAllEvents();
-    const events = await response.json();
-    setEvents(events);
+    try {
+      const response = await ShowTimeService.getAllEvents();
+      if (!response.ok) {
+        console.error(`Failed to fetch events: ${response.status} ${response.statusText}`);
+        setEvents([]);
+        return;
+      }
+      const events = await response.json();
+      if (Array.isArray(events)) {
+        setEvents(events);
+      } else {
+        setEvents([]);
+        console.error("Expected an array of events but got:", events);
+      }
+    } catch (error) {
+      console.error("Failed to fetch events:", error);
+      setEvents([]);
+    }
   };
 
   useEffect(() => {
@@ -52,12 +68,13 @@ const Start: React.FC = () => {
         <h2>Upcoming Events</h2>
         <section className={styles.filterButton}>
           <FilterButton onClick={() => {}} />
+          <ButtonAddEvent/>
         </section>
         <section className={styles.events}>
           {events.map(
             (event, index) => (
               console.log("event"),
-              (<EventFrame key={index} title={event.genre} time={event.time} />)
+              (<EventFrame key={index} title={event.title} time={event.time} id={event.id} genre={event.genre} />)
             )
           )}
         </section>

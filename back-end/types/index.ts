@@ -17,8 +17,7 @@ type TicketInput= {
     type: string;
     status: string;
     price: number;
-    seat: string;
-    generalAdmission: boolean;
+    eventId: number;
 }
 type EventInput = {
     id?: number;

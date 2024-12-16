@@ -1,18 +1,18 @@
+import { Ticket as TicketPrisma } from '@prisma/client';
+
 export class Ticket {
     private id?: number;
     private type: string;
     private status: string;
-    private price: number;    
-    private generalAdmission: boolean;
-    private seat: string | null;
+    private price: number;
+    private eventId: number; 
 
-    constructor(ticket: { id?: number; type: string; status: string; price: number; generalAdmission: boolean; seat: string | null }) {
+    constructor(ticket: { id?: number; type: string; status: string; price: number; eventId: number }) {
         this.id = ticket.id;
         this.type = this.validateType(ticket.type);
         this.status = this.validateStatus(ticket.status);
-        this.price = this.validatePrice(ticket.price);        
-        this.generalAdmission = this.validateAdmission(ticket.generalAdmission);
-        this.seat = this.validateSeat(ticket.seat, ticket.generalAdmission);
+        this.price = this.validatePrice(ticket.price);
+        this.eventId = ticket.eventId;
     }
 
     private validateType(type: string): string {
@@ -38,25 +38,6 @@ export class Ticket {
         return price;
     }
 
-    private validateSeat(seat: string | null, generalAdmission: boolean): string | null {
-        if (generalAdmission) {
-            if (seat !== null ) {
-                throw new Error('There are no seats in a general admission.');
-            }
-        }
-        if (!seat || seat.trim() === "") {
-            throw new Error("Seat cannot be empty.");
-        }
-        return seat;
-    }
-
-    private validateAdmission(generalAdmission: boolean): boolean {
-        if (typeof generalAdmission !== 'boolean') {
-            throw new Error('General Admission must be a boolean.');
-        }
-        return generalAdmission;
-    }
-
     getId(): number | undefined {
         return this.id;
     }
@@ -73,19 +54,21 @@ export class Ticket {
         return this.price;
     }
 
-    getSeat(): string | null{
-        return this.seat;
-    }
-
-    getGeneralAdmission(): boolean {
-        return this.generalAdmission;
+    getEventId(): number {
+        return this.eventId;
     }
 
     setStatus(newStatus: string): void {
         this.status = this.validateStatus(newStatus);
     }
 
-    setSeat(newSeat: string): void {
-        this.seat = this.validateSeat(newSeat, this.generalAdmission);
+    static from({ id, type, status, price, eventId}: TicketPrisma) {
+        return new Ticket({
+            id,
+            type,
+            status,
+            price,
+            eventId,
+        });
     }
 }

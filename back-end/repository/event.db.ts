@@ -7,36 +7,28 @@ const date = new Date();
 
 date.setMonth(now.getMonth() + 1)
 
-const events = [
-    new Event({
-        id: 1,
-        title:'ACDC- rocking hard',
-        genre: 'Rock',
-        time: '20:00',
-        date: date,
-        duration: 60,
-        description: 'a new band who are performing live for the first time',
-        status: 'Past',
-        }),
-    new Event({
-        id: 2,
-        title: 'Taylor Swift - Erras tours',
-        genre: 'Pop',
-        time: '20:00',            
-        date: date,
-        duration: 120,
-        description: 'Taylor swift errors tour comes to visit',
-        status: 'Upcoming',
-        })
-];
-
-const getAllEvents = (): Event[] => {
-    return events;
+const getAllEvents = async (): Promise<Event[]> => {
+    try {
+        const eventsPrisma = await database.event.findMany();
+        return eventsPrisma.map((eventPrisma) => Event.from(eventPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 }
 
-const getEventById = ({ id }: { id: number}): Event | null => {
-    return events.find((event) => event.getId() === id) || null;
-}
+const getEventById = async ({ id }: { id: number}): Promise<Event | null> => {
+    try {
+        const eventPrisma = await database.event.findUnique({
+            where: { id },
+        });
+
+        return eventPrisma ? Event.from(eventPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 const getEventByTitle = async ({ title }: { title: string }): Promise<Event | null> => {
     try {
@@ -51,4 +43,24 @@ const getEventByTitle = async ({ title }: { title: string }): Promise<Event | nu
     }
 };
 
-export default { getAllEvents, getEventById, getEventByTitle }
+const createEvent = async (event: Event): Promise<Event> => {
+    try {
+        const eventPrisma = await database.event.create({
+            data: {
+                title: event.getTitle(),
+                genre: event.getGenre(),
+                time: event.getTime(),
+                date: event.getDate(),
+                duration: event.getDuration(),
+                description: event.getDescription(),
+                status: event.getStatus(),
+            },
+        });
+        return Event.from(eventPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+export default { getAllEvents, getEventById, getEventByTitle, createEvent }

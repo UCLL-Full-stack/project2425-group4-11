@@ -14,16 +14,10 @@ const createTicket = ({
     type,
     status,
     price,
-    seat,
-    generalAdmission,
+    eventId
 }: TicketInput): Ticket => {
-    if (!generalAdmission) {
-        const existingTicket = ticketDb.getTicketByTypeAndStatusAndPriceAndSeat({ type }, { status }, { price }, { seat });
-        if (existingTicket) {
-            throw new Error(`There is already a ticket for ${seat}`);
-        }
-    }
-    const ticket = new Ticket({ type, status, price, seat, generalAdmission });
+
+    const ticket = new Ticket({ type, status, price, eventId });
     return ticket;
 }
 

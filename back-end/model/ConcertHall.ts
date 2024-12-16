@@ -1,4 +1,5 @@
 import { ContactInfo } from "../types";
+import { ConcertHall as ConcertHallPrisma } from '@prisma/client';
 
 export class ConcertHall {
     private id?: number;
@@ -123,5 +124,16 @@ export class ConcertHall {
     setContactInfo(newContactInfo: Partial<ContactInfo>): void {
         const updatedContactInfo = { ...this.contactInfo, ...newContactInfo };
         this.contactInfo = this.validateContactInfo(updatedContactInfo);
+    }
+
+    static from ({id, location, capacity, name, facilities, contactInfo}: ConcertHallPrisma & { contactInfo: ContactInfo }) {
+        return new ConcertHall({
+            id, 
+            location, 
+            capacity, 
+            name, 
+            facilities, 
+            contactInfo
+        });
     }
 }

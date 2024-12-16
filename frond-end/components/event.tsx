@@ -4,11 +4,12 @@ import PurchaseButton from "./Tickets/purchaseButton";
 type EventProps = {
   id: string;
   title: string;
+  genre: string;
   time: string;
   imageUrl?: string;
 };
 
-const EventFrame: React.FC<EventProps> = ({ id, title, time, imageUrl }) => {
+const EventFrame: React.FC<EventProps> = ({ id, title, genre, time, imageUrl }) => {
   return (
     <Paper
       sx={{
@@ -43,6 +44,12 @@ const EventFrame: React.FC<EventProps> = ({ id, title, time, imageUrl }) => {
         sx={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 1 }}
       >
         {title}
+      </Typography>
+
+      <Typography
+        variant="h6"
+        sx={{ fontSize: "1rem", marginBottom: 1 }}>
+        {genre}
       </Typography>
 
       <Typography variant="body2" sx={{ marginBottom: 1 }}>

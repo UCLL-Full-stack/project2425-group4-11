@@ -1,60 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import {
-  Box,
-  Button,
-  Divider,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Typography,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import ShowTimeService from "@/services/ShowTimeService";
-import EventFrame from "@/components/event";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { Event } from "@/types";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Paper, Typography, Button, IconButton, Divider, FormControl, InputLabel, Select, SelectChangeEvent, MenuItem } from "@mui/material";
+import EventDetails from "@/components/events/eventDetails";
 
-// Component
 const PurchasePage: React.FC = () => {
-  const router = useRouter();
-  const { eventId } = router.query;
-
-  // State
-  const [event, setEvent] = useState<any>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [ticketQuantity, setTicketQuantity] = useState<number>(1);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [countdown, setCountdown] = useState<number>(600); // 10 minutes countdown
+  const [countdown, setCountdown] = useState<number>(600);
 
-  // Check login status and fetch event data
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const loggedIn = Boolean(localStorage.getItem("loggedInUser"));
-      setIsLoggedIn(loggedIn);
-    };
+  const [event, setEvent] = useState<Event>();
+  const router = useRouter();
+  const { eventId } = router.query; // Dynamic route parameter
 
-    checkLoginStatus();
+  const getEventById = async () => {
+    const eventResponse = await ShowTimeService.getEventById(
+      eventId as string
+    );
+    const eventData = await eventResponse.json();
+    setEvent(eventData);
+  };
 
-    if (eventId) {
-      const fetchEvent = async () => {
-        const response = await ShowTimeService.getEventById(eventId as string);
-        const eventData = await response.json();
-        setEvent(eventData);
-        console.log(event);
-      };
-      fetchEvent();
-    }
-  }, [eventId]);
-
-  // Countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
-      setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+      setCountdown((prev) => {
+        if (prev > 0) {
+          return prev - 1;
+        } else {
+          clearInterval(timer);
+          router.push("/");
+          return 0;
+        }
+      });
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -64,6 +45,15 @@ const PurchasePage: React.FC = () => {
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
+  
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const loggedIn = Boolean(localStorage.getItem("loggedInUser"));
+      setIsLoggedIn(loggedIn);
+    };
+
+    checkLoginStatus();
+  })
 
   const handlePurchase = () => {
     console.log("Purchasing ticket for:", event);
@@ -76,11 +66,12 @@ const PurchasePage: React.FC = () => {
     router.push("/");
   };
 
-  if (!event) {
-    return <Typography>Loading...</Typography>;
-  }
+  useEffect(() => {
+    if (eventId) {
+        getEventById();
+    }
+  }, [eventId]);
 
-  // User needs to log in to purchase a ticket
   if (!isLoggedIn) {
     return (
       <Box sx={{ backgroundColor: "#fff", minHeight: "100vh", padding: 3 }}>
@@ -100,15 +91,28 @@ const PurchasePage: React.FC = () => {
     );
   }
 
+  console.log(event);
+
   const totalPrice = ticketQuantity * 279.61;
 
   return (
-    <Box sx={{ backgroundColor: "#f8f9fa", minHeight: "100vh", padding: 3 }}>
-      {/* Event Details */}
-      <Box sx={{ maxWidth: 800, margin: "auto", textAlign: "center" }}>
-        <EventFrame id={event.id} title={event.title} time={event.time} />
-      </Box>
-
+    <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      backgroundColor: "#f8f9fa",
+      minHeight: "100vh",
+      padding: 3,
+    }}
+  >
+    {/* Event Details */}
+    <EventDetails
+      title={event ? event.title : "Loading..."}
+      genre={event ? event.genre : "Loading..."}
+      time={event ? event.time : "Loading..."}
+      date={new Date()}
+    />
       {/* Reserved Ticket Section */}
       <Paper
         sx={{
@@ -201,6 +205,6 @@ const PurchasePage: React.FC = () => {
       </Paper>
     </Box>
   );
-};
+}
 
 export default PurchasePage;

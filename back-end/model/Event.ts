@@ -10,7 +10,7 @@ export class Event {
     private description: string;
     private status: string;
 
-    constructor(event: { id?: number; title: string; genre: string; time: string; date: Date; duration: number; description: string; status: string}) {
+    constructor(event: { id?: number; title: string; genre: string; time: string; date: Date; duration: number; description: string; status: string; }) {
         this.id = event.id;
         this.title = this.validateTitle(event.title);
         this.genre = this.validateGenre(event.genre);

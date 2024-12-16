@@ -1,6 +1,7 @@
 export type Events = {
     id?: number;
     genre: string;
+    title: string;
     time: Date;
     date: Date;
     price: number;
@@ -25,8 +26,6 @@ export type Ticket = {
     type: string;
     status: string;
     price: number;
-    seat: string;
-    generalAdmission: boolean;
 }
 
 export type ConcertHall = {
@@ -51,8 +50,9 @@ export type Artist = {
 
 export type Event = {
     id?: number;
+    title: string;
     genre: string;
-    time: Date;
+    time: string;
     date: Date;
     price: number;
     duration: number;

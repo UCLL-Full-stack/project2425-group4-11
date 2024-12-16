@@ -117,14 +117,11 @@ const validContactInfo: ContactInfo = {
             type: "VIP",
             status: "Available",
             price: 100,
-            seat: "A1",
-            generalAdmission: false,
         });
         
         expect(newTicket.getType()).toEqual("VIP");
         expect(newTicket.getStatus()).toEqual("Available");
         expect(newTicket.getPrice()).toEqual(100);
-        expect(newTicket.getSeat()).toEqual("A1");
     });
 
     // concert hall
@@ -640,8 +637,7 @@ const validContactInfo: ContactInfo = {
                 type: "Economy",
                 status: "available",
                 price: 50,
-                seat: "B2",
-                generalAdmission: false,
+                eventId: 1,
             });
 
             // then
@@ -657,8 +653,6 @@ const validContactInfo: ContactInfo = {
                 type: "VIP",
                 status: "Reserved",
                 price: 100,
-                seat: "A1",
-                generalAdmission: false,
             });
 
             // then
@@ -674,47 +668,11 @@ const validContactInfo: ContactInfo = {
                 type: "Regular",
                 status: "Available",
                 price: -10,
-                seat: "C3",
-                generalAdmission: false,
             });
 
             // then
             expect(createTicket).toThrow("Price must be a positive number.");
         });
-
-        // seat
-        test("given empty seat when no general admission, when creating a ticket, then an error is thrown", () => {
-            // given
-
-            // when
-            const createTicket = () => new Ticket({
-                type: "Student",
-                status: "Available",
-                price: 30,
-                seat: "",
-                generalAdmission: false,
-            });
-
-            // then
-            expect(createTicket).toThrow("Seat cannot be empty.");
-        });
-
-        // general admission
-        test("given a seat when general admission, when creating a ticket, then an error is thrown", () => {
-            // given
-
-            // when
-            const createTicket = () => new Ticket({
-                type: "Regular",
-                status: "Available",
-                price: 50,
-                seat: "S32",
-                generalAdmission: true,
-            });
-
-            // then
-            expect(createTicket).toThrow("There are no seats in a general admission.");
-        })
 
     // concert hall
         // location

@@ -43,32 +43,53 @@ const main = async () => {
             accountStatus: true,
             role: 'admin',
         },
-    });
-
+    });         
+    
     const event1 = await prisma.event.create({
         data: {
             title: 'ACDC - ON TOUR',
             genre: 'Rock',
-            title: 'Panic Tower',
-            time: new Date(),
-            date: new Date(),
+            time: '20:00',
+            date: new Date(new Date().setMonth(new Date().getMonth() + 1)),
             duration: 60,
             description: 'a new band who are performing live for the first time',
-            status: 'Past', 
+            status: 'Past',
         }
-    });
+    });    
+    
+    const ticket1 = await prisma.ticket.create({
+        data: {
+            type: 'Regular',
+            status: 'Available',
+            price: 300,
+            event: {
+                connect: { id: event1.id }
+            },
+        }
+    });  
+    
     const event2 = await prisma.event.create({
         data: {
             title: 'Taylor Swift - Lover Tour',
             genre: 'Pop',
-            title: 'Taylor Swift Tour',
-            time: new Date(),            
-            date: new Date,
+            time: '20:00',
+            date: new Date(new Date().setMonth(new Date().getMonth() + 1)),
             duration: 120,
             description: 'Taylor swift errors tour comes to visit',
             status: 'Upcoming',
         }
     });
+  
+    const ticket2 = await prisma.ticket.create({
+        data: {
+            type: 'Student',
+            status: 'Available',
+            price: 20,
+            event: {
+                connect: { id: event2.id }
+            }
+        }
+    })
 };
 
 (async () => {

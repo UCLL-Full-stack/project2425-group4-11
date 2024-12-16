@@ -19,7 +19,7 @@ const PurchaseButton: React.FC<PurchaseButtonProps> = ({
     if (onClick) {
       onClick();
     }
-    router.push(`/purchase?eventId=${eventId}`);
+    router.push(`/purchase/${eventId}`);
   };
 
   return (
