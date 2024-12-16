@@ -6,10 +6,11 @@ import FilterButton from "@/components/filterButton";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
 import ButtonAddEvent from "@/components/events/buttonAddEvent";
+import { Event } from "@/types/index";
 //import EventOverviewTable from "@/components/events/EventOverviewTable";
 
 const Start: React.FC = () => {
-  const [events, setEvents] = useState<Array<Event>>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -44,11 +45,6 @@ const Start: React.FC = () => {
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSearch = () => {
-    // This function can be used to trigger any additional actions on search button click
-    console.log("Search button clicked");
-  };
-
   return (
     <>
       <Head>
@@ -69,9 +65,6 @@ const Start: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className={styles.searchButton} onClick={handleSearch}>
-              <span>🔍</span>
-            </button>
           </div>
           <p>
             Get tickets to gigs, parties, and festivals for the best price in

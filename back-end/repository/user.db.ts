@@ -1,4 +1,5 @@
 import { User } from "../model/User";
+import { UserInput } from "../types";
 import database from "./database";
 
 const users = [
@@ -59,6 +60,19 @@ const createUser = async (user: User): Promise<User> => {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
+};
+
+const updateUser = async (id: number, userData: Partial<UserInput>): Promise<User> => {
+    try {
+        const userPrisma = await database.user.update({
+            where: { id },
+            data: userData,
+        });
+        return User.from(userPrisma)
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 }
 
 export default {
@@ -66,5 +80,6 @@ export default {
     getUserById,
     getUserByEmail,
     createUser,
-    getUserByUsername
+    getUserByUsername,
+    updateUser,
 }

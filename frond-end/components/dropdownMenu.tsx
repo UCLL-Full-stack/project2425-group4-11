@@ -32,7 +32,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             <MenuItem component="a" href="/events/overviewEvents" onClick={handleClose}>
               View My Events
             </MenuItem>
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem component= "a" href="/user/editProfile" onClick={handleClose}>Profile</MenuItem>
             <MenuItem
               onClick={() => {
                 handleLogout();

@@ -188,4 +188,50 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
     }
 });
 
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Update an existing user's profile by ID.
+ *     description: Updates the profile information of a user based on their ID.
+ *     operationId: updateUser
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The user ID that needs to be updated.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The user profile was successfully updated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Invalid input or missing required fields.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
+userRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    try {
+        const result = await userService.editProfile(Number(id), req.body);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { userRouter };

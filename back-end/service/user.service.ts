@@ -58,8 +58,23 @@ const createUser = async ({
     return await userDb.createUser(user);
 }
 
+const editProfile = async (id: number, userData: UserInput): Promise<User> => {
+    const user = await userDB.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id ${id} not found.`);
+    }
+
+    if (userData.password) {
+        userData.password = await bcrypt.hash(userData.password, 12);
+    }
+
+    const updatedUser = await userDB.updateUser(id, userData);
+    return updatedUser;
+}
+
 export default { getAllUsers, 
     getUserById,
     createUser,
-    authenticate
+    authenticate,
+    editProfile
 };
