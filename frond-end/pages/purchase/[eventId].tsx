@@ -6,6 +6,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, Paper, Typography, Button, IconButton, Divider, FormControl, InputLabel, Select, SelectChangeEvent, MenuItem } from "@mui/material";
 import EventDetails from "@/components/events/eventDetails";
 import TicketService from "@/services/TicketService";
+import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const PurchasePage: React.FC = () => {
   const [name, setName] = useState("");
@@ -15,6 +17,8 @@ const PurchasePage: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [countdown, setCountdown] = useState<number>(600);
   const [ticketPrice, setTicketPrice] = useState<number>(0);
+
+  const { t } = useTranslation();
 
   const [event, setEvent] = useState<Event>();
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -79,13 +83,13 @@ const PurchasePage: React.FC = () => {
   })
 
   const handlePurchase = () => {
-    console.log("Purchasing ticket for:", event);
-    console.log("Name:", name, "Email:", email, "Quantity:", ticketQuantity);
-    alert("Succesfully purchased ticket.");
+    console.log(t('handlePurchase.handle.console.purchasingMessage'), event);
+    console.log(t('eventPurchase.handlePurchase.console.name'), name, t('eventPurchase.handlePurchase.console.email'), email, t('eventPurchase.handlePurchase.console.quantity'), ticketQuantity);
+    alert(t('eventPurchase.handlePurchase.alert.succesfullPurchase'));
   };
 
   const handleCancelPurchase = () => {
-    alert("Ticket purchase has been canceled.");
+    alert(t('eventPurchase.handlePurchase.alert.cancelPurchase'));
     router.push("/");
   };
 
@@ -100,14 +104,14 @@ const PurchasePage: React.FC = () => {
       <Box sx={{ backgroundColor: "#fff", minHeight: "100vh", padding: 3 }}>
         <Paper sx={{ padding: 3, maxWidth: 600, margin: "auto", marginTop: 5 }}>
           <Typography variant="h4" gutterBottom>
-            You need to sign up or log in to purchase a ticket.
+            {t('eventPurchase.handlePurchase.noUser.message')}
           </Typography>
           <Button
             variant="contained"
             color="primary"
             onClick={() => router.push("/login")}
           >
-            Log In
+            {t('eventPurchase.handlePurchase.noUser.label.login')}
           </Button>
         </Paper>
       </Box>
@@ -129,9 +133,9 @@ const PurchasePage: React.FC = () => {
   >
     {/* Event Details */}
     <EventDetails
-      title={event ? event.title : "Loading..."}
-      genre={event ? event.genre : "Loading..."}
-      time={event ? event.time : "Loading..."}
+      title={event ? event.title : t('eventPurchase.handlePurchase.loadingMessage')}
+      genre={event ? event.genre : t('eventPurchase.handlePurchase.loadingMessage')}
+      time={event ? event.time : t('eventPurchase.handlePurchase.loadingMessage')}
       date={new Date()}
     />
       {/* Reserved Ticket Section */}
@@ -153,11 +157,10 @@ const PurchasePage: React.FC = () => {
         </IconButton>
 
         <Typography variant="h6" color="success">
-          ✅ Je tickets zijn gereserveerd!
+          ✅ {t('eventPurchase.handlePurchase.reserveMessage')}
         </Typography>
         <Typography>
-          Het duurt nu nog slechts een paar clicks om je bestelling te
-          voltooien.
+          {t('eventPurchase.handlePurchase.fewClicksMessage')}
         </Typography>
 
         {/* Countdown */}
@@ -169,7 +172,7 @@ const PurchasePage: React.FC = () => {
             marginTop: 2,
           }}
         >
-          <Typography variant="h6">Resterende tijd:</Typography>
+          <Typography variant="h6">{t('eventPurchase.handlePurchase.countdown.remainingTime')}</Typography>
           <Typography variant="h3" color="error">
             {formatTime(countdown)}
           </Typography>
@@ -179,14 +182,14 @@ const PurchasePage: React.FC = () => {
 
         {/* Ticket Summary */}
         <Box>
-          <Typography variant="h6">Tickets</Typography>
-          <Typography>General Admission Ticket</Typography>
-          <Typography>Concert Hall: ....</Typography>
+          <Typography variant="h6">{t('eventPurchase.handlePurchase.ticketSummary.title')}</Typography>
+          <Typography>{t('eventPurchase.handlePurchase.ticketSummary.ticketGenAdmission')}</Typography>
+          <Typography>{t('eventPurchase.handlePurchase.ticketSummary.concertHall')}</Typography>
 
           {/* Ticket Category Dropdown */}
 
           <FormControl fullWidth sx={{ marginTop: 2 }}>
-            <InputLabel id="ticket-category-label">Category</InputLabel>
+            <InputLabel id="ticket-category-label">{t('eventPurchase.handlePurchase.label.category')}</InputLabel>
             <Select
               labelId="ticket-category-label"
               value={ticketCategory}
@@ -195,16 +198,16 @@ const PurchasePage: React.FC = () => {
               }
               label="Category"
             >
-              <MenuItem value="Regular">Regular</MenuItem>
-              <MenuItem value="VIP">VIP</MenuItem>
-              <MenuItem value="Student">Student</MenuItem>
+              <MenuItem value="Regular">{t('eventPurchase.handlePurchase.label.regular')}</MenuItem>
+              <MenuItem value="VIP">{t('eventPurchase.handlePurchase.label.vip')}</MenuItem>
+              <MenuItem value="Student">{t('eventPurchase.handlePurchase.label.student')}</MenuItem>
             </Select>
           </FormControl>
 
           {/* Ticket Quantity Dropdown */}
 
           <FormControl fullWidth sx={{ marginTop: 2 }}>
-            <InputLabel id="ticket-quantity-label">Quantity</InputLabel>
+            <InputLabel id="ticket-quantity-label">{t('eventPurchase.handlePurchase.label.quantity')}</InputLabel>
             <Select
               labelId="ticket-quantity-label"
               value={ticketQuantity}
@@ -226,14 +229,14 @@ const PurchasePage: React.FC = () => {
 
         {/* Price */}
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6">Total</Typography>
+          <Typography variant="h6">{t('eventPurchase.handlePurchase.label.totalPrice')}</Typography>
           {tickets ? (
           <Typography variant="h5" color="primary">
             €{(tickets?.find((ticket) => ticket.eventId.toString() === eventId?.toString())?.price || 0) * ticketQuantity}
           </Typography>
        
         ) : (
-          <Typography>Loading price...</Typography>
+          <Typography>{t('eventPurchase.handlePurchase.loadingMessage')}</Typography>
         )}
 
         </Box>
@@ -246,11 +249,21 @@ const PurchasePage: React.FC = () => {
           sx={{ marginTop: 3 }}
           onClick={handlePurchase}
         >
-          Doorgaan
+          {t('eventPurchase.handlePurchase.button.label.proceed')}
         </Button>
       </Paper>
     </Box>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
+};
 
 export default PurchasePage;

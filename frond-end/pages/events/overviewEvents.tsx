@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "@styles/Home.module.css";
+import styles from "@/styles/Home.module.css";
 import MyEventFrame from "@/components/events/myEventFrameCH";
 import FilterButton from "@/components/filterButton";
 import ShowTimeService from "@/services/ShowTimeService";
@@ -7,17 +7,20 @@ import { useState, useEffect } from "react";
 import ButtonAddEvent from "@/components/events/buttonAddEvent";
 import Navbar from "@/components/navbar";
 //import EventOverviewTable from "@/components/events/EventOverviewTable";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const OverviewMyEvent: React.FC = () => {
   const [events, setEvents] = useState<Array<Event>>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const {t} = useTranslation();
 
   const getEvents = async () => {
     try {
       const response = await ShowTimeService.getAllEvents();
       if (!response.ok) {
         console.error(
-          `Failed to fetch events: ${response.status} ${response.statusText}`
+          `${t('overviewEvent.error.fetchFail')} ${response.status} ${response.statusText}`
         );
         setEvents([]);
         return;
@@ -27,10 +30,10 @@ const OverviewMyEvent: React.FC = () => {
         setEvents(events);
       } else {
         setEvents([]);
-        console.error("Expected an array of events but got:", events);
+        console.error(t('overviewEvent.error.expected'), events);
       }
     } catch (error) {
-      console.error("Failed to fetch events:", error);
+      console.error(t('overviewEvent.error.fetchFail'), error);
       setEvents([]);
     }
   };
@@ -49,7 +52,7 @@ const OverviewMyEvent: React.FC = () => {
       </Head>
       <Navbar />
       <main className={styles.main}>
-        <h2>My Events</h2>
+        <h2>{t('overviewEvent.titel')}</h2>
         <section className={styles.events}>
           {events.map((event, index) => {
             const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -79,5 +82,16 @@ const OverviewMyEvent: React.FC = () => {
     </>
   );
 };
+
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
+};
+
 
 export default OverviewMyEvent;

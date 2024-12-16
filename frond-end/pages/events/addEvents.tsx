@@ -15,6 +15,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
 import ShowTimeService from "@/services/ShowTimeService";
 import InputField from "@/components/InputField";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "react-i18next";
+import Navbar from "@/components/navbar";
 
 interface Ticket {
   type: string;
@@ -62,6 +65,8 @@ const AddEventPage: React.FC = () => {
   });
   const [ticketErrors, setTicketErrors] = useState({ type: "", price: "", amount: "" });
 
+  const { t } = useTranslation();
+
   const clearErrors = () => {
     setEventErrors({
       title: "",
@@ -81,31 +86,31 @@ const AddEventPage: React.FC = () => {
     const errors = { ...eventErrors };
 
     if (!eventData.title) {
-      errors.title = "Title is required.";
+      errors.title = t('addEvents.error.titleRequired');
       valid = false;
     }
     if (!eventData.genre) {
-      errors.genre = "Genre is required.";
+      errors.genre = t('addEvents.error.genreRequired');
       valid = false;
     }
     if (!eventData.time) {
-      errors.time = "Time is required.";
+      errors.time = t('addEvents.error.timeRequired');
       valid = false;
     }
     if (!eventData.date) {
-      errors.date = "Date is required.";
+      errors.date = t('addEvents.error.dateRequired');
       valid = false;
     }
     if (eventData.duration <= 0) {
-      errors.duration = "Duration must be greater than 0.";
+      errors.duration = t('addEvents.error.durationGreater');
       valid = false;
     }
     if (!eventData.description) {
-      errors.description = "Description is required.";
+      errors.description = t('addEvents.error.descriptionRequired');
       valid = false;
     }
     if (!eventData.status) {
-      errors.status = "Status is required.";
+      errors.status = t('addEvents.error.statusRequired');
       valid = false;
     }
 
@@ -118,15 +123,15 @@ const AddEventPage: React.FC = () => {
     const errors = { ...ticketErrors };
 
     if (!newTicket.type) {
-      errors.type = "Category is required.";
+      errors.type = t('addEvents.error.categoryRequired');
       valid = false;
     }
     if (newTicket.price <= 0) {
-      errors.price = "Price must be greater than 0.";
+      errors.price = t('addEvents.error.priceGreater');
       valid = false;
     }
     if (newTicket.amount <= 0) {
-      errors.amount = "Amount must be greater than 0.";
+      errors.amount = t('addEvents.error.amountGreater');
       valid = false;
     }
 
@@ -153,7 +158,7 @@ const AddEventPage: React.FC = () => {
 
       if (!eventResponse.ok) {
         const errorText = await eventResponse.text();
-        setStatusMessages([{ message: `Error creating event: ${errorText}`, type: "error" }]);
+        setStatusMessages([{ message: `${t('addEvents.error.creatingEvent')} ${errorText}`, type: "error" }]);
         setLoading(false);
         return;
       }
@@ -166,16 +171,16 @@ const AddEventPage: React.FC = () => {
         const ticketResponse = await ShowTimeService.createTicket(ticketPayload);
 
         if (!ticketResponse.ok) {
-          setStatusMessages([{ message: "Failed to create one or more tickets", type: "error" }]);
+          setStatusMessages([{ message: t('addEvent.error.createFail'), type: "error" }]);
           setLoading(false);
           return;
         }
       }
 
-      setStatusMessages([{ message: "Event and tickets created successfully!", type: "success" }]);
+      setStatusMessages([{ message: t('addEvent.succes.create'), type: "success" }]);
       router.push("/");
     } catch (error) {
-      setStatusMessages([{ message: "An error occurred. Please try again later.", type: "error" }]);
+      setStatusMessages([{ message: t('addEvents.error.general'), type: "error" }]);
     } finally {
       setLoading(false);
     }
@@ -185,7 +190,7 @@ const AddEventPage: React.FC = () => {
     if (validateTicket()) {
       // Check for duplicates
       if (ticketCategories.some(ticket => ticket.type === newTicket.type)) {
-        setTicketErrors({ ...ticketErrors, type: "This category has already been added." });
+        setTicketErrors({ ...ticketErrors, type: t('addEvents.error.duplicateCategory') });
         return;
       }
 
@@ -195,40 +200,42 @@ const AddEventPage: React.FC = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <Box sx={{ padding: 3, backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
       <Paper sx={{ maxWidth: 700, margin: "auto", padding: 3, position: "relative" }}>
         <IconButton onClick={() => router.push("/")} sx={{ position: "absolute", top: 8, right: 8 }}>
           <CloseIcon />
         </IconButton>
         <Typography variant="h4" gutterBottom>
-          Add New Event
+          {t('addEvents.title')}
         </Typography>
         <Divider sx={{ marginBottom: 2 }} />
 
         {/* Event Fields */}
         <InputField
-          label="Title"
+          label={t('addEvents.label.title')}
           value={eventData.title}
           error={!!eventErrors.title}
           helperText={eventErrors.title}
           onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
         />
         <InputField
-          label="Genre"
+          label={t('addEvents.label.genre')}
           value={eventData.genre}
           error={!!eventErrors.genre}
           helperText={eventErrors.genre}
           onChange={(e) => setEventData({ ...eventData, genre: e.target.value })}
         />
         <InputField
-          label="Time"
+          label={t('addEvents.label.time')}
           value={eventData.time}
           error={!!eventErrors.time}
           helperText={eventErrors.time}
           onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
         />
         <InputField
-          label="Date"
+          label={t('addEvents.label.date')}
           value={eventData.date.toISOString().split("T")[0]}
           type="date"
           error={!!eventErrors.date}
@@ -236,7 +243,7 @@ const AddEventPage: React.FC = () => {
           onChange={(e) => {
             const parsedDate = new Date(e.target.value);
             if (isNaN(parsedDate.getTime())) {
-              setEventErrors({ ...eventErrors, date: "Invalid date format." });
+              setEventErrors({ ...eventErrors, date: t('addEvents.error.invalidDateFormat') });
             } else {
               setEventData({ ...eventData, date: parsedDate });
             }
@@ -244,7 +251,7 @@ const AddEventPage: React.FC = () => {
           
         />
         <InputField
-          label="Duration (minutes)"
+          label={t('addEvents.label.duration')}
           value={eventData.duration}
           type="number"
           error={!!eventErrors.duration}
@@ -252,43 +259,43 @@ const AddEventPage: React.FC = () => {
           onChange={(e) => setEventData({ ...eventData, duration: parseInt(e.target.value) })}
         />
         <InputField
-          label="Description"
+          label={t('addEvents.label.description')}
           value={eventData.description}
           error={!!eventErrors.description}
           helperText={eventErrors.description}
           onChange={(e) => setEventData({ ...eventData, description: e.target.value })}
         />
         <FormControl fullWidth margin="normal">
-          <InputLabel>Status</InputLabel>
+          <InputLabel>{t('addEvents.label.status')}</InputLabel>
           <Select
             value={eventData.status}
             onChange={(e) => setEventData({ ...eventData, status: e.target.value })}
             error={!!eventErrors.status}
           >
-            <MenuItem value="Upcoming">Upcoming</MenuItem>
-            <MenuItem value="Ongoing">Ongoing</MenuItem>
-            <MenuItem value="Past">Past</MenuItem>
+            <MenuItem value="Upcoming">{t('addEvents.label.upcoming')}</MenuItem>
+            <MenuItem value="Ongoing">{t('addEvents.label.ongoing')}</MenuItem>
+            <MenuItem value="Past">{t('addEvents.label.past')}</MenuItem>
           </Select>
         </FormControl>
 
         {/* Add Ticket */}
         <Divider sx={{ marginY: 2 }} />
-        <Typography variant="h6">Ticket Categories</Typography>
+        <Typography variant="h6">{t('addEvents.label.ticketCategories')}</Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
           <FormControl fullWidth>
-            <InputLabel>Category</InputLabel>
+            <InputLabel>{t('addEvents.label.category')}</InputLabel>
             <Select
               value={newTicket.type}
               onChange={(e) => setNewTicket({ ...newTicket, type: e.target.value })}
               error={!!ticketErrors.type}
             >
-              <MenuItem value="Regular">Regular</MenuItem>
-              <MenuItem value="VIP">VIP</MenuItem>
-              <MenuItem value="Student">Student</MenuItem>
+              <MenuItem value="Regular">{t('addEvents.label.regular')}</MenuItem>
+              <MenuItem value="VIP">{t('addEvents.label.vip')}</MenuItem>
+              <MenuItem value="Student">{t('addEvents.label.student')}</MenuItem>
             </Select>
           </FormControl>
           <InputField
-            label="Price (€)"
+            label={t('addEvents.label.price')}
             value={newTicket.price}
             type="number"
             error={!!ticketErrors.price}
@@ -296,7 +303,7 @@ const AddEventPage: React.FC = () => {
             onChange={(e) => setNewTicket({ ...newTicket, price: parseFloat(e.target.value) })}
           />
           <InputField
-            label="Amount"
+            label={t('addEvents.label.amount')}
             value={newTicket.amount}
             type="number"
             error={!!ticketErrors.amount}
@@ -304,14 +311,14 @@ const AddEventPage: React.FC = () => {
             onChange={(e) => setNewTicket({ ...newTicket, amount: parseInt(e.target.value) })}
           />
           <Button variant="contained" onClick={handleTicketAdd}>
-            Add Ticket
+            {t('addEvents.button.addTicket')}
           </Button>
         </Box>
 
         {/* Display Tickets */}
         {ticketCategories.length > 0 && (
           <Box sx={{ marginY: 2 }}>
-            <Typography variant="subtitle1">Added Tickets:</Typography>
+            <Typography variant="subtitle1">{t('addEvents.displayTickets.added')}</Typography>
             {ticketCategories.map((ticket, index) => (
               <Typography key={index}>
                 {ticket.type} - €{ticket.price.toFixed(2)} ({ticket.amount} tickets)
@@ -323,7 +330,7 @@ const AddEventPage: React.FC = () => {
         {/* Submit Button */}
         <Divider sx={{ marginY: 2 }} />
         <Button variant="contained" fullWidth onClick={handleSubmit} disabled={loading}>
-          {loading ? "Creating..." : "Create Event"}
+          {loading ? t('addEvents.button.loading') : t('addEvents.button.create')}
         </Button>
 
         {/* Status Messages */}
@@ -338,7 +345,18 @@ const AddEventPage: React.FC = () => {
         )}
       </Paper>
     </Box>
+    </>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
 };
 
 export default AddEventPage;

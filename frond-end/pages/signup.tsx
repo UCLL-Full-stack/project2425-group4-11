@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import { useRouter } from "next/router";
-import styles from "@styles/Login.module.css";
+import styles from "@/styles/Login.module.css";
 import Navbar from "../components/navbar";
 import { StatusMessage } from "../types";
 import classNames from "classnames";
 import InputField from "@/components/InputField";
 import UserService from "@/services/UserService";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+
 
 const SignUp: React.FC = () => {
   const router = useRouter();
@@ -25,6 +29,8 @@ const SignUp: React.FC = () => {
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const {t} = useTranslation();
+
   const clearErrors = () => {
     setEmailError(null);
     setPasswordError(null);
@@ -38,42 +44,42 @@ const SignUp: React.FC = () => {
   const validate = (): boolean => {
     let result = true;
     if (!email || email.trim() === "") {
-      setEmailError("Email is required.");
+      setEmailError(t('signup.error.emailRequired'));
       result = false;
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        setEmailError("Invalid email format.");
+        setEmailError(t('signup.error.invalidEmail'));
         result = false;
       }
     }
     if (!password || password.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t('signup.error.passWordRequired'));
       result = false;
     } else {
       if (password.length < 8) {
-        setPasswordError("Password must be at least 8 characters long.");
+        setPasswordError(t('signup.error.passwordLength'));
       }
     }
     if (!firstName || firstName.trim() === "") {
-      setFirstNameError("First name is required.");
+      setFirstNameError(t('signup.error.firstNameRequired'));
       result = false;
     }
     if (!lastName || lastName.trim() === "") {
-      setLastNameError("Last name is required.");
+      setLastNameError(t('signup.error.lastNameRequired'));
       result = false;
     }
     if (!username || username.trim() === "") {
-      setUsernameError("Username is required.");
+      setUsernameError(t('signup.error.userNameRequired'));
       result = false;
     }
     if (!phoneNumber || phoneNumber.trim() === "") {
-      setPhoneNumberError("Phone number is required.");
+      setPhoneNumberError(t('signup.error.phoneNumRequired'));
       result = false;
     }
     const phoneRegex = /^\+?[0-9]\d{1,14}$/;
     if (!phoneRegex.test(phoneNumber)) {
-      setPhoneNumberError("Invalid phone number format.");
+      setPhoneNumberError(t('signup.error.invalidPhoneNumber'));
       result = false;
     }
     return result;
@@ -106,7 +112,7 @@ const SignUp: React.FC = () => {
           ...statusMessages,
           {
             type: "success",
-            message: "Signup successful. Redirecting to login page...",
+            message: t('signup.statusMessages.succes'),
           },
         ]);
 
@@ -116,14 +122,14 @@ const SignUp: React.FC = () => {
       } else {
         const error = await response.json();
         setStatusMessages([
-          {message: error.message || "Signup failed", type: "error"},
+          {message: error.message || t('signup.statusMessages.failed'), type: "error"},
         ]);
       }
     } catch (error) {
       console.log("Signup error", error);
       setStatusMessages([
         {
-          message: "An error has occurred. Please try again later.",
+          message: t('signup.statusMessages.error'),
           type: "error",
         },
       ]);
@@ -138,7 +144,7 @@ const SignUp: React.FC = () => {
       <Box className={styles.page}>
         <Box className={styles.loginContainer}>
           <Typography variant="h4" gutterBottom align="center">
-            Sign Up
+            {t('signup.label.title')}
           </Typography>
           {statusMessages && (
             <ul className="list-none mb-3 mx-auto">
@@ -157,7 +163,7 @@ const SignUp: React.FC = () => {
           )}
           <form onSubmit={(event) => handleSignUp(event)}>
             <InputField
-              label="Email"
+              label={t('signup.label.email')}
               margin="normal"
               value={email}
               error={!!emailError}
@@ -165,7 +171,7 @@ const SignUp: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <InputField
-              label="Username"
+              label={t('signup.label.username')}
               margin="normal"
               value={username}
               error={!!usernameError}
@@ -173,7 +179,7 @@ const SignUp: React.FC = () => {
               onChange={(e) => setUsername(e.target.value)}
             />
             <InputField
-              label="Password"
+              label={t('signup.label.password')}
               secure={true}
               margin="normal"
               value={password}
@@ -182,7 +188,7 @@ const SignUp: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <InputField
-              label="First Name"
+              label={t('signup.label.firstName')}
               margin="normal"
               value={firstName}
               error={!!firstNameError}
@@ -190,7 +196,7 @@ const SignUp: React.FC = () => {
               onChange={(e) => setFirstName(e.target.value)}
             />
             <InputField
-              label="Last Name"
+              label={t('signup.label.lastName')}
               margin="normal"
               value={lastName}
               error={!!lastNameError}
@@ -198,7 +204,7 @@ const SignUp: React.FC = () => {
               onChange={(e) => setLastName(e.target.value)}
             />
             <InputField
-              label="Phone Number"
+              label={t('signup.label.phoneNumber')}
               margin="normal"
               value={phoneNumber}
               error={!!phoneNumberError}
@@ -215,7 +221,7 @@ const SignUp: React.FC = () => {
                   [styles.loading]: isLoading,
                 })}
               >
-                {isLoading ? "Signing Up..." : "Sign Up"}
+                {isLoading ? t('signup.button.loading') : t('signup.button.signUp')}
               </Button>
             </Box>
           </form>
@@ -223,6 +229,16 @@ const SignUp: React.FC = () => {
       </Box>
     </>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
 };
 
 export default SignUp;

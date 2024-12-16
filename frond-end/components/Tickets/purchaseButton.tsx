@@ -1,6 +1,8 @@
 import React from "react";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+
 
 interface PurchaseButtonProps {
   eventId: string;
@@ -11,7 +13,7 @@ interface PurchaseButtonProps {
 const PurchaseButton: React.FC<PurchaseButtonProps> = ({
   eventId,
   onClick,
-  label = "Purchase",
+  label,
 }) => {
   const router = useRouter();
 

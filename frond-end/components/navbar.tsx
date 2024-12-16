@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
-import styles from "@styles/Navbar.module.css";
+import { AppBar, Toolbar, Typography, Box, Tabs } from "@mui/material";
+import styles from "@/styles/Navbar.module.css";
 import DropdownMenu from "./dropdownMenu";
+import { useTranslation } from "next-i18next";
+import Language from "./language/Language";
+
 
 const Navbar: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const {t} = useTranslation();
 
   useEffect(() => {
     const user = localStorage.getItem("loggedInUser");
@@ -22,14 +26,20 @@ const Navbar: React.FC = () => {
     <AppBar position="static" className={styles.navbar}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Typography variant="h6" component="a" href="/" className={styles.logo}>
-          ShowTime
+          {t("navbar.logo")}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {loggedInUser && (
             <Typography variant="body1" className={styles.welcomeMessage}>
-              Welcome, {loggedInUser}
+              {t('navbar.welcome')} , {loggedInUser}
             </Typography>
           )}
+          <Box sx={{ mx: 2 }}>
+            <Tabs/>
+          </Box>
+          <Box sx={{ mx: 2 }}>
+            <Language/>
+          </Box>
           <DropdownMenu
             loggedInUser={loggedInUser}
             handleLogout={handleLogout}

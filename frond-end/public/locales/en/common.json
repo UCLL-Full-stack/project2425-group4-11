@@ -1,0 +1,216 @@
+{
+    "app.title": "ShowTime",
+    "purchaseButton": "Purchase",
+    "navbar": {
+        "logo": "ShowTime",
+        "welcome": "Welcome"
+    },
+    "index": {
+        "error": {
+            "mismatch": "Expected an array of events but got:",
+            "fetchFail": "Failed to fetch events:"
+        },
+        "main": {
+            "heroSection": {
+                "slogan": "Unlock the stage to unforgettable sounds.",
+                "text": "Get tickets to gigs, parties, and festivals for the best price in the market.",
+                "placeHolder": {
+                    "searchBar": "Search for event"
+                }
+            },
+            "body": {
+                "title":  "Upcoming Events",
+                "filterButton": "Filter"
+            }
+        }
+    },
+    
+    "login":{
+        "error": { 
+            "userNameRequired": "username is required.", 
+            "passWordRequired": "Password is Required.",  
+            "errorStatus": "An error has occurred. Please try againn later."
+        },
+        "title": "Login",
+        "label":{
+            "username": "Username",
+            "password": "Password",
+            "rememberMe": "Remember Me",
+            "loginButton": "Login",
+            "account": "Don’t have an account?",
+            "signup": "Sign up",
+            "artist": "Artist?",
+            "artistButton": "Log in here",
+            "concertHall": "Hall admin?",
+            "concertHallButton": "Log in here"
+        }
+        
+    },
+
+    "signup":{
+        "error":{
+            "emailRequired": "Email is required.",
+            "invalidEmail": "Invalid email format.",
+            "passWordRequired": "Password is Required.",
+            "passwordLength": "Password must be at least 8 characters long.",
+            "firstNameRequired": "First name is required.",
+            "lastNameRequired": "Last name is required.",
+            "userNameRequired": "Username is required.",
+            "phoneNumRequired": "Phone number is required.",
+            "invalidPhoneNumber": "Invalid phone number format."
+        },
+        "statusMessages":{
+            "succes": "Signup successful. Redirecting to login page...",
+            "failed": "Signup failed",
+            "error": "An error has occurred. Please try again later."
+        },
+        "label":{
+            "title": "Sign Up",
+            "email": "Email",
+            "username": "Username",
+            "password": "Password",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "phoneNumber": "Phone Number" 
+        },
+        "button": {
+            "signup": "Sign Up",
+            "loading": "Signing Up..."
+        }        
+        
+    },
+    
+    "eventPurchase": {
+        "error": {
+            "fetchFail": "Failed to fetch events:"
+        },
+        "handlePurchase": {
+            "console": {
+                "purchasingMessage": "Purchasing ticket for:",
+                "name": "Name:",
+                "email": "Email",
+                "quantity": "Quantity:"
+            },
+            "alert": {
+                "succesfullPurchase": "Succesfully purchased ticket.",
+                "cancelPurchase": "Ticket purchase has been canceled."
+            },
+            "noUser": {
+                "message": "You need to sign up or log in to purchase a ticket.",
+                "label": {
+                    "login": "Log In"
+                }
+            },
+            "loadingMessage": "Loading...",
+            "reserveMessage": "Your tickets are reserved!",
+            "fewClicksMessage": "Now it only takes a few clicks to complete your order.",
+            "countdown": {
+                "remainingTime": "Remaining time:"
+            },
+            "ticketSummary": {
+                "title": "Tickets",
+                "ticketGenAdmission": "General Admission Ticket",
+                "concertHall": "Concert Hall:"
+            },
+            "label": {
+                "category": "Category",
+                "regular": "Regular",
+                "vip": "VIP",
+                "student": "Student",
+                "quantity": "Quantity",
+                "totalPrice": "Total"
+            },
+            "button": {
+                "label": {
+                    "proceed": "Continue"
+                }
+            }
+        }
+    },
+
+    "editProfile":{
+        "error":{
+            "emailRequired": "Email is required."
+        },
+        "label":{
+            "title": "Edit Profile",
+            "email": "Email",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "password": "Password",
+            "phoneNumber": "Phone Number",
+            "username": "Username"
+        },
+        "button": "Update profile"
+
+    },
+
+    "addEvents": {
+        "error": {
+            "titleRequired": "Title is required.",
+            "genreRequired": "Genre is required.",
+            "timeRequired": "Time is required.",
+            "dateRequired": "Date is required.",
+            "durationGreater": "Duration must be greater than 0.",
+            "descriptionRequired": "Description is required.",
+            "statusRequired": "Status is required.",
+            "categoryRequired": "Category is required.",
+            "priceGreater": "Price must be greater than 0.",
+            "amountGreater": "Amount must be greater than 0.",
+            "creatingEvent": "Error creating event: ",
+            "createFail": "Failed to create one or more tickets",
+            "general": "An error occurred. Please try again later.",
+            "duplicateCategory": "This category has already been added.",
+            "invalidDateFormat": "Invalid date format."
+        },
+        "succes": {
+            "create": "Event and tickets created successfully!"
+        },
+        "title": "Add New Event",
+        "label": {
+            "title": "Title",
+            "genre": "Genre",
+            "time": "Time",
+            "date": "Date",
+            "duration": "Duration (minutes)",
+            "description": "Description",
+            "status": "Status",
+            "upcoming": "Upcoming",
+            "ongoing": "Ongoing",
+            "past": "Past",
+            "ticketCategories": "Ticket Categories",
+            "category": "Category",
+            "regular": "Regular",
+            "vip": "VIP",
+            "student": "Student",
+            "price": "Price (€)",
+            "amount": "Amount"
+        },
+        "button": {
+            "create": "Create Event",
+            "loading": "Creating Event...",
+            "addTicket": "+"
+        },
+        "displayTickets": {
+            "added": "Added Tickets:"
+        }
+        
+    },
+    
+    "overviewEvent":{
+        "error":{
+            "fetchFail": "Failed to fetch events:",
+            "expected":"Expected an array of events but got:"
+        },
+        "titel": "My Events"
+    },
+
+    "dropdownMenu":{
+        "menuItem": {
+            "events": "View My Events",
+            "editProfile": "Edit Profile",
+            "logout": "Log Out",
+            "login": "Log In"          
+        }
+    }   
+}

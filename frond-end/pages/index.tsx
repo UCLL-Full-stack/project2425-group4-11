@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "@styles/Home.module.css";
+import styles from "@/styles/Home.module.css";
 import NavBar from "../components/navbar";
 import EventFrame from "@/components/event";
 import FilterButton from "@/components/filterButton";
@@ -7,12 +7,18 @@ import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
 import ButtonAddEvent from "@/components/events/buttonAddEvent";
 import { Event } from "@/types/index";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "react-i18next";
 //import EventOverviewTable from "@/components/events/EventOverviewTable";
 
 const Start: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [isClient, setIsClient] = useState<boolean>(false);
+
+  const { t } = useTranslation(); 
 
   const getEvents = async () => {
     try {
@@ -29,17 +35,22 @@ const Start: React.FC = () => {
         setEvents(events);
       } else {
         setEvents([]);
-        console.error("Expected an array of events but got:", events);
+        console.error(t('index.error.mismatch'), events);
       }
     } catch (error) {
-      console.error("Failed to fetch events:", error);
+      console.error(t('index.error.fetchFail'), error);
       setEvents([]);
     }
   };
 
   useEffect(() => {
+    setIsClient(true);
     getEvents();
   }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   const filteredEvents = events.filter((event) =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -48,33 +59,32 @@ const Start: React.FC = () => {
   return (
     <>
       <Head>
-        <title>ShowTime</title>
-        <meta name="description" content="ShowTime app" />
+        <title>{t('app.title')}</title>
+        <meta name="description" content={t('app.title')} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
       <main className={styles.main}>
         <section className={styles.heroSection}>
-          <h1>Unlock the stage to unforgettable sounds.</h1>
+          <h1>{t('index.main.heroSection.slogan')}</h1>
           <div className={styles.searchContainer}>
             <input
               type="text"
-              placeholder="Search for event"
+              placeholder={t('index.main.heroSection.placeHolder.searchBar')}
               className={styles.searchBar}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <p>
-            Get tickets to gigs, parties, and festivals for the best price in
-            the market.
+            {t('index.main.heroSection.text')}
           </p>
         </section>
 
-        <h2>Upcoming Events</h2>
+        <h2>{t('index.main.body.title')}</h2>
         <section className={styles.filterButton}>
-          <FilterButton onClick={() => {}} />
+          <FilterButton label={t('index.main.body.filterButton')} onClick={() => {}} />
           <ButtonAddEvent />
         </section>
         <section className={styles.events}>
@@ -104,6 +114,16 @@ const Start: React.FC = () => {
       </footer>
     </>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
 };
 
 export default Start;

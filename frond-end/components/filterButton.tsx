@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 interface FilterButtonProps {
   onClick: () => void;
   label?: string;
 }
 
-const FilterButton: React.FC<FilterButtonProps> = ({ onClick, label = "Filter" }) => {
+const FilterButton: React.FC<FilterButtonProps> = ({ onClick, label }) => {
   return (
     <Button
       variant="contained"

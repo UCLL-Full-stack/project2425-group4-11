@@ -1,5 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import PurchaseButton from "./Tickets/purchaseButton";
+import { useTranslation } from "next-i18next";
+
 
 type EventProps = {
   id: string;
@@ -11,6 +13,8 @@ type EventProps = {
 };
 
 const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageUrl }) => {
+  const {t} = useTranslation();
+
   return (
     <Paper
       sx={{
@@ -57,7 +61,7 @@ const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageU
         {date}, {time}
       </Typography>
 
-      <PurchaseButton eventId={id} />
+      <PurchaseButton label={t('purchaseButton')} eventId={id} />
     </Paper>
   );
 };

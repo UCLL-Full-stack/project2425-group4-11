@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
+import { useTranslation } from "next-i18next";
+import Language from "./language/Language";
+
 
 interface DropdownMenuProps {
   loggedInUser: string | null;
@@ -20,6 +23,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const {t} = useTranslation();
 
   return (
     <>
@@ -30,9 +34,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         {loggedInUser ? (
           <>
             <MenuItem component="a" href="/events/overviewEvents" onClick={handleClose}>
-              View My Events
+              {t('dropdownMenu.menuItem.events')}
             </MenuItem>
-            <MenuItem component= "a" href="/user/editProfile" onClick={handleClose}>Profile</MenuItem>
+            <MenuItem component="a" href="/user/editProfile" onClick={handleClose}>
+              {t('dropdownMenu.menuItem.editProfile')}
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 handleLogout();
@@ -40,12 +46,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               }}
               style={{ color: "red" }}
             >
-              Logout
+              {t('dropdownMenu.menuItem.logout')}
             </MenuItem>
           </>
         ) : (
           <MenuItem component="a" href="/login" onClick={handleClose}>
-            Login
+            {t('dropdownMenu.menuItem.login')}
           </MenuItem>
         )}
       </Menu>

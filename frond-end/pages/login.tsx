@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import {
   Checkbox,
   FormControlLabel,
-  TextField,
   Button,
   Typography,
   Box,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import styles from "@styles/Login.module.css";
+import styles from "@/styles/Login.module.css";
 import Navbar from "../components/navbar";
 import { StatusMessage } from "../types";
 import classNames from "classnames";
 import InputField from "@/components/InputField";
 import UserService from "@/services/UserService";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -24,6 +25,8 @@ const Login: React.FC = () => {
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { t } = useTranslation();
+
   const clearErrors = () => {
     setNameError(null);
     setPasswordError(null);
@@ -33,11 +36,11 @@ const Login: React.FC = () => {
   const validate = (): boolean => {
     let result = true;
     if (!username || username.trim() === "") {
-      setNameError("Username is required.");
+      setNameError(t('login.error.userNameRequired'));
       result = false;
     }
     if (!password || password.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t('login.error.passWordRequired'));
       result = false;
     }
     return result;
@@ -90,7 +93,7 @@ const Login: React.FC = () => {
     } catch (error) {
       setStatusMessages([
         {
-          message: "An error has occurred. Please try againn later.",
+          message: t('login.error.errorStatus'),
           type: "error",
         },
       ]);
@@ -105,7 +108,7 @@ const Login: React.FC = () => {
       <Box className={styles.page}>
         <Box className={styles.loginContainer}>
           <Typography variant="h4" gutterBottom align="center">
-            Login
+            {t('login.title')}
           </Typography>
           {statusMessages && (
             <ul className="list-none mb-3 mx-auto">
@@ -124,7 +127,7 @@ const Login: React.FC = () => {
           )}
           <form onSubmit={(event) => handleSubmit(event)}>
             <InputField
-              label={"Username"}
+              label={t('login.label.username')}
               margin="normal"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
@@ -132,7 +135,7 @@ const Login: React.FC = () => {
               helperText={nameError}
             />
             <InputField
-              label={"Password"}
+              label={t('login.label.password')}
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -142,7 +145,7 @@ const Login: React.FC = () => {
             />
             <FormControlLabel
               control={<Checkbox name="remember" color="primary" />}
-              label="Remember me"
+              label={t('login.label.rememberMe')}
             />
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Button
@@ -151,47 +154,57 @@ const Login: React.FC = () => {
                 fullWidth
                 type="submit"
               >
-                Login
+                {t('login.label.loginButton')}
               </Button>
             </Box>
           </form>
           <Typography align="center" mt={2}>
-            Don’t have an account?{" "}
+            {t('login.label.account')}{" "}
             <Button
               color="primary"
               href="/signup"
               variant="outlined"
               className={styles.signupButton}
             >
-              Sign up
+              {t('login.label.signup')}
             </Button>
           </Typography>
           <Typography align="center" mt={2}>
-            Artist?{" "}
+            {t('login.label.artist')}{" "}
             <Button
               color="primary"
               href="/diffsignup"
               variant="outlined"
               className={styles.signupButton}
             >
-              Log in here
+              {t('login.label.artistButton')}
             </Button>
           </Typography>
           <Typography align="center" mt={2}>
-            Hall admin?{" "}
+            {t('login.label.concertHall')}{" "}
             <Button
               color="primary"
               href="/diffsignup"
               variant="outlined"
               className={styles.signupButton}
             >
-              Log in here
+              {t('login.label.concertHallButton')}
             </Button>
           </Typography>
         </Box>
       </Box>
     </>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
 };
 
 export default Login;
