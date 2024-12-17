@@ -17,7 +17,6 @@ const PurchasePage: React.FC = () => {
   const [ticketCategory, setTicketCategory] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [countdown, setCountdown] = useState<number>(600);
-  const [ticketPrice, setTicketPrice] = useState<number>(0);
 
   const { t } = useTranslation();
 

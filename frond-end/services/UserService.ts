@@ -20,9 +20,30 @@ const registerUser = (user: User) => {
     });
 };
 
+const editProfile = (username: string, user: User) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/users/${username}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+    })
+}
+
+const getUserByUsername = (username: string) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/users/username/${username}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+}
+
 const UserService = {
     loginUser,
     registerUser,
+    editProfile,
+    getUserByUsername,
 };
 
 export default UserService;

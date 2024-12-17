@@ -130,7 +130,15 @@
 
     "editProfile":{
         "error":{
-            "emailRequired": "Email is required."
+            "emailRequired": "Email is required.",
+            "invalidEmail": "Invalid email format.",
+            "firstNameRequired": "First name is required.",
+            "lastNameRequired": "Last name is required.",
+            "phoneNumRequired": "Phone number is required.",
+            "invalidPhoneNumber":"Invalid phone number format.",
+            "passWordRequired": "Password is Required.",
+            "passwordLength":"Password must be at least 8 characters long.",
+            "usernameRequired":"Username is required."
         },
         "label":{
             "title": "Edit Profile",
@@ -141,7 +149,12 @@
             "phoneNumber": "Phone Number",
             "username": "Username"
         },
-        "button": "Update profile"
+        "button": "Update profile",
+        "statusMessages": {
+            "error":"An error has occurred. Please try again later.",
+            "failed": "Edit profile failed",
+            "success": "Edit successful. Redirecting to login page..."
+        }
 
     },
 

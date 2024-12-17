@@ -190,6 +190,36 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
 
 /**
  * @swagger
+ * /users/username/{username}:
+ *  get:
+ *      summary: Get a user by username.
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The user username.
+ *      responses:
+ *          200:
+ *              description: A user object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ */
+userRouter.get('/username/:username', async (req: Request, res: Response, next: NextFunction) => {
+    const { username } = req.params;
+    try {
+        const result = await userService.getUserByUsername({ username });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+})
+
+/**
+ * @swagger
  * /users/{id}:
  *   put:
  *     summary: Update an existing user's profile by ID.
@@ -224,10 +254,10 @@ userRouter.post('/signup', async (req: Request, res: Response, next: NextFunctio
  *       500:
  *         description: Internal Server Error.
  */
-userRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+userRouter.put('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    const { username } = req.params;
     try {
-        const result = await userService.editProfile(Number(id), req.body);
+        const result = await userService.editProfile(username, req.body);
         res.status(200).json(result);
     } catch (error) {
         next(error);

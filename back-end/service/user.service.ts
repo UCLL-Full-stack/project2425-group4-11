@@ -58,17 +58,23 @@ const createUser = async ({
     return await userDb.createUser(user);
 }
 
-const editProfile = async (id: number, userData: UserInput): Promise<User> => {
-    const user = await userDB.getUserById({ id });
+const editProfile = async (username: string, userData: UserInput): Promise<User> => {
+    const user = await userDB.getUserByUsername({ username });
+    console.log(user)
     if (!user) {
-        throw new Error(`User with id ${id} not found.`);
+        throw new Error(`User with username ${username} not found.`);
     }
 
     if (userData.password) {
         userData.password = await bcrypt.hash(userData.password, 12);
     }
 
-    const updatedUser = await userDB.updateUser(id, userData);
+    const userId = user.getId();
+    if (!userId) {
+        throw new Error("User ID is undefined.");
+    }
+
+    const updatedUser = await userDB.updateUser(userId, userData);
     return updatedUser;
 }
 
@@ -76,5 +82,6 @@ export default { getAllUsers,
     getUserById,
     createUser,
     authenticate,
-    editProfile
+    editProfile,
+    getUserByUsername,
 };
