@@ -216,6 +216,7 @@ const AddEventPage: React.FC = () => {
         <InputField
           label={t('addEvents.label.title')}
           value={eventData.title}
+          margin="normal"
           error={!!eventErrors.title}
           helperText={eventErrors.title}
           onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
@@ -223,6 +224,7 @@ const AddEventPage: React.FC = () => {
         <InputField
           label={t('addEvents.label.genre')}
           value={eventData.genre}
+          margin="normal"
           error={!!eventErrors.genre}
           helperText={eventErrors.genre}
           onChange={(e) => setEventData({ ...eventData, genre: e.target.value })}
@@ -230,6 +232,7 @@ const AddEventPage: React.FC = () => {
         <InputField
           label={t('addEvents.label.time')}
           value={eventData.time}
+          margin="normal"
           error={!!eventErrors.time}
           helperText={eventErrors.time}
           onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
@@ -237,6 +240,7 @@ const AddEventPage: React.FC = () => {
         <InputField
           label={t('addEvents.label.date')}
           value={eventData.date.toISOString().split("T")[0]}
+          margin="normal"
           type="date"
           error={!!eventErrors.date}
           helperText={eventErrors.date}
@@ -253,6 +257,7 @@ const AddEventPage: React.FC = () => {
         <InputField
           label={t('addEvents.label.duration')}
           value={eventData.duration}
+          margin="normal"
           type="number"
           error={!!eventErrors.duration}
           helperText={eventErrors.duration}
@@ -261,6 +266,7 @@ const AddEventPage: React.FC = () => {
         <InputField
           label={t('addEvents.label.description')}
           value={eventData.description}
+          margin="normal"
           error={!!eventErrors.description}
           helperText={eventErrors.description}
           onChange={(e) => setEventData({ ...eventData, description: e.target.value })}

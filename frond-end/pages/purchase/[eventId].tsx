@@ -8,6 +8,7 @@ import EventDetails from "@/components/events/eventDetails";
 import TicketService from "@/services/TicketService";
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Navbar from "@/components/navbar";
 
 const PurchasePage: React.FC = () => {
   const [name, setName] = useState("");
@@ -121,6 +122,8 @@ const PurchasePage: React.FC = () => {
   console.log(event);
 
   return (
+    <>
+    <Navbar/>
     <Box
     sx={{
       display: "flex",
@@ -253,6 +256,7 @@ const PurchasePage: React.FC = () => {
         </Button>
       </Paper>
     </Box>
+    </>
   );
 }
 
