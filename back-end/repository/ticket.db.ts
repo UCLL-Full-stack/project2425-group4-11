@@ -1,5 +1,7 @@
 import { Ticket } from "../model/Ticket";
 import database from "./database";
+import ticketDB from '../repository/ticket.db';
+
 
 const tickets = [
     new Ticket({
@@ -42,8 +44,20 @@ const createTicket = async (ticket: Ticket): Promise<Ticket> => {
     }
 }
 
+const deleteTicket = async ({ id }: { id: number }): Promise<void> => {
+    try {
+        await database.ticket.delete({
+            where: { id },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllTickets,
     getTicketById,
     createTicket,
+    deleteTicket,
 }

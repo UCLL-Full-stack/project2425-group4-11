@@ -17,6 +17,12 @@ const deleteEvent = async (eventId: string) => {
       method: "DELETE",
     });
 };
+ 
+const deleteTicket = async (eventId: string) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/tickets/${eventId}`, {
+      method: "DELETE",
+    });
+}
 
 
 const createEvent = async (eventData: any) => {

@@ -141,4 +141,32 @@ ticketRouter.post('/', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+/**
+ * @swagger
+ * /tickets/{id}:
+ *   delete:
+ *     summary: Delete a ticket by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ticket ID
+ *     responses:
+ *       200:
+ *         description: The ticket was successfully deleted.
+ *       404:
+ *         description: Ticket not found.
+ */
+ticketRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const ticketId = Number(req.params.id);
+        await ticketService.deleteTicket(ticketId);
+        res.status(200).json({ message: 'Ticket successfully deleted' });
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { ticketRouter };
