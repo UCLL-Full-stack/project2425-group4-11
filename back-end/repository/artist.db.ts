@@ -1,4 +1,5 @@
 import { Artist } from "../model/Artist";
+import { ArtistInput } from "../types";
 import database from "./database";
 
 const getAllArtists = async (): Promise<Artist[]> => {
@@ -21,7 +22,9 @@ const createArtist = async (artist: Artist): Promise<Artist> => {
                 biography: artist.getBiography(),
                 bookingFee: artist.getBookingFee(),
                 socialMedia: artist.getSocialMedia(),
+                isVerified: artist.getIsVerified(),
                 email: artist.getEmail(),
+                
                 role: artist.getRole(),
             },
         });
@@ -46,8 +49,24 @@ const getArtistByArtistName = async ({ artistName }: { artistName: string }): Pr
     }
 };
 
+const updateArtist = async (id: number, artistData: Partial<ArtistInput>): Promise<Artist> => {
+    try {
+        const artistPrisma = await database.artist.update({
+            where: { id: id },
+            data: {
+                ...artistData,
+            },
+        });
+        return Artist.from(artistPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllArtists,
     createArtist,
     getArtistByArtistName,
+    updateArtist
 }

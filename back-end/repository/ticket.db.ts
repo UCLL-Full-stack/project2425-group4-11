@@ -3,17 +3,6 @@ import database from "./database";
 import ticketDB from '../repository/ticket.db';
 import { TicketInput } from "../types";
 
-
-const tickets = [
-    new Ticket({
-        id: 1,
-        type: "Student",
-        status: "Available",
-        price: 65,
-        eventId: 1
-    }),
-]
-
 const getAllTickets = async (): Promise<Ticket[]> => {
     try {
         const ticketsPrisma = await database.ticket.findMany();
@@ -40,6 +29,18 @@ const getTicketsByEventId = async ({ eventId }: { eventId: number }): Promise<Ti
     try {
         const ticketsPrisma = await database.ticket.findMany({
             where: { eventId },
+        });
+        return ticketsPrisma.map(ticketPrisma => Ticket.from(ticketPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const getTicketsByUserId = async ({ userId }: { userId: number }): Promise<Ticket[]> => {
+    try {
+        const ticketsPrisma = await database.ticket.findMany({
+            where: { userId },
         });
         return ticketsPrisma.map(ticketPrisma => Ticket.from(ticketPrisma));
     } catch (error) {
@@ -76,7 +77,7 @@ const deleteTicketsByEventId = async ({ eventId }: { eventId: number }): Promise
     }
 };
 
-const updateTicketById = async (id:number, ticketData: Partial<TicketInput>): Promise<Ticket> =>{
+const updateTicketById = async (id: number, ticketData: Partial<TicketInput>): Promise<Ticket> =>{
     try {
         const ticketPrisma = await database.ticket.update({
             where: { id },
@@ -89,6 +90,7 @@ const updateTicketById = async (id:number, ticketData: Partial<TicketInput>): Pr
     }
 }
 
+
 export default {
     getAllTickets,
     getTicketById,
@@ -96,4 +98,5 @@ export default {
     deleteTicketsByEventId,
     getTicketsByEventId,
     updateTicketById,
+    getTicketsByUserId,
 };

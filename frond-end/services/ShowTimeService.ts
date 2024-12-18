@@ -12,8 +12,6 @@ const getEventById = (eventId: string) => {
     });
 };
 
-
-
 const deleteEvent = async (eventId: number) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${eventId}`, {
       method: "DELETE",
@@ -43,8 +41,8 @@ const createTicket = async (ticketData: any) => {
   });
 };
 
-const purchasedTicket = async (id: string) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + `/tickets/${id}`, {
+const purchasedTicket = async (id: string, userId: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/tickets/${id}/${userId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
   });
@@ -55,7 +53,58 @@ const getTicketsByEventId = async (eventId: string) => {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
-}
+};
+
+const getTicketsByUserId = async (userId: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/tickets/userId/${userId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+const rescheduleEvent = async ({ id, date, time }: { id: number; date: string; time: string }) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ date, time }),
+  });
+};
+
+const getArtistByArtistName = async (artistName: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/artists/artistName/${artistName}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+};
+
+const getEventsByArtistId = async (artistId: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/artistId/${artistId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+};
+
+const getConcertHallByUsername = async (username: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/username/${username}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+};
+
+const getEventsByConcertHallId = async (concertHallId: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/concertHallId/${concertHallId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+};
 
 const ShowTimeService = {
     getAllEvents,
@@ -66,6 +115,12 @@ const ShowTimeService = {
     deleteTicket,
     purchasedTicket,
     getTicketsByEventId,
+    rescheduleEvent,
+    getTicketsByUserId,
+    getArtistByArtistName,
+    getEventsByArtistId,
+    getEventsByConcertHallId,
+    getConcertHallByUsername
 };
   
 export default ShowTimeService;

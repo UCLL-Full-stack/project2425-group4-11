@@ -1,45 +1,105 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import MyEventFrame from "@/components/events/myEventFrameCH";
+import EventFrameArtist from "@/components/events/eventFrameArtist";
+import EventFrameUser from "@/components/events/eventFrameUser";
+import EventFrameCH from "@/components/events/eventFrameCH";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Event } from "@/types/index"
+import { Event, Ticket, User } from "@/types/index"
 import ButtonAddEvent from "@/components/events/buttonAddEvent";
+import UserService from "@/services/UserService";
 
 const OverviewMyEvent: React.FC = () => {
   const [events, setEvents] = useState<Array<Event>>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [parsedUser, setParsedUser] = useState<User>();
+  const [user, setUser] = useState<any>();
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const {t} = useTranslation();
 
-  const getEvents = async () => {
-    try {
-      const response = await ShowTimeService.getAllEvents();
-      if (!response.ok) {
-        console.error(
-          `${t('overviewEvent.error.fetchFail')} ${response.status} ${response.statusText}`
-        );
-        setEvents([]);
-        return;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("loggedInUser");
+      const parsedUser = user ? JSON.parse(user) : null;
+      setParsedUser(parsedUser);
+      setUserRole(parsedUser?.role || null);
+    }
+  }, []);
+
+  const fetchTicketsAndEvents = async () => {
+    if (userRole === "user" && parsedUser) {
+      try {
+        // Fetch User Data
+        const getUser = await UserService.getUserByUsername(parsedUser.username || "");
+        if (getUser.ok) {
+          const userData = await getUser.json();
+          setUser(userData);
+  
+          // Fetch Tickets
+          const ticketResponse = await ShowTimeService.getTicketsByUserId(userData.id.toString());
+          if (ticketResponse.ok) {
+            const ticketsData: Ticket[] = await ticketResponse.json();
+            setTickets(ticketsData);
+  
+            // Fetch Events for Tickets
+            const eventPromises = ticketsData.map((ticket) =>
+              ShowTimeService.getEventById(ticket.eventId.toString()).then((res) =>
+                res.ok ? res.json() : null
+              )
+            );
+            const eventsData = (await Promise.all(eventPromises)).filter(Boolean) as Event[];
+            setEvents(eventsData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching tickets and events: ", error);
       }
-      const events = await response.json();
-      if (Array.isArray(events)) {
-        setEvents(events);
-      } else {
-        setEvents([]);
-        console.error(t('overviewEvent.error.expected'), events);
+    }
+
+    if (userRole === "artist" && parsedUser) {
+      try {
+        const getUser = await ShowTimeService.getArtistByArtistName(parsedUser.username || "");
+        if (getUser.ok) {
+          const userData = await getUser.json();
+          setUser(userData);
+
+          const eventResponse = await ShowTimeService.getEventsByArtistId(userData.id.toString());
+          if (eventResponse.ok) {
+            const eventData = await eventResponse.json();
+            setEvents(eventData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching events: ", error);
       }
-    } catch (error) {
-      console.error(t('overviewEvent.error.fetchFail'), error);
-      setEvents([]);
+    }
+
+    if (userRole === "concertHall" && parsedUser) {
+      try {
+        const getUser = await ShowTimeService.getConcertHallByUsername(parsedUser.username || "");
+        if (getUser.ok) {
+          const userData = await getUser.json();
+          setUser(userData);
+
+          const eventResponse = await ShowTimeService.getEventsByConcertHallId(userData.id.toString());
+          if (eventResponse.ok) {
+            const eventData = await eventResponse.json();
+            setEvents(eventData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching events: ", error);
+      }
     }
   };
-
+  
   useEffect(() => {
-    getEvents();
-  }, []);
+    fetchTicketsAndEvents();
+  }, [userRole, parsedUser]);
 
   return (
     <>
@@ -52,6 +112,41 @@ const OverviewMyEvent: React.FC = () => {
       <Navbar />
       <main className={styles.main}>
         <h2>{t('overviewEvent.titel')}</h2>
+        {userRole} {user && (
+    <p>
+      Parsed User ID: {user.id}, Name: {user.username}
+      {user ? (user.id ? user.id.toString() : "") : ""}
+      {tickets.length > 0 ? (
+  <div>
+    <h2>Your Tickets:</h2>
+    <ul>
+      {tickets.map((ticket, index) => (
+        <li key={index}>
+          Event ID: {ticket.eventId} - Ticket ID: {ticket.id}
+        </li>
+      ))}
+    </ul>
+  </div>
+) : (
+  <p>You have no tickets yet.</p>
+)}
+{events.length > 0 ? (
+  <div>
+    <h2>Your Events:</h2>
+    <ul>
+      {events.map((event, index) => (
+        <li key={index}>
+          Event ID: {event.id} 
+        </li>
+      ))}
+    </ul>
+  </div>
+) : (
+  <p>You have no tickets yet.</p>
+)}
+    </p>
+
+        )}
         <ButtonAddEvent />
         <section className={styles.events}>
           {events.map((event, index) => {
@@ -64,17 +159,18 @@ const OverviewMyEvent: React.FC = () => {
             return (
               //check for roles when rendering the event
               // concert hall can delete
-              // artist can reschedule
+              // artist can reschedule & delete
               // user can view
               <>
-                <MyEventFrame
-                  key={index}
-                  title={event.title}
-                  date={formattedDate} // Pass formatted date
-                  time={event.time}
-                  id={event.id}
-                  genre={event.genre}
-                />
+              {userRole === "artist" && (
+                <EventFrameArtist key={index} title={event.title} genre={event.genre} date={formattedDate} time={event.time}/>
+              )}
+              {userRole === "user" && (
+                <EventFrameUser key={index} title={event.title} genre={event.genre} date={formattedDate} time={event.time}/>
+              )}
+              {userRole === "concertHall" && (
+                <EventFrameCH key={index} title={event.title} genre={event.genre} date={formattedDate} time={event.time}/>
+              )}
               </>
             );
           })}

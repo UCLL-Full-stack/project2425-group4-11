@@ -45,8 +45,41 @@
             "artistButton": "Log in here",
             "concertHall": "Hall admin?",
             "concertHallButton": "Log in here"
+        }  
+    },
+
+    "loginArtist": {
+        "error": { 
+            "artistNameRequired": "artistName is required.", 
+            "passWordRequired": "Password is Required.",  
+            "errorStatus": "An error has occurred. Please try againn later."
+        },
+        "title": "Login as artist",
+        "label": {
+            "artistName": "Artist name",
+            "password": "Password",
+            "rememberMe": "Remember Me",
+            "loginButton": "Login",
+            "account": "Don’t have an account?",
+            "signup": "Sign up"
         }
-        
+    },
+
+    "loginCH": {
+        "error": { 
+            "artistNameRequired": "artistName is required.", 
+            "passWordRequired": "Password is Required.",  
+            "errorStatus": "An error has occurred. Please try againn later."
+        },
+        "title": "Login as hall admin",
+        "label": {
+            "username": "Username",
+            "password": "Password",
+            "rememberMe": "Remember Me",
+            "loginButton": "Login",
+            "account": "Don’t have an account?",
+            "signup": "Sign up"
+        }
     },
 
     "signup":{
@@ -78,8 +111,75 @@
         "button": {
             "signup": "Sign Up",
             "loading": "Signing Up..."
-        }        
-        
+        }         
+    },
+
+    "artistSignup":{
+        "error":{
+            "emailRequired": "Email is required.",
+            "invalidEmail": "Invalid email format.",
+            "passWordRequired": "Password is Required.",
+            "passwordLength": "Password must be at least 8 characters long.",
+            "genresRequired": "Genres is required.",
+            "bookingFeeRequired": "Booking fee is required.",
+            "artistNameRequired": "Artist name is required.",
+            "biographyRequired": "Biography is required.",
+            "socialMediaRequired": "Social media is required."
+        },
+        "statusMessages":{
+            "succes": "Signup successful. Redirecting you...",
+            "failed": "Signup failed",
+            "error": "An error has occurred. Please try again later."
+        },
+        "label":{
+            "title": "Sign Up As Artist",
+            "email": "Email",
+            "artistName": "Artist name",
+            "password": "Password",
+            "genres": "Genres",
+            "biography": "Biography",
+            "bookingFee": "Booking fee",
+            "socialMedia": "Social Media"
+        },
+        "button": {
+            "signup": "Sign Up",
+            "loading": "Signing Up..."
+        }         
+    },
+
+    "CHSignup":{
+        "error":{
+            "locationRequired": "Location is required.",
+            "passWordRequired": "Password is Required.",
+            "passwordLength": "Password must be at least 8 characters long.",
+            "capacityRequired": "Capacity is required",
+            "nameRequired": "Concert hall name is required.",
+            "facilitiesRequired": "Facilitie(s) is (are) required.",
+            "usernameRequired": "Username is required."
+        },
+        "statusMessages":{
+            "succes": "Signup successful. Redirecting you...",
+            "failed": "Signup failed",
+            "error": "An error has occurred. Please try again later."
+        },
+        "label":{
+            "title": "Sign Up As Concert Hall Admin",
+            "location": "Location",
+            "capacity": "Capacity",
+            "password": "Password",
+            "name": "Name of the concert hall",
+            "facilities": "Facilities",
+            "username": "Username",
+            "contactCountryCode": "Country code",
+            "contactEmail": "Email",
+            "contactInstagram": "Instagram",
+            "contactNumber": "Phone number",
+            "contactInfoTitle": "Contact Info"
+        },
+        "button": {
+            "signup": "Sign Up",
+            "loading": "Signing Up..."
+        }         
     },
     
     "eventPurchase": {
@@ -226,7 +326,8 @@
             "events": "View My Events",
             "editProfile": "Edit Profile",
             "logout": "Log Out",
-            "login": "Log In"          
+            "login": "Log In",
+            "adminDashboard": "Dashboard"        
         }
     },
     "eventFrameCH":{
@@ -235,6 +336,22 @@
             "deleteEvent": "Failed to delete the Event ",
             "deleteProcess": "Error during deletion process: "
         }
+    },
+    "adminApproval":{
+        "title": "Admin Approval Page",
+        "approvalArtist": "Artist Approval",
+        "approvalConcertHall": "Concert Hall Approval",
+        "tabel":{
+            "id": "ID",
+            "artistName": "Artist name",
+            "name": "Name",
+            "email":"Email",
+            "actions":"Actions",
+            "noApprovalsArtist": "No pending artist approvals.",
+            "noApprovalsConcertHall": "No pending concert hall approvals."
+        },
+        "button": "Approve"
     }
+
        
 }

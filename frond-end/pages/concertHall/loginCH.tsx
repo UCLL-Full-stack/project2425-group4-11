@@ -8,15 +8,15 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import styles from "@/styles/Login.module.css";
-import Navbar from "../components/navbar";
-import { StatusMessage } from "../types";
+import Navbar from "../../components/navbar";
+import { StatusMessage } from "../../types";
 import classNames from "classnames";
 import InputField from "@/components/InputField";
-import UserService from "@/services/UserService";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import ConcertHallService from "@/services/ConcertHallService";
 
-const Login: React.FC = () => {
+const LoginArtist: React.FC = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [nameError, setNameError] = useState<string | null>(null);
@@ -36,11 +36,11 @@ const Login: React.FC = () => {
   const validate = (): boolean => {
     let result = true;
     if (!username || username.trim() === "") {
-      setNameError(t('login.error.userNameRequired'));
+      setNameError(t('loginCH.error.usernameRequired'));
       result = false;
     }
     if (!password || password.trim() === "") {
-      setPasswordError(t('login.error.passWordRequired'));
+      setPasswordError(t('loginCH.error.passWordRequired'));
       result = false;
     }
     return result;
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await UserService.loginUser({
+      const response = await ConcertHallService.loginConcertHall({
         username: username,
         password,
       });
@@ -93,7 +93,7 @@ const Login: React.FC = () => {
     } catch (error) {
       setStatusMessages([
         {
-          message: t('login.error.errorStatus'),
+          message: t('loginArtist.error.errorStatus'),
           type: "error",
         },
       ]);
@@ -108,7 +108,7 @@ const Login: React.FC = () => {
       <Box className={styles.page}>
         <Box className={styles.loginContainer}>
           <Typography variant="h4" gutterBottom align="center">
-            {t('login.title')}
+            {t('loginCH.title')}
           </Typography>
           {statusMessages && (
             <ul className="list-none mb-3 mx-auto">
@@ -127,7 +127,7 @@ const Login: React.FC = () => {
           )}
           <form onSubmit={(event) => handleSubmit(event)}>
             <InputField
-              label={t('login.label.username')}
+              label={t('loginCH.label.username')}
               margin="normal"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
@@ -135,7 +135,7 @@ const Login: React.FC = () => {
               helperText={nameError}
             />
             <InputField
-              label={t('login.label.password')}
+              label={t('loginCH.label.password')}
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -145,7 +145,7 @@ const Login: React.FC = () => {
             />
             <FormControlLabel
               control={<Checkbox name="remember" color="primary" />}
-              label={t('login.label.rememberMe')}
+              label={t('loginCH.label.rememberMe')}
             />
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Button
@@ -154,41 +154,19 @@ const Login: React.FC = () => {
                 fullWidth
                 type="submit"
               >
-                {t('login.label.loginButton')}
+                {t('loginCH.label.loginButton')}
               </Button>
             </Box>
           </form>
           <Typography align="center" mt={2}>
-            {t('login.label.account')}{" "}
+            {t('loginCH.label.account')}{" "}
             <Button
               color="primary"
-              href="/signup"
+              href="/concertHall/concertHallSignup"
               variant="outlined"
               className={styles.signupButton}
             >
-              {t('login.label.signup')}
-            </Button>
-          </Typography>
-          <Typography align="center" mt={2}>
-            {t('login.label.artist')}{" "}
-            <Button
-              color="primary"
-              href="/diffsignup"
-              variant="outlined"
-              className={styles.signupButton}
-            >
-              {t('login.label.artistButton')}
-            </Button>
-          </Typography>
-          <Typography align="center" mt={2}>
-            {t('login.label.concertHall')}{" "}
-            <Button
-              color="primary"
-              href="/diffsignup"
-              variant="outlined"
-              className={styles.signupButton}
-            >
-              {t('login.label.concertHallButton')}
+              {t('loginCH.label.signup')}
             </Button>
           </Typography>
         </Box>
@@ -207,4 +185,4 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-export default Login;
+export default LoginArtist;

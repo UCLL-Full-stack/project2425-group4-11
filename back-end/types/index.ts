@@ -1,5 +1,4 @@
-type Role = 'admin' | 'user' | 'artist';
-
+type Role = 'admin' | 'user' | 'artist' | "concertHall";
 
 type UserInput ={
     id?: number;
@@ -18,6 +17,7 @@ type TicketInput= {
     status: string;
     price: number;
     eventId: number;
+    userId?: number; 
 }
 type EventInput = {
     id?: number;
@@ -29,6 +29,8 @@ type EventInput = {
     duration: number;
     description: string;
     status: string;
+    artistId: number;
+    concertHallId: number;
 }
 
 type ConcertHallInput = {
@@ -37,7 +39,10 @@ type ConcertHallInput = {
     capacity: number;
     name: string;
     facilities: string[];
-    contactInfo: ContactInfo;
+    contactInfo: string[];
+    isVerified: string;
+    username: string;
+    password: string;
 }
 
 type ArtistInput = {
@@ -49,23 +54,8 @@ type ArtistInput = {
     bookingFee: number;
     socialMedia: string[];
     email: string;
+    isVerified: string;
     role: Role;
-}
-
-type ContactInfo = {
-    email: string;
-    countryCode: string;
-    number: string;
-    instagram: string;
-}
-
-type SocialMedia = {
-    instagram?: string;
-    facebook?: string;
-    discord?: string;
-    spotify: string;
-    youtube: string;
-    twitter?: string;
 }
 
 type AuthenticationResponse = {
@@ -82,7 +72,5 @@ export {
     EventInput,
     ConcertHallInput,
     ArtistInput,
-    ContactInfo,
-    SocialMedia,
     AuthenticationResponse
 }

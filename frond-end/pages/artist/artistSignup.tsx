@@ -3,10 +3,12 @@ import { StatusMessage } from "@/types";
 import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router"
 import classNames from "classnames";
-import styles from "@styles/Login.module.css";
+import styles from "@/styles/Login.module.css";
 import React, { useState } from "react";
 import InputField from "@/components/InputField";
 import ArtistService from "@/services/ArtistService";
+import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const SignUpArtist: React.FC = () => {
     const router = useRouter();
@@ -27,6 +29,7 @@ const SignUpArtist: React.FC = () => {
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
+    const { t } = useTranslation();
 
     const clearErrors = () => {
         setArtistNameError(null);
@@ -42,41 +45,41 @@ const SignUpArtist: React.FC = () => {
     const validate = (): boolean => {
         let result = true;
         if (!artistName || artistName.trim() === "") {
-            setArtistNameError("Artist name is required.");
+            setArtistNameError(t('artistSignup.error.artistNameRequired'));
             result = false;
         }
         if (!password || password.trim() === "") {
-            setPasswordError("Password is required.");
+            setPasswordError(t('artistSignup.error.passWordRequired'));
             result = false;
         } else {
             if (password.length < 8) {
-              setPasswordError("Password must be at least 8 characters long.");
+              setPasswordError(t('artistSignup.error.passwordLength'));
               result = false;
             }
         }
         if (!genres || genres.trim() === "") {
-            setGenresError("Genres is required.");
+            setGenresError(t('artistSignup.error.genresRequired'));
             result = false;
         }
         if (!biography || biography.trim() === "") {
-            setBiographyError("Biography is required.");
+            setBiographyError(t('artistSignup.error.biographyRequired'));
             result = false;
         }
         if (!bookingFee) {
-            setBookingFeeError("Booking fee is required.");
+            setBookingFeeError(t('artistSignup.error.bookingFeeRequired'));
             result = false;
         }
         if (!socialMedia || socialMedia.trim() === "") {
-            setSocialMediaError("Social media is required.");
+            setSocialMediaError(t('artistSignup.error.socialMediaRequired'));
             result = false;
         }
         if (!email || email.trim() === "") {
-            setEmailError("Email is required.");
+            setEmailError(t('artistSignup.error.emailRequired'));
             result = false;
         } else {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(email)) {
-            setEmailError("Invalid email format.");
+            setEmailError(t('artistSignup.error.invalidEmail'));
             result = false;
           }
         }
@@ -85,20 +88,21 @@ const SignUpArtist: React.FC = () => {
 
     const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+    
         clearErrors();
-
+    
         if (!validate()) {
             return;
         }
-
+    
         setIsLoading(true);
-
+    
         try {
             const genresArray = genres.split(',').map((genre) => genre.trim());
             const socialMediaArray = socialMedia.split(',').map((link) => link.trim());
-
-            const response = await ArtistService.registerArtist({
+    
+            // Register the artist
+            const registerResponse = await ArtistService.registerArtist({
                 artistName,
                 password,
                 genres: genresArray,
@@ -107,30 +111,55 @@ const SignUpArtist: React.FC = () => {
                 socialMedia: socialMediaArray,
                 email,
             });
-
-            if (response.status === 201) {
-                setStatusMessages([
-                    ...statusMessages,
-                    {
-                        type: "success",
-                        message: "Signup successful. Redirecting you...",
-                    },
-                ]);
-
-                setTimeout(() => {
-                    router.push("/");
-                }, 2000);
+    
+            if (registerResponse.status === 201) {
+                // Automatically log in the artist after successful signup
+                const loginResponse = await ArtistService.loginArtist({
+                    artistName: artistName,
+                    password,
+                });
+    
+                if (loginResponse.status === 200) {
+                    const user = await loginResponse.json();
+                    localStorage.setItem(
+                        "loggedInUser",
+                        JSON.stringify({
+                            token: user.token,
+                            fullname: user.fullname,
+                            username: user.username,
+                            role: user.role,
+                        })
+                    );
+    
+                    setStatusMessages([
+                        {
+                            type: "success",
+                            message: t('artistSignup.statusMessages.success'),
+                        },
+                    ]);
+    
+                    setTimeout(() => {
+                        router.push("/");
+                    }, 2000);
+                } else {
+                    setStatusMessages([
+                        {
+                            message: t('artistSignup.statusMessages.loginFailed'),
+                            type: "error",
+                        },
+                    ]);
+                }
             } else {
-                const error = await response.json();
+                const error = await registerResponse.json();
                 setStatusMessages([
-                    {message: error.message || "Signup failed", type: "error"},
+                    { message: error.message || t('artistSignup.statusMessages.failed'), type: "error" },
                 ]);
             }
         } catch (error) {
-            console.log("Signup error", error);
+            console.error("Signup or login error", error);
             setStatusMessages([
                 {
-                    message: "An error has occurred. Please try again later.",
+                    message: t('artistSignup.statusMessages.error'),
                     type: "error",
                 },
             ]);
@@ -138,6 +167,7 @@ const SignUpArtist: React.FC = () => {
             setIsLoading(false);
         }
     };
+    
 
     return (
         <>
@@ -145,7 +175,7 @@ const SignUpArtist: React.FC = () => {
           <Box className={styles.page}>
             <Box className={styles.loginContainer}>
                 <Typography variant="h4" gutterBottom align="center">
-                    Sign up as an artist
+                    {t('artistSignup.label.title')}
                 </Typography>
                 {statusMessages && (
                     <ul className="list-none mb-3 mx-auto">
@@ -164,7 +194,7 @@ const SignUpArtist: React.FC = () => {
                 )}
                 <form onSubmit={handleSignUp}>
                 <InputField
-                    label="Email"
+                    label={t('artistSignup.label.email')}
                     margin="normal"
                     value={email}
                     error={!!emailError}
@@ -172,7 +202,7 @@ const SignUpArtist: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <InputField
-                    label="Artist Name"
+                    label={t('artistSignup.label.artistName')}
                     margin="normal"
                     value={artistName}
                     error={!!artistNameError}
@@ -180,7 +210,7 @@ const SignUpArtist: React.FC = () => {
                     onChange={(e) => setArtistName(e.target.value)}
                 />
                 <InputField
-                    label="Password"
+                    label={t('artistSignup.label.password')}
                     margin="normal"
                     value={password}
                     error={!!passwordError}
@@ -188,7 +218,7 @@ const SignUpArtist: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <InputField
-                    label="Genres"
+                    label={t('artistSignup.label.genres')}
                     margin="normal"
                     value={genres}
                     error={!!genresError}
@@ -196,7 +226,7 @@ const SignUpArtist: React.FC = () => {
                     onChange={(e) => setGenres(e.target.value)}
                 />
                 <InputField
-                    label="Biography"
+                    label={t('artistSignup.label.biography')}
                     margin="normal"
                     value={biography}
                     error={!!biographyError}
@@ -204,7 +234,7 @@ const SignUpArtist: React.FC = () => {
                     onChange={(e) => setBiography(e.target.value)}
                 />
                 <InputField
-                    label="Booking Fee"
+                    label={t('artistSignup.label.bookingFee')}
                     margin="normal"
                     value={bookingFee}
                     error={!!bookingFeeError}
@@ -215,7 +245,7 @@ const SignUpArtist: React.FC = () => {
 
                 />
                 <InputField
-                    label="Social media"
+                    label={t('artistSignup.label.socialMedia')}
                     margin="normal"
                     value={socialMedia}
                     error={!!socialMediaError}
@@ -232,7 +262,7 @@ const SignUpArtist: React.FC = () => {
                         [styles.loading]: isLoading,
                         })}
                     >
-                        {isLoading ? "Signing Up..." : "Sign Up"}
+                        {isLoading ? t('artistSignup.buttin.loading') : t('artistSignup.button.signup')}
                     </Button>
                 </Box>
                 </form>
@@ -242,5 +272,15 @@ const SignUpArtist: React.FC = () => {
         </>
     )
 }
+
+export const getServerSideProps = async (context) => {
+    const { locale } = context;
+  
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
+  };
 
 export default SignUpArtist;

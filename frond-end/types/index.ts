@@ -1,3 +1,5 @@
+type Role = 'admin' | 'user' | 'artist' | "concertHall";
+
 export type Events = {
     id?: number;
     genre: string;
@@ -31,11 +33,15 @@ export type Ticket = {
 
 export type ConcertHall = {
     id?: number;
-    location: string;
-    capacity: number;
-    name: string;
-    facilities: string[];
-    contactInfo: ContactInfo;
+    location?: string;
+    capacity?: number;
+    name?: string;
+    facilities?: string[];
+    contactInfo?: string[];
+    role?: Role;
+    username?: string;
+    password?: string;
+    isVerified?: string;
 }
 
 export type Artist = {
@@ -46,7 +52,8 @@ export type Artist = {
     biography?: string;
     bookingFee?: number;
     socialMedia?: string[];
-    email: string;
+    email?: string;
+    role?: Role;
 }
 
 export type Event = {
@@ -59,13 +66,6 @@ export type Event = {
     duration: number;
     description: string;
     status: string;
-}
-
-export type ContactInfo = {
-    email: string;
-    countryCode: string;
-    number: string;
-    instagram: string;
 }
 
 export type SocialMedia = {

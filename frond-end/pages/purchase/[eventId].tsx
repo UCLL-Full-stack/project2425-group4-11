@@ -8,6 +8,7 @@ import EventDetails from "@/components/events/eventDetails";
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Navbar from "@/components/navbar";
+import UserService from "@/services/UserService";
 
 const PurchasePage: React.FC = () => {
   const [name, setName] = useState("");
@@ -50,8 +51,12 @@ const PurchasePage: React.FC = () => {
   }, [eventId]);
 
   const purchaseTicket = async (ticketId: number) => {
+    const user = localStorage.getItem("loggedInUser");
+    const userResponse = await UserService.getUserByUsername(user ? JSON.parse(user).username : null);
+    const gottenData = await userResponse.json();
+    const userId = gottenData.id;
     try {
-      const ticketResponse = await ShowTimeService.purchasedTicket(ticketId.toString());
+      const ticketResponse = await ShowTimeService.purchasedTicket(ticketId.toString(), userId.toString());
       if (ticketResponse.ok) {
         console.log('Ticket status updated to Sold');
         getEventById();

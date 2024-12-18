@@ -48,6 +48,8 @@ const createEvent = async (event: Event): Promise<Event> => {
                 duration: event.getDuration(),
                 description: event.getDescription(),
                 status: event.getStatus(),
+                artistId: event.getArtistId(),
+                concertHallId: event.getConcertHallId()
             },
         });
         return Event.from(eventPrisma);
@@ -67,4 +69,45 @@ const deleteEvent = async ({ id }: { id: number }): Promise<void> => {
         throw new Error('Database error. See server log for details.');
     }
 };
-export default { getAllEvents, getEventById, getEventByTitle, createEvent, deleteEvent };
+
+const updateEvent = async ({ id, date, time }: { id: number; date: string; time: string }): Promise<Event | null> => {
+    try {
+        const eventPrisma = await database.event.update({
+            where: { id },
+            data: {
+                date: new Date(date),
+                time,
+            },
+        });
+        return Event.from(eventPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const getEventsByArtistId = async ({ artistId }: { artistId: number }): Promise<Event[]> => {
+    try {
+        const eventsPrisma = await database.event.findMany({
+            where: { artistId },
+        });
+        return eventsPrisma.map(eventPrisma => Event.from(eventPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const getEventsByConcertHallId = async ({ concertHallId }: { concertHallId: number }): Promise<Event[]> => {
+    try {
+        const eventsPrisma = await database.event.findMany({
+            where: { concertHallId },
+        });
+        return eventsPrisma.map(eventPrisma => Event.from(eventPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+  
+export default { getAllEvents, getEventById, getEventByTitle, createEvent, deleteEvent, updateEvent, getEventsByArtistId, getEventsByConcertHallId };

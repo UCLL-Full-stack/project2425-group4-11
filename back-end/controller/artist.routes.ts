@@ -45,7 +45,7 @@
 
 import express, { NextFunction, Request, Response } from "express";
 import artistService from "../service/artist.service";
-import { ArtistInput } from "../types";
+import { ArtistInput, Role } from "../types";
 
 const artistRouter = express.Router();
 
@@ -75,7 +75,7 @@ artistRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
 
 /**
  * @swagger
- * /artist/login:
+ * /artists/login:
  *   post:
  *      summary: Login using username/password. Returns an object with JWT token and user name when succesful.
  *      requestBody:
@@ -152,6 +152,98 @@ artistRouter.post('/signup', async (req: Request, res: Response, next: NextFunct
         const artist = <ArtistInput>req.body;
         const result = await artistService.createArtist(artist);
         res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /artists/role:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Make a put request so that only admin can change isVerified.
+ *     responses:
+ *       200:
+ *         description: The schedule of a lecturer or if the user is an admin, a list of all schedules.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Artist'
+ */
+artistRouter.put('/role', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        console.log("username: ", username)
+        const artist = await artistService.updateArtist( username, role );
+        res.status(200).json(artist);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+/**
+ * @swagger
+ * /artists/role:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get a list of all artists if the user is an admin.
+ *     responses:
+ *       200:
+ *         description: A list of artists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Artist'
+ */
+artistRouter.get('/role', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        console.log("hallo")
+        const request = req as Request & { auth: { role: Role } };
+        console.log("Role: ", request)
+        console.log("hi");
+        const { role } = request.auth;
+        console.log("Role: ", role)
+        const users = await artistService.getArtists({ role });
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /artists/artistName/{artistName}:
+ *  get:
+ *      summary: Get a artist by artistName.
+ *      parameters:
+ *          - in: path
+ *            name: artistName
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The artist name.
+ *      responses:
+ *          200:
+ *              description: An artist object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Artist'
+ */
+artistRouter.get('/artistName/:artistName', async (req: Request, res: Response, next: NextFunction) => {
+    const { artistName } = req.params;
+    try {
+        const result = await artistService.getArtistByArtistName({ artistName });
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }

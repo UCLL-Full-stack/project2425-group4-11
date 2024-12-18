@@ -1,4 +1,4 @@
-import { ContactInfo } from "../types";
+import { Role } from "../types";
 import { ConcertHall as ConcertHallPrisma } from '@prisma/client';
 
 export class ConcertHall {
@@ -7,15 +7,45 @@ export class ConcertHall {
     private capacity: number;
     private name: string;
     private facilities: string[];
-    private contactInfo: ContactInfo;
+    private contactInfo: string[];
+    private isVerified: string;
+    private username: string;
+    private password: string;
+    private role: Role;
 
-    constructor(concertHall: { id?: number; location: string; capacity: number; name: string; facilities: string[]; contactInfo: ContactInfo }) {
+    constructor(concertHall: { id?: number; location: string; capacity: number; name: string; facilities: string[]; contactInfo: string[]; isVerified: string, username: string; password: string; role: Role }) {
         this.id = concertHall.id;
         this.location = this.validateLocation(concertHall.location);
         this.capacity = this.validateCapacity(concertHall.capacity);
         this.name = this.validateName(concertHall.name);
         this.facilities = this.validateFacilities(concertHall.facilities);
         this.contactInfo = this.validateContactInfo(concertHall.contactInfo);
+        this.isVerified = this.validateVerification(concertHall.isVerified);
+        this.username = this.validateConcertHallUsername(concertHall.username);
+        this.password = this.validatePassword(concertHall.password);
+        this.role = concertHall.role;
+    }
+
+    private validateConcertHallUsername(username: string): string {
+        if (!username || username.trim() === '') {
+            throw new Error("Artist name cannot be empty.");
+        }
+        return username;
+    }
+
+    private validatePassword(password: string): string {
+        if (password.length < 8) {
+            throw new Error("Password must be at least 8 characters long.");
+        }
+        return password;
+    }
+
+    private validateVerification(isVerified: string): string {
+        const allowedVerifications = ["Not verified", "Pending", "Verified"];
+        if (allowedVerifications.indexOf(isVerified) === -1) {
+            throw new Error(`Invalid verification. Allowed verifications are: ${allowedVerifications.join(", ")}`);
+        }
+        return isVerified;
     }
 
     private validateLocation(location: string): string {
@@ -57,41 +87,17 @@ export class ConcertHall {
         return facilities;
     }
 
-    private validateContactInfo(contactInfo: ContactInfo): ContactInfo {
-        if (!this.validateEmail(contactInfo.email)) {
-            throw new Error("Invalid email format.");
+    private validateContactInfo(contactsInfo: string[]): string[] {
+        if (!Array.isArray(contactsInfo)) {
+            throw new Error("Facilities must be an array.");
         }
-        if (!this.validateCountryCode(contactInfo.countryCode)) {
-            throw new Error("Invalid country code. It should start with '+' followed by 1 to 3 digits.");
-        }
-        if (!this.validatePhoneNumber(contactInfo.number)) {
-            throw new Error("Invalid phone number. It should contain only numbers and be between 7 and 15 digits.");
-        }
-        if (!this.validateInstagram(contactInfo.instagram)) {
-            throw new Error("Invalid Instagram handle. It should start with '@' and be between 2 and 30 characters long.");
-        }
-        return contactInfo;
-    }
-
-    private validateEmail(email: string): boolean {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
-    private validatePhoneNumber(number: string): boolean {
-        const phoneRegex = /^\d{7,15}$/;
-        return phoneRegex.test(number);
-    }
-
-    private validateCountryCode(countryCode: string): boolean {
-        const countryCodeRegex = /^\+\d{1,3}$/;
-        return countryCodeRegex.test(countryCode);
-    }
-
-    private validateInstagram(instagram: string): boolean {
-        const instagramRegex = /^@[A-Za-z0-9_.]{1,29}$/;
-        return instagramRegex.test(instagram);
-    }
+        contactsInfo.forEach((contactInfo, index) => {
+            if (!contactInfo || contactInfo.trim() === '') {
+                throw new Error(`Facility at index ${index} cannot be empty.`);
+            }
+        });
+        return contactsInfo;
+    } 
 
     getId(): number | undefined {
         return this.id;
@@ -113,27 +119,45 @@ export class ConcertHall {
         return this.facilities;
     }
 
-    getContactInfo(): ContactInfo {
+    getContactInfo(): string[] {
         return this.contactInfo;
+    }
+    getIsVerified(): string {
+        return this.isVerified;
+    }
+
+    getUsername(): string {
+        return this.username;
+    }
+
+    getPassword(): string {
+        return this.password;
+    }
+
+    getRole(): Role {
+        return this.role;
     }
 
     setFacilities(newFacility: string): void {
         this.facilities.push(newFacility);
     }
-
-    setContactInfo(newContactInfo: Partial<ContactInfo>): void {
-        const updatedContactInfo = { ...this.contactInfo, ...newContactInfo };
-        this.contactInfo = this.validateContactInfo(updatedContactInfo);
+    
+    setIsVerified(newVerified: string): void {
+        this.isVerified = newVerified;
     }
 
-    static from ({id, location, capacity, name, facilities, contactInfo}: ConcertHallPrisma & { contactInfo: ContactInfo }) {
+    static from ({id, location, capacity, name, facilities, contactInfo, isVerified, username, password, role}: ConcertHallPrisma) {
         return new ConcertHall({
             id, 
             location, 
             capacity, 
             name, 
             facilities, 
-            contactInfo
+            contactInfo,
+            isVerified,
+            username,
+            password,
+            role: role as Role
         });
     }
 }

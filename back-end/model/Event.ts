@@ -9,8 +9,10 @@ export class Event {
     private duration: number;
     private description: string;
     private status: string;
+    private artistId: number;
+    private concertHallId: number;
 
-    constructor(event: { id?: number; title: string; genre: string; time: string; date: Date; duration: number; description: string; status: string; }) {
+    constructor(event: { id?: number; title: string; genre: string; time: string; date: Date; duration: number; description: string; status: string; artistId: number; concertHallId: number}) {
         this.id = event.id;
         this.title = this.validateTitle(event.title);
         this.genre = this.validateGenre(event.genre);
@@ -19,6 +21,8 @@ export class Event {
         this.duration = this.validateDuration(event.duration);
         this.description = this.validateDescription(event.description);
         this.status = this.validateStatus(event.status);
+        this.artistId = event.artistId;
+        this.concertHallId = event.concertHallId;
     }
 
     private validateTitle(title: string): string {
@@ -144,6 +148,14 @@ export class Event {
         return this.status;
     }
 
+    getArtistId(): number {
+        return this.artistId;
+    }
+
+    getConcertHallId(): number {
+        return this.concertHallId;
+    }
+
     setTitle(newTitle: string): void {
         this.title = this.validateTitle(newTitle);
     }
@@ -156,7 +168,7 @@ export class Event {
         this.status = this.validateStatus(newStatus);
     }
 
-    static from({ id, title, genre, time, date, duration, description, status }: EventPrisma) {
+    static from({ id, title, genre, time, date, duration, description, status, artistId, concertHallId }: EventPrisma) {
         return new Event({
             id,
             title,
@@ -166,6 +178,8 @@ export class Event {
             duration,
             description,
             status,
+            artistId,
+            concertHallId
         });
     }
     

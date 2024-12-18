@@ -187,11 +187,13 @@ ticketRouter.delete('/:eventId', async (req: Request, res: Response, next: NextF
  *       404:
  *         description: Ticket not found.
  */
-ticketRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =>   {
+ticketRouter.put('/:id/:userId', async (req: Request, res: Response, next: NextFunction) =>   {
     try {
         const ticketId = req.params.id;
+        const userId = req.params.userId;
         console.log("ticket ID: ",ticketId);
-        const ticket = await ticketService.updateTicket(parseInt(ticketId));
+        console.log("User Id: ", userId);
+        const ticket = await ticketService.updateTicket(parseInt(ticketId), parseInt(userId));
         res.status(200).json(ticket);
     } catch (error) {
         next(error);
@@ -220,6 +222,34 @@ ticketRouter.get('/eventId/:eventId', async (req: Request, res: Response, next: 
     try{
         const eventId = req.params.eventId;
         const tickets = await ticketService.getTicketsByEventId(parseInt(eventId));
+        res.status(200).json(tickets);
+    } catch (error) {
+        next(error);
+    }
+})
+
+/**
+ * @swagger
+ * /tickets/userId/{userId}:
+ *   get:
+ *     summary: Get tickets by event ID.
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The event ID
+ *     responses:
+ *       200:
+ *         description: The array of tickets was successfully retrieved.
+ *       404:
+ *         description: Tickets not found.
+ */
+ticketRouter.get('/userId/:userId', async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const userId = req.params.userId;
+        const tickets = await ticketService.getTicketsByUserId(parseInt(userId));
         res.status(200).json(tickets);
     } catch (error) {
         next(error);

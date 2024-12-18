@@ -8,6 +8,7 @@ import { userRouter } from './controller/user.routes';
 import { ticketRouter } from './controller/ticket.routes';
 import { artistRouter } from './controller/artist.routes';
 import { eventRouter } from './controller/event.routes';
+import { concertHallRouter } from './controller/concertHall.routes';
 
 const app = express();
 dotenv.config();
@@ -20,6 +21,7 @@ app.use('/users', userRouter);
 app.use('/tickets', ticketRouter);
 app.use('/artists', artistRouter);
 app.use('/events', eventRouter);
+app.use('/concertHalls', concertHallRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

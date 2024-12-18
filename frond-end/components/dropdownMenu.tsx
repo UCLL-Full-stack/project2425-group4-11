@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import { useTranslation } from "next-i18next";
-import Language from "./language/Language";
-
 
 interface DropdownMenuProps {
   loggedInUser: string | null;
@@ -15,6 +13,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   handleLogout,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -23,7 +22,17 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const {t} = useTranslation();
+
+  const { t } = useTranslation();
+
+  // Load user role on client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("loggedInUser");
+      const parsedUser = user ? JSON.parse(user) : null;
+      setUserRole(parsedUser?.role || null);
+    }
+  }, []);
 
   return (
     <>
@@ -34,11 +43,16 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         {loggedInUser ? (
           <>
             <MenuItem component="a" href="/events/overviewEvents" onClick={handleClose}>
-              {t('dropdownMenu.menuItem.events')}
+              {t("dropdownMenu.menuItem.events")}
             </MenuItem>
             <MenuItem component="a" href="/user/editProfile" onClick={handleClose}>
-              {t('dropdownMenu.menuItem.editProfile')}
+              {t("dropdownMenu.menuItem.editProfile")}
             </MenuItem>
+            {userRole === "admin" && (
+              <MenuItem component="a" href="/adminApproval/adminApproval" onClick={handleClose}>
+                {t("dropdownMenu.menuItem.adminDashboard")}
+              </MenuItem>
+            )}
             <MenuItem
               onClick={() => {
                 handleLogout();
@@ -46,12 +60,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               }}
               style={{ color: "red" }}
             >
-              {t('dropdownMenu.menuItem.logout')}
+              {t("dropdownMenu.menuItem.logout")}
             </MenuItem>
           </>
         ) : (
-          <MenuItem component="a" href="/login" onClick={handleClose}>
-            {t('dropdownMenu.menuItem.login')}
+          <MenuItem component="a" href="/user/login" onClick={handleClose}>
+            {t("dropdownMenu.menuItem.login")}
           </MenuItem>
         )}
       </Menu>

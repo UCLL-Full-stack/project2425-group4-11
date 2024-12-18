@@ -65,10 +65,6 @@ const editProfile = async (username: string, userData: UserInput): Promise<User>
         throw new Error(`User with username ${username} not found.`);
     }
 
-    if (userData.password) {
-        userData.password = await bcrypt.hash(userData.password, 12);
-    }
-
     const userId = user.getId();
     if (!userId) {
         throw new Error("User ID is undefined.");

@@ -162,7 +162,6 @@ const EditProfilePage: React.FC = () => {
                 email: userData.email ?? formData.email,
                 firstName: userData.firstName ?? formData.firstName,
                 lastName: userData.lastName ?? formData.lastName,
-                phoneNumber: userData.phoneNumber ?? formData.phoneNumber,
                 password: userData.password ?? formData.password,
                 username: userData.username ?? formData.username,
                 accountStatus: formData.accountStatus,
@@ -227,30 +226,40 @@ const EditProfilePage: React.FC = () => {
                         label={t('editProfile.label.email')}
                         margin="normal"
                         value={formData.email}
+                        error={!!errors.email}
+                        helperText={errors.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     />
                     <InputField 
                         label={t('editProfile.label.firstName')}
                         margin="normal"
                         value={formData.firstName}
+                        error={!!errors.firstName}
+                        helperText={errors.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     />
                     <InputField 
                         label={t('editProfile.label.lastName')}
                         margin="normal"
                         value={formData.lastName}
+                        error={!!errors.lastName}
+                        helperText={errors.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     />
                     <InputField 
                         label={t('editProfile.label.phoneNumber')}
                         margin="normal"
                         value={formData.phoneNumber}
+                        error={!!errors.phoneNumber}
+                        helperText={errors.phoneNumber}
                         onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                     />
                     <InputField 
                         label={t('editProfile.label.username')}
                         margin="normal"
                         value={formData.username}
+                        error={!!errors.username}
+                        helperText={errors.username}
                         onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     />
                     <Box display="flex" justifyContent="space-between" mt={2}>

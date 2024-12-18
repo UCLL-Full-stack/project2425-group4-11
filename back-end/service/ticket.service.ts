@@ -13,10 +13,10 @@ const getTicketById = async (id: number): Promise<Ticket> => {
 const createTicket = async ({
     type,
     price,
-    eventId
+    eventId,
 }: TicketInput): Promise<Ticket> => {
 
-    const ticket = new Ticket({ type, status: 'Available', price, eventId });
+    const ticket = new Ticket({ type, status: 'Available', price, eventId, userId: null });
     return await ticketDB.createTicket(ticket);
 }
 
@@ -27,7 +27,7 @@ const deleteTicket = async (eventId: number): Promise<void> => {
     }
     return await ticketDB.deleteTicketsByEventId({ eventId });
 }
-const updateTicket = async (id: number): Promise<Ticket> => {
+const updateTicket = async (id: number, userId: number): Promise<Ticket> => {
     const ticket = await ticketDB.getTicketById({ id });
     if (!ticket) {
         throw new Error(`Ticket with id ${id} not found.`);
@@ -37,7 +37,8 @@ const updateTicket = async (id: number): Promise<Ticket> => {
         type: ticket.getType(),
         status: "Sold",
         price: ticket.getPrice(),
-        eventId: ticket.getEventId()
+        eventId: ticket.getEventId(),
+        userId: userId,
     };
 
     return await ticketDB.updateTicketById(id, updatedTicketData);
@@ -47,6 +48,10 @@ const getTicketsByEventId = async (eventId: number): Promise<Ticket[]> => {
     return await ticketDB.getTicketsByEventId({ eventId });
 }
 
+const getTicketsByUserId = async (userId: number): Promise<Ticket[]> => {
+    return await ticketDB.getTicketsByUserId({ userId });
+}
+
 export default {
     getAllTickets,
     getTicketById,
@@ -54,4 +59,5 @@ export default {
     deleteTicket,
     updateTicket,
     getTicketsByEventId,
+    getTicketsByUserId,
 };

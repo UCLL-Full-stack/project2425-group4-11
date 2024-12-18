@@ -6,13 +6,15 @@ export class Ticket {
     private status: string;
     private price: number;
     private eventId: number; 
+    private userId: number | null;
 
-    constructor(ticket: { id?: number; type: string; status: string; price: number; eventId: number }) {
+    constructor(ticket: { id?: number; type: string; status: string; price: number; eventId: number; userId: number | null }) {
         this.id = ticket.id;
         this.type = this.validateType(ticket.type);
         this.status = this.validateStatus(ticket.status);
         this.price = this.validatePrice(ticket.price);
         this.eventId = ticket.eventId;
+        this.userId = ticket.userId;
     }
 
     private validateType(type: string): string {
@@ -58,17 +60,22 @@ export class Ticket {
         return this.eventId;
     }
 
+    getUserId(): number | null {
+        return this.userId;
+    }
+
     setStatus(newStatus: string): void {
         this.status = this.validateStatus(newStatus);
     }
 
-    static from({ id, type, status, price, eventId}: TicketPrisma) {
+    static from({ id, type, status, price, eventId, userId}: TicketPrisma) {
         return new Ticket({
             id,
             type,
             status,
             price,
             eventId,
+            userId,
         });
     }
 }
