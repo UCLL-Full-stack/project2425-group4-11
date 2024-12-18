@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {loggedInUser && (
             <Typography variant="body1" className={styles.welcomeMessage}>
-              {t('navbar.welcome')} , {loggedInUser}
+              {t('navbar.welcome')}, {loggedInUser}
             </Typography>
           )}
           <Box sx={{ mx: 2 }}>

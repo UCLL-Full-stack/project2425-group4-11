@@ -1,15 +1,13 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import NavBar from "../components/navbar";
+import NavBar from "@/components/navbar";
 import EventFrame from "@/components/event";
 import FilterButton from "@/components/filterButton";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
-import ButtonAddEvent from "@/components/events/buttonAddEvent";
 import { Event } from "@/types/index";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
-//import EventOverviewTable from "@/components/events/EventOverviewTable";
 
 const Start: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -85,7 +83,6 @@ const Start: React.FC = () => {
         <h2>{t('index.main.body.title')}</h2>
         <section className={styles.filterButton}>
           <FilterButton label={t('index.main.body.filterButton')} onClick={() => {}} />
-          <ButtonAddEvent />
         </section>
         <section className={styles.events}>
           {filteredEvents.map((event, index) => {
@@ -99,7 +96,7 @@ const Start: React.FC = () => {
               <EventFrame
                 key={index}
                 title={event.title}
-                date={formattedDate} // Pass formatted date
+                date={formattedDate}
                 time={event.time}
                 id={event.id}
                 genre={event.genre}

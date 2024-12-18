@@ -1,6 +1,7 @@
 import { Ticket } from "../model/Ticket";
 import database from "./database";
 import ticketDB from '../repository/ticket.db';
+import { TicketInput } from "../types";
 
 
 const tickets = [
@@ -23,9 +24,29 @@ const getAllTickets = async (): Promise<Ticket[]> => {
     }
 }
 
-const getTicketById = ({ id }: { id: number }): Ticket | null => {
-    return tickets.find((ticket) => ticket.getId() === id) || null;
+const getTicketById = async ({ id }: { id: number }): Promise<Ticket | null> => {
+    try {
+        const ticketPrisma = await database.ticket.findUnique({
+            where: { id },
+        });
+        return ticketPrisma ? Ticket.from(ticketPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
 }
+
+const getTicketsByEventId = async ({ eventId }: { eventId: number }): Promise<Ticket[]> => {
+    try {
+        const ticketsPrisma = await database.ticket.findMany({
+            where: { eventId },
+        });
+        return ticketsPrisma.map(ticketPrisma => Ticket.from(ticketPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 const createTicket = async (ticket: Ticket): Promise<Ticket> => {
     try {
@@ -44,10 +65,10 @@ const createTicket = async (ticket: Ticket): Promise<Ticket> => {
     }
 }
 
-const deleteTicket = async ({ id }: { id: number }): Promise<void> => {
+const deleteTicketsByEventId = async ({ eventId }: { eventId: number }): Promise<void> => {
     try {
-        await database.ticket.delete({
-            where: { id },
+        await database.ticket.deleteMany({
+            where: { eventId },
         });
     } catch (error) {
         console.error(error);
@@ -55,9 +76,24 @@ const deleteTicket = async ({ id }: { id: number }): Promise<void> => {
     }
 };
 
+const updateTicketById = async (id:number, ticketData: Partial<TicketInput>): Promise<Ticket> =>{
+    try {
+        const ticketPrisma = await database.ticket.update({
+            where: { id },
+            data: ticketData,
+        });
+        return Ticket.from(ticketPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     getAllTickets,
     getTicketById,
     createTicket,
-    deleteTicket,
-}
+    deleteTicketsByEventId,
+    getTicketsByEventId,
+    updateTicketById,
+};

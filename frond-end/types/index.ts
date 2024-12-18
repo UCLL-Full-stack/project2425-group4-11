@@ -50,7 +50,7 @@ export type Artist = {
 }
 
 export type Event = {
-    id?: number;
+    id?: string;
     title: string;
     genre: string;
     time: string;

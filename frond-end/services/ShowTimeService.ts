@@ -12,13 +12,15 @@ const getEventById = (eventId: string) => {
     });
 };
 
-const deleteEvent = async (eventId: string) => {
+
+
+const deleteEvent = async (eventId: number) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${eventId}`, {
       method: "DELETE",
     });
 };
  
-const deleteTicket = async (eventId: string) => {
+const deleteTicket = async (eventId: number) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/tickets/${eventId}`, {
       method: "DELETE",
     });
@@ -39,6 +41,20 @@ const createTicket = async (ticketData: any) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(ticketData),
   });
+};
+
+const purchasedTicket = async (id: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/tickets/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+const getTicketsByEventId = async (eventId: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/tickets/eventId/${eventId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
 const ShowTimeService = {
@@ -47,6 +63,9 @@ const ShowTimeService = {
     createEvent,
     createTicket,
     deleteEvent,
+    deleteTicket,
+    purchasedTicket,
+    getTicketsByEventId,
 };
   
 export default ShowTimeService;

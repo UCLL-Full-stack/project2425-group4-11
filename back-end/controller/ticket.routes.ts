@@ -79,6 +79,7 @@ ticketRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
  */
 ticketRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log("hallo")
         const user = await ticketService.getTicketById(Number(req.params.id));
         res.status(200).json(user);
     } catch (error) {
@@ -130,7 +131,6 @@ ticketRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
  *          500:
  *              description: Internal server error.
  */
-
 ticketRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const ticket = <TicketInput>req.body;
@@ -159,14 +159,71 @@ ticketRouter.post('/', async (req: Request, res: Response, next: NextFunction) =
  *       404:
  *         description: Ticket not found.
  */
-ticketRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+ticketRouter.delete('/:eventId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const ticketId = Number(req.params.id);
-        await ticketService.deleteTicket(ticketId);
-        res.status(200).json({ message: 'Ticket successfully deleted' });
+        const eventId = req.params.eventId;
+        const ticket = await ticketService.deleteTicket(parseInt(eventId));
+        res.status(200).json(ticket);
     } catch (error) {
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /tickets/{id}:
+ *   put:
+ *     summary: Update a ticket by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ticket ID
+ *     responses:
+ *       200:
+ *         description: The ticket was successfully updated.
+ *       404:
+ *         description: Ticket not found.
+ */
+ticketRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =>   {
+    try {
+        const ticketId = req.params.id;
+        console.log("ticket ID: ",ticketId);
+        const ticket = await ticketService.updateTicket(parseInt(ticketId));
+        res.status(200).json(ticket);
+    } catch (error) {
+        next(error);
+    }
+})
+
+/**
+ * @swagger
+ * /tickets/eventId/{eventId}:
+ *   get:
+ *     summary: Get a ticket by event ID.
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The event ID
+ *     responses:
+ *       200:
+ *         description: The array of tickets was successfully retrieved.
+ *       404:
+ *         description: Tickets not found.
+ */
+ticketRouter.get('/eventId/:eventId', async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const eventId = req.params.eventId;
+        const tickets = await ticketService.getTicketsByEventId(parseInt(eventId));
+        res.status(200).json(tickets);
+    } catch (error) {
+        next(error);
+    }
+})
 
 export { ticketRouter };

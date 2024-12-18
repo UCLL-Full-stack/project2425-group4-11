@@ -165,18 +165,19 @@ const AddEventPage: React.FC = () => {
 
       const eventData = await eventResponse.json();
 
-      // Handle ticket creation
-      for (const ticket of ticketCategories) {
-        const ticketPayload = { ...ticket, eventId: eventData.id };
-        const ticketResponse = await ShowTimeService.createTicket(ticketPayload);
+      for (const ticketCategory of ticketCategories) {
+        for (let i = 0; i < ticketCategory.amount; i++) {
+          const ticketPayload = { ...ticketCategory, eventId: eventData.id };
+          const ticketResponse = await ShowTimeService.createTicket(ticketPayload);
 
-        if (!ticketResponse.ok) {
-          setStatusMessages([{ message: t('addEvent.error.createFail'), type: "error" }]);
-          setLoading(false);
-          return;
+          if (!ticketResponse.ok) {
+            setStatusMessages([{ message: t('addEvent.error.createFail'), type: "error" }]);
+            setLoading(false);
+            return;
+          }
         }
       }
-
+    
       setStatusMessages([{ message: t('addEvent.succes.create'), type: "success" }]);
       router.push("/");
     } catch (error) {

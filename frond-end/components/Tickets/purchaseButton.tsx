@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 
 
 interface PurchaseButtonProps {
-  eventId: string;
+  eventId?: string;
   onClick?: () => void;
   label?: string;
 }

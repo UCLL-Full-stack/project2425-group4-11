@@ -1,6 +1,8 @@
 {
     "app.title": "ShowTime",
     "purchaseButton": "Purchase",
+    "noTicketsAvailable": "Sold Out",
+    "fewTicketsLeft": "Only a few tickets left",
     "navbar": {
         "logo": "ShowTime",
         "welcome": "Welcome"
@@ -118,7 +120,8 @@
                 "vip": "VIP",
                 "student": "Student",
                 "quantity": "Quantity",
-                "totalPrice": "Total"
+                "totalPrice": "Total",
+                "catagoryLabel": "Category"
             },
             "button": {
                 "label": {
@@ -225,5 +228,13 @@
             "logout": "Log Out",
             "login": "Log In"          
         }
-    }   
+    },
+    "eventFrameCH":{
+        "error":{
+            "deleteTicket": "Failed to delete the ticket",
+            "deleteEvent": "Failed to delete the Event ",
+            "deleteProcess": "Error during deletion process: "
+        }
+    }
+       
 }

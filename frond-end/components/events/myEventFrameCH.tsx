@@ -2,38 +2,49 @@ import React from "react";
 import { Box, Paper, Typography, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShowTimeService from "@/services/ShowTimeService";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
 
 type EventProps = {
-  id: string;
+  id?: number;
   title: string;
   genre: string;
   date: string;
   time: string;
   imageUrl?: string;
-  onDelete: (id: string) => void;
 };
 
 const MyEventFrame: React.FC<EventProps> = ({
-  id,
-  title,
-  genre,
-  date,
-  time,
-  imageUrl,
-  onDelete,
-}) => {
-  const handleDelete = async () => {
-    try {
-      const response = await ShowTimeService.deleteEvent(parseInt(id));
-      if (response.ok) {
-        onDelete(id);
-      } else {
-        console.error("Failed to delete the event");
+    id,
+    title,
+    genre,
+    date,
+    time,
+    imageUrl,
+  }) => {
+    const {t} = useTranslation();
+    const router = useRouter();
+    const handleDelete = async () => {
+      try {
+        const ticketResponse = await ShowTimeService.deleteTicket(Number(id));
+        if (!ticketResponse.ok) {
+          console.error(t('eventFrameCH.error.deleteTickete'));
+          return;
+        }
+
+        const eventResponse = await ShowTimeService.deleteEvent(Number(id));
+        if (!eventResponse.ok) {
+          console.error(t('eventFrameCH.error.deleteEvent'));
+          return;
+        }
+
+      } catch (error) {
+        console.error(t('eventFrameCH.error.deleteProcess'), error);
       }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+      router.reload()
+    };
+    
   return (
     <Paper
       sx={{

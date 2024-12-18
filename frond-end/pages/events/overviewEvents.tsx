@@ -1,14 +1,13 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import MyEventFrame from "@/components/events/myEventFrameCH";
-import FilterButton from "@/components/filterButton";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
-import ButtonAddEvent from "@/components/events/buttonAddEvent";
 import Navbar from "@/components/navbar";
-//import EventOverviewTable from "@/components/events/EventOverviewTable";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { Event } from "@/types/index"
+import ButtonAddEvent from "@/components/events/buttonAddEvent";
 
 const OverviewMyEvent: React.FC = () => {
   const [events, setEvents] = useState<Array<Event>>([]);
@@ -53,6 +52,7 @@ const OverviewMyEvent: React.FC = () => {
       <Navbar />
       <main className={styles.main}>
         <h2>{t('overviewEvent.titel')}</h2>
+        <ButtonAddEvent />
         <section className={styles.events}>
           {events.map((event, index) => {
             const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -66,15 +66,16 @@ const OverviewMyEvent: React.FC = () => {
               // concert hall can delete
               // artist can reschedule
               // user can view
-              
-              <MyEventFrame
-                key={index}
-                title={event.title}
-                date={formattedDate} // Pass formatted date
-                time={event.time}
-                id={event.id}
-                genre={event.genre}
-              />
+              <>
+                <MyEventFrame
+                  key={index}
+                  title={event.title}
+                  date={formattedDate} // Pass formatted date
+                  time={event.time}
+                  id={event.id}
+                  genre={event.genre}
+                />
+              </>
             );
           })}
         </section>

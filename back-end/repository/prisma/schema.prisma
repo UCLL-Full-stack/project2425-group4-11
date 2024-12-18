@@ -16,7 +16,7 @@ model Event {
     duration    Int
     description String
     status      String
-    tickets     Ticket?
+    tickets     Ticket[]
 }
 
 model Artist {
@@ -56,7 +56,7 @@ model Ticket {
     status                  String
     price                   Int
     event                   Event     @relation(fields: [eventId], references: [id])
-    eventId                 Int       @unique
+    eventId                 Int       
 }
 
 model User {
