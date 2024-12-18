@@ -9,16 +9,12 @@
   color: black;
 }
 
-.filterButton {
-  display: flex;
-  align-self: flex-end;
-  padding-right: 5rem;
-}
-
 .events {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
+  width: 75%;
+  padding: 20px;
 }
 
 .description {

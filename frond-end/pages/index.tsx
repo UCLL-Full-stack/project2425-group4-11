@@ -2,7 +2,6 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import NavBar from "@/components/navbar";
 import EventFrame from "@/components/event";
-import FilterButton from "@/components/filterButton";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useState, useEffect } from "react";
 import { Event } from "@/types/index";
@@ -15,7 +14,7 @@ const Start: React.FC = () => {
 
   const [isClient, setIsClient] = useState<boolean>(false);
 
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   const getEvents = async () => {
     try {
@@ -32,10 +31,10 @@ const Start: React.FC = () => {
         setEvents(events);
       } else {
         setEvents([]);
-        console.error(t('index.error.mismatch'), events);
+        console.error(t("index.error.mismatch"), events);
       }
     } catch (error) {
-      console.error(t('index.error.fetchFail'), error);
+      console.error(t("index.error.fetchFail"), error);
       setEvents([]);
     }
   };
@@ -56,33 +55,28 @@ const Start: React.FC = () => {
   return (
     <>
       <Head>
-        <title>{t('app.title')}</title>
-        <meta name="description" content={t('app.title')} />
+        <title>{t("app.title")}</title>
+        <meta name="description" content={t("app.title")} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
       <main className={styles.main}>
         <section className={styles.heroSection}>
-          <h1>{t('index.main.heroSection.slogan')}</h1>
+          <h1>{t("index.main.heroSection.slogan")}</h1>
           <div className={styles.searchContainer}>
             <input
               type="text"
-              placeholder={t('index.main.heroSection.placeHolder.searchBar')}
+              placeholder={t("index.main.heroSection.placeHolder.searchBar")}
               className={styles.searchBar}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <p>
-            {t('index.main.heroSection.text')}
-          </p>
+          <p>{t("index.main.heroSection.text")}</p>
         </section>
 
-        <h2>{t('index.main.body.title')}</h2>
-        <section className={styles.filterButton}>
-          <FilterButton label={t('index.main.body.filterButton')} onClick={() => {}} />
-        </section>
+        <h2>{t("index.main.body.title")}</h2>
         <section className={styles.events}>
           {filteredEvents.map((event, index) => {
             const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -116,9 +110,9 @@ export const getServerSideProps = async (context) => {
   const { locale } = context;
 
   return {
-      props: {
-          ...(await serverSideTranslations(locale ?? "en", ["common"])),
-      },
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
   };
 };
 
