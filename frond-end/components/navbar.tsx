@@ -5,10 +5,9 @@ import DropdownMenu from "./dropdownMenu";
 import { useTranslation } from "next-i18next";
 import Language from "./language/Language";
 
-
 const Navbar: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const user = localStorage.getItem("loggedInUser");
@@ -25,20 +24,31 @@ const Navbar: React.FC = () => {
   return (
     <AppBar position="static" className={styles.navbar}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography variant="h6" component="a" href="/" className={styles.logo}>
+        {/* Blue ShowTime logo */}
+        <Typography
+          variant="h6"
+          component="a"
+          href="/"
+          className={styles.logo}
+          sx={{ fontWeight: "bold", fontSize: "2rem" }}
+        >
           {t("navbar.logo")}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {loggedInUser && (
-            <Typography variant="body1" className={styles.welcomeMessage}>
-              {t('navbar.welcome')}, {loggedInUser}
+            <Typography
+              variant="body1"
+              className={styles.welcomeMessage}
+              sx={{ color: "royalblue", fontWeight: "bold" }}
+            >
+              {t("navbar.welcome")}, {loggedInUser}
             </Typography>
           )}
           <Box sx={{ mx: 2 }}>
-            <Tabs/>
+            <Tabs />
           </Box>
           <Box sx={{ mx: 2 }}>
-            <Language/>
+            <Language />
           </Box>
           <DropdownMenu
             loggedInUser={loggedInUser}
