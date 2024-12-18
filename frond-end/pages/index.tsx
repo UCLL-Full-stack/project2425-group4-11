@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 
 const Start: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [isClient, setIsClient] = useState<boolean>(false);

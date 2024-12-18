@@ -5,7 +5,6 @@ import { Event, Ticket } from "@/types";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Paper, Typography, Button, IconButton, Divider, FormControl, InputLabel, Select, SelectChangeEvent, MenuItem } from "@mui/material";
 import EventDetails from "@/components/events/eventDetails";
-import TicketService from "@/services/TicketService";
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Navbar from "@/components/navbar";
