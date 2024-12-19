@@ -13,6 +13,7 @@ import InputField from "@/components/InputField";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import ConcertHallService from "@/services/ConcertHallService";
+import SimpleTable from "@/components/table";
 
 const LoginArtist: React.FC = () => {
   const router = useRouter();
@@ -104,6 +105,15 @@ const LoginArtist: React.FC = () => {
     <>
       <Navbar />
       <Box className={styles.page}>
+        <div className={styles.simpleTableContainer}>
+            <SimpleTable
+              data={[
+                ['cityville', 'cityville123', 'concertHall'],
+                ['townsville', 'townsville123', 'concertHall']
+              ]}
+              label={t('loginArtist.label.artistName')}
+            />
+          </div>
         <Box className={styles.loginContainer}>
           <Typography variant="h4" gutterBottom align="center">
             {t('loginCH.title')}

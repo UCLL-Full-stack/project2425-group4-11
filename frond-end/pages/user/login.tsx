@@ -15,6 +15,7 @@ import InputField from "@/components/InputField";
 import UserService from "@/services/UserService";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import SimpleTable from "@/components/table";
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -106,6 +107,15 @@ const Login: React.FC = () => {
     <>
       <Navbar />
       <Box className={styles.page}>
+          <div className={styles.simpleTableContainer}>
+            <SimpleTable
+              data={[
+                ['admin', 'admin123', 'admin'],
+                ['tester', 'tester123', 'user']
+              ]}
+              label={t('login.label.username')}
+            />
+          </div>
         <Box className={styles.loginContainer}>
           <Typography variant="h4" gutterBottom align="center" className={styles.title}>
             {t('login.title')}

@@ -25,6 +25,9 @@
  *            lastName:
  *              type: string
  *              description: User last name.
+ *            username:
+ *              type: string
+ *              description: User username.
  *            phoneNumber:
  *              type: string
  *              description: User phone number.
@@ -157,6 +160,9 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  *                              type: string
  *                              description: The user's last name.
  *                              example: "Doe"
+ *                          username:
+ *                              type: string
+ *                              description: The user's username.
  *                          phoneNumber:
  *                              type: string
  *                              description: The user's phone number.

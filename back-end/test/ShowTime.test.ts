@@ -4,37 +4,70 @@ import { Event } from "../model/Event";
 import { Ticket } from "../model/Ticket";
 import { ConcertHall } from "../model/ConcertHall";
 import { Artist } from "../model/Artist";
-import { ContactInfo } from '../types';
 
 const now = new Date();
 const eventDate = new Date();
 eventDate.setMonth(now.getMonth() + 1);
 
-const event = new Event({
-    genre: 'rock',
-    time: '20:00',
-    date: eventDate,
-    duration: 90,
-    description: 'rock concert',
-    status: 'Upcoming',
-});
-
 const artist = new Artist({
+    id: 1,
     artistName: 'Jeremy Zucker',
     password: 'jeremy123',
     genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
     biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
     bookingFee: 1000,
     socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+    email: 'jeremyzucker@showtime.com',
+    isVerified: 'Verified',
     role: 'artist'
 });
 
-const validContactInfo: ContactInfo = {
-    email: "contact@venue.com",
-    countryCode: "+1",
-    number: "1234567890",
-    instagram: "@concertvenue"
-};
+const concertHall = new ConcertHall({
+    id: 1,
+    location: 'street',
+    capacity: 5000,
+    name: 'concertHall',
+    facilities: ['restroom', 'bar'],
+    contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+    isVerified: 'Verified',
+    username: 'concertHall',
+    password: 'cocnertHall123',
+    role: 'concertHall'
+})
+
+const event = new Event({
+    id: 1,
+    title: 'ACDC',
+    genre: 'rock',
+    time: '20:00',
+    date: eventDate,
+    duration: 90,
+    description: 'rock concert',
+    status: 'Upcoming',
+    artistId: artist.getId() || 0,
+    concertHallId: concertHall.getId() || 0
+});
+
+const user = new User({
+    id:1,
+    email: "user@example.com",
+    password: "password123",
+    firstName: "John",
+    lastName: "Doe",
+    username: 'johndoe',
+    phoneNumber: "+1234567890",
+    accountStatus: true,
+    role: 'user'
+})
+
+const ticket = new Ticket({
+    id: 1,
+    type: 'Regular',
+    status: 'Available',
+    price: 25,
+    eventId: event.getId() || 0,
+    userId: null
+})
 
 // happy cases
 
@@ -44,12 +77,15 @@ const validContactInfo: ContactInfo = {
 
         //when
         const newEvent = new Event({
+            title: 'ACDC',
             genre: 'rock',
             time: '20:00',
             date: eventDate,
             duration: 90,
             description: 'rock concert',
             status: 'Upcoming',
+            artistId: artist.getId() || 0,
+            concertHallId: concertHall.getId() || 0
         });
 
         // then
@@ -73,6 +109,8 @@ const validContactInfo: ContactInfo = {
             biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
             bookingFee: 1000,
             socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+            email: 'jeremyzucker@showtime.com',
+            isVerified: 'Verified',
             role: 'artist'
         });
 
@@ -94,14 +132,15 @@ const validContactInfo: ContactInfo = {
             password: "password123",
             firstName: "John",
             lastName: "Doe",
-            
+            username: 'johndoe',
             phoneNumber: "+1234567890",
             accountStatus: true,
+            role: 'user'
         });
         
         // then 
         expect(newUser.getEmail()).toEqual("user@example.com");
-        expect(newUser.getPassword()).toEqual("hashed_password123");
+        expect(newUser.getPassword()).toEqual("password123");
         expect(newUser.getFirstName()).toEqual("John");
         expect(newUser.getLastName()).toEqual("Doe");
         expect(newUser.getPhoneNumber()).toEqual("+1234567890");
@@ -117,6 +156,8 @@ const validContactInfo: ContactInfo = {
             type: "VIP",
             status: "Available",
             price: 100,
+            eventId: event.getId() || 0,
+            userId: user.getId() || 0
         });
         
         expect(newTicket.getType()).toEqual("VIP");
@@ -134,14 +175,18 @@ const validContactInfo: ContactInfo = {
             capacity: 2000,
             name: "Madison Square Garden",
             facilities: ["WiFi", "Parking"],
-            contactInfo: validContactInfo,
+            contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+            isVerified: 'Verified',
+            username: 'concertHall',
+            password: 'cocnertHall123',
+            role: 'concertHall'
         });
         
         expect(newConcertHall.getLocation()).toEqual("New York");
         expect(newConcertHall.getCapacity()).toEqual(2000);
         expect(newConcertHall.getName()).toEqual("Madison Square Garden");
         expect(newConcertHall.getFacilities()).toEqual(["WiFi", "Parking"]);
-        expect(newConcertHall.getContactInfo()).toEqual(validContactInfo);
+        expect(newConcertHall.getContactInfo()).toEqual(['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567']);
     });
 
 // unhappy cases
@@ -153,12 +198,15 @@ const validContactInfo: ContactInfo = {
 
             //when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: '    ',
                 time: '20:00',
                 date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
@@ -171,12 +219,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
-                time: '25:020', // Invalid time format
+                time: '25:020',
                 date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
@@ -190,16 +241,19 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
-                time: '25:00', // Invalid time format
+                time: '25:00',
                 date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
-            expect(createEvent).toThrow("Invalid time provided.");
+            expect(createEvent).toThrow("Hours must be between 00 and 23.");
         });
 
         // time
@@ -208,16 +262,19 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
-                time: '19:79', // Invalid time format
+                time: '19:79',
                 date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
-            expect(createEvent).toThrow("Invalid time provided.");
+            expect(createEvent).toThrow("Minutes must be between 00 and 59.");
         });
 
         // time
@@ -226,12 +283,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
-                time: 'rt:00', // Invalid time format
+                time: 'rt:00',
                 date: eventDate,
                 duration: 90,
                 description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             })
 
             //then
@@ -245,13 +305,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
-                id: 3,
-                genre: 'jazz',
-                time: '19:00',
+                title: 'ACDC',
+                genre: 'rock',
+                time: '20:00',
                 date: invalidEndDate,
-                duration: 120,
-                description: 'jazz concert',
+                duration: 90,
+                description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
@@ -264,12 +326,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
                 time: '20:00',
                 date: eventDate,
-                duration: -5, // Negative duration
+                duration: -5,
                 description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
@@ -282,12 +347,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
                 time: '20:00',
                 date: eventDate,
-                duration: 0, // Zero duration
+                duration: 0,
                 description: 'rock concert',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
@@ -300,12 +368,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
                 time: '20:00',
                 date: eventDate,
                 duration: 90,
-                description: '', // Empty description
+                description: '',
                 status: 'Upcoming',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
@@ -318,12 +389,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createEvent = () => new Event({
+                title: 'ACDC',
                 genre: 'rock',
                 time: '20:00',
                 date: eventDate,
                 duration: 90,
                 description: 'rock concert',
-                status: 'Scheduled', // Invalid status
+                status: 'Scheduled',
+                artistId: artist.getId() || 0,
+                concertHallId: concertHall.getId() || 0
             });
 
             // then
@@ -365,10 +439,14 @@ const validContactInfo: ContactInfo = {
             // when
             const createArtist = () => new Artist({
                 artistName: '',
+                password: 'jeremy123',
                 genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
                 biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
                 bookingFee: 1000,
                 socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+                email: 'jeremyzucker@showtime.com',
+                isVerified: 'Verified',
+                role: 'artist'
             });
 
             // then
@@ -382,10 +460,14 @@ const validContactInfo: ContactInfo = {
             // when
             const createArtist = () => new Artist({
                 artistName: 'Jeremy Zucker',
+                password: 'jeremy123',
                 genres: [],
                 biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
                 bookingFee: 1000,
                 socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+                email: 'jeremyzucker@showtime.com',
+                isVerified: 'Verified',
+                role: 'artist'
             });
 
             // then
@@ -411,10 +493,14 @@ const validContactInfo: ContactInfo = {
             // when
             const createArtist = () => new Artist({
                 artistName: 'Jeremy Zucker',
+                password: 'jeremy123',
                 genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
                 biography: '',
                 bookingFee: 1000,
                 socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+                email: 'jeremyzucker@showtime.com',
+                isVerified: 'Verified',
+                role: 'artist'
             });
 
             expect(createArtist).toThrow('Biography cannot be empty.');
@@ -426,10 +512,14 @@ const validContactInfo: ContactInfo = {
             // when
             const createArtist = () => new Artist({
                 artistName: 'Jeremy Zucker',
+                password: 'jeremy123',
                 genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
                 biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
                 bookingFee: -1000,
                 socialMedia: ['https://www.jeremyzuckermusic.com', 'https://www.instagram.com/jeremyzucker/'],
+                email: 'jeremyzucker@showtime.com',
+                isVerified: 'Verified',
+                role: 'artist'
             });
 
             // then
@@ -443,10 +533,14 @@ const validContactInfo: ContactInfo = {
             // when
             const createArtist = () => new Artist({
                 artistName: 'Jeremy Zucker',
+                password: 'jeremy123',
                 genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
                 biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
                 bookingFee: 1000,
                 socialMedia: [],
+                email: 'jeremyzucker@showtime.com',
+                isVerified: 'Verified',
+                role: 'artist'
             });
             
             // then
@@ -460,10 +554,14 @@ const validContactInfo: ContactInfo = {
             // when
             const createArtist = () => new Artist({
                 artistName: 'Jeremy Zucker',
+                password: 'jeremy123',
                 genres: ['alt z', 'indie', 'alt rock', 'emo', 'blues'],
                 biography: `Jeremy Zucker is an American singer-songwriter and producer known for his introspective, melancholic style blending pop, indie, and electronic music. Born in Franklin Lakes, New Jersey, in 1996, Zucker began making music in high school, experimenting with beats and lyrics in his bedroom studio. He gained recognition with his 2015 single "Bout It" and later achieved mainstream success with "Comethru" in 2018, a hit that resonated with fans worldwide for its candid reflection on loneliness and self-discovery. Zucker’s music often delves into themes of love, mental health, and personal growth, making him a relatable voice for many listeners. His sound, characterized by soft vocals layered over airy, acoustic beats, has led to collaborations with artists like Chelsea Cutler, blackbear, and Lauv. Jeremy’s debut album, Love Is Not Dying (2020), cemented his reputation as an artist unafraid to explore vulnerability through music.`,
                 bookingFee: 1000,
                 socialMedia: ['@jeremyzucker'],
+                email: 'jeremyzucker@showtime.com',
+                isVerified: 'Verified',
+                role: 'artist'
             });
             
             // then
@@ -494,8 +592,10 @@ const validContactInfo: ContactInfo = {
                 password: "password123",
                 firstName: "John",
                 lastName: "Doe",
+                username: 'johndoe',
                 phoneNumber: "+1234567890",
                 accountStatus: true,
+                role: 'user'
             });
 
             // then
@@ -512,8 +612,10 @@ const validContactInfo: ContactInfo = {
                 password: "short",
                 firstName: "John",
                 lastName: "Doe",
+                username: 'johndoe',
                 phoneNumber: "+1234567890",
                 accountStatus: true,
+                role: 'user'
             });
 
             // then
@@ -530,8 +632,10 @@ const validContactInfo: ContactInfo = {
                 password: "password123",
                 firstName: "",
                 lastName: "Doe",
+                username: 'johndoe',
                 phoneNumber: "+1234567890",
                 accountStatus: true,
+                role: 'user'
             });
 
             // then
@@ -548,8 +652,10 @@ const validContactInfo: ContactInfo = {
                 password: "password123",
                 firstName: "J0hn",
                 lastName: "Doe",
+                username: 'johndoe',
                 phoneNumber: "+1234567890",
                 accountStatus: true,
+                role: 'user'
             });
 
             // then
@@ -566,8 +672,10 @@ const validContactInfo: ContactInfo = {
                 password: "password123",
                 firstName: "John",
                 lastName: "",
+                username: 'johndoe',
                 phoneNumber: "+1234567890",
                 accountStatus: true,
+                role: 'user'
             });
 
             expect(createUser).toThrow("Last name cannot be empty and must contain only alphabetic characters.");
@@ -583,8 +691,10 @@ const validContactInfo: ContactInfo = {
                 password: "password123",
                 firstName: "John",
                 lastName: "Doe123",
+                username: 'johndoe',
                 phoneNumber: "+1234567890",
                 accountStatus: true,
+                role: 'user'
             });
 
             // then
@@ -601,8 +711,10 @@ const validContactInfo: ContactInfo = {
                 password: "password123",
                 firstName: "John",
                 lastName: "Doe",
+                username: 'johndoe',
                 phoneNumber: "123-456",
                 accountStatus: true,
+                role: 'user'
             });
 
             // then
@@ -619,8 +731,10 @@ const validContactInfo: ContactInfo = {
                 password: "password123",
                 firstName: "John",
                 lastName: "Doe",
+                username: 'johndoe',
                 phoneNumber: "+1234567890",
-                accountStatus: "active" as unknown as boolean,
+                accountStatus: 'true' as unknown as boolean,
+                role: 'user',
             });
 
             // then
@@ -634,10 +748,11 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createTicket = () => new Ticket({
-                type: "Economy",
-                status: "available",
-                price: 50,
-                eventId: 1,
+                type: 'Economy',
+                status: 'Available',
+                price: 25,
+                eventId: event.getId() || 0,
+                userId: null
             });
 
             // then
@@ -650,9 +765,11 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createTicket = () => new Ticket({
-                type: "VIP",
-                status: "Reserved",
-                price: 100,
+                type: 'Regular',
+                status: 'Reserved',
+                price: 25,
+                eventId: event.getId() || 0,
+                userId: null
             });
 
             // then
@@ -665,9 +782,11 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createTicket = () => new Ticket({
-                type: "Regular",
-                status: "Available",
+                type: 'Regular',
+                status: 'Available',
                 price: -10,
+                eventId: event.getId() || 0,
+                userId: null
             });
 
             // then
@@ -683,9 +802,13 @@ const validContactInfo: ContactInfo = {
             const createConcertHall = () => new ConcertHall({
                 location: '',
                 capacity: 5000,
-                name: 'Main Hall',
-                facilities: ['Parking', 'Restrooms'],
-                contactInfo: validContactInfo,
+                name: 'concertHall',
+                facilities: ['restroom', 'bar'],
+                contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+                isVerified: 'Verified',
+                username: 'concertHall',
+                password: 'cocnertHall123',
+                role: 'concertHall'
             });
 
             // then
@@ -698,11 +821,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createConcertHall = () => new ConcertHall({
-                location: 'City Center',
-                capacity: -100,
-                name: 'Main Hall',
-                facilities: ['Parking', 'Restrooms'],
-                contactInfo: validContactInfo,
+                location: 'street',
+                capacity: -5000,
+                name: 'concertHall',
+                facilities: ['restroom', 'bar'],
+                contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+                isVerified: 'Verified',
+                username: 'concertHall',
+                password: 'cocnertHall123',
+                role: 'concertHall'
             });
 
             // then
@@ -712,11 +839,15 @@ const validContactInfo: ContactInfo = {
         // capacity
         test('given an unrealistically large value for capacity, when creating concert hall, then an error should be thrown', () => {
             const createConcertHall = () => new ConcertHall({
-                location: 'City Center',
+                location: 'street',
                 capacity: 150000,
-                name: 'Main Hall',
-                facilities: ['Parking', 'Restrooms'],
-                contactInfo: validContactInfo
+                name: 'concertHall',
+                facilities: ['restroom', 'bar'],
+                contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+                isVerified: 'Verified',
+                username: 'concertHall',
+                password: 'cocnertHall123',
+                role: 'concertHall'
             });
 
             // then
@@ -729,11 +860,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createConcertHall = () => new ConcertHall({
-                location: 'City Center',
+                location: 'street',
                 capacity: 5000,
                 name: '',
-                facilities: ['Parking', 'Restrooms'],
-                contactInfo: validContactInfo,
+                facilities: ['restroom', 'bar'],
+                contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+                isVerified: 'Verified',
+                username: 'concertHall',
+                password: 'cocnertHall123',
+                role: 'concertHall'
             });
 
             // then
@@ -747,11 +882,15 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createConcertHall = () => new ConcertHall({
-                location: 'City Center',
+                location: 'street',
                 capacity: 5000,
                 name: longName,
-                facilities: ['Parking', 'Restrooms'],
-                contactInfo: validContactInfo,
+                facilities: ['restroom', 'bar'],
+                contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+                isVerified: 'Verified',
+                username: 'concertHall',
+                password: 'cocnertHall123',
+                role: 'concertHall'
             });
 
             // then
@@ -764,101 +903,17 @@ const validContactInfo: ContactInfo = {
 
             // when
             const createConcertHall = () => new ConcertHall({
-                location: 'City Center',
+                location: 'street',
                 capacity: 5000,
-                name: 'Main Hall',
-                facilities: ['Parking', ''],
-                contactInfo: validContactInfo
+                name: 'concertHall',
+                facilities: ['restroom', ''],
+                contactInfo: ['http://www.instagram.com/concertHall', 'concertHall@concertHall.com', '0481234567'],
+                isVerified: 'Verified',
+                username: 'concertHall',
+                password: 'cocnertHall123',
+                role: 'concertHall'
             });
 
             // then
             expect(createConcertHall).toThrow("Facility at index 1 cannot be empty.");
         });
-
-        // contact info
-            // email address
-            test('given invalid email address, when creating concert hall, then an error is thrown', () => {
-                // given
-
-                // when
-                const createConcertHall = () => new ConcertHall({
-                    location: 'City Center',
-                    capacity: 5000,
-                    name: 'Main Hall',
-                    facilities: ['Parking', 'Restrooms'],
-                    contactInfo: {
-                        email: 'invalid-email',
-                        countryCode: '+1',
-                        number: '1234567890',
-                        instagram: '@venue'
-                    }
-                });
-
-                // then
-                expect(createConcertHall).toThrow("Invalid email format.");
-            });
-
-            // country code
-            test('given invalid country code, when creating concert hall, then an error is thrown', () => {
-                // given
-
-                // when
-                const createConcertHall = () => new ConcertHall({
-                    location: 'City Center',
-                    capacity: 5000,
-                    name: 'Main Hall',
-                    facilities: ['Parking', 'Restrooms'],
-                    contactInfo: {
-                        email: 'info@venue.com',
-                        countryCode: '123',
-                        number: '1234567890',
-                        instagram: '@venue'
-                    }
-                });
-
-                // then
-                expect(createConcertHall).toThrow("Invalid country code. It should start with '+' followed by 1 to 3 digits.");
-            });
-
-            // phone number
-            test('given invalid phone number, when creating concert hall, then an error is thrown', () => {
-                // given
-
-                // when
-                const createConcertHall = () => new ConcertHall({
-                    location: 'City Center',
-                    capacity: 5000,
-                    name: 'Main Hall',
-                    facilities: ['Parking', 'Restrooms'],
-                    contactInfo: {
-                        email: 'info@venue.com',
-                        countryCode: '+1',
-                        number: 'phone1234',
-                        instagram: '@venue'
-                    }
-                });
-
-                // then
-                expect(createConcertHall).toThrow("Invalid phone number. It should contain only numbers and be between 7 and 15 digits.");
-            });
-
-            // instagram
-            test('given invalid instagram, when creating concert hall, then an error is thrown', () => {
-                // given
-
-                // when
-                const createConcertHall = () => new ConcertHall({
-                    location: 'City Center',
-                    capacity: 5000,
-                    name: 'Main Hall',
-                    facilities: ['Parking', 'Restrooms'],
-                    contactInfo: {
-                        email: 'info@venue.com',
-                        countryCode: '+1',
-                        number: '1234567890',
-                        instagram: 'venue_handle'
-                    }
-                });
-
-                expect(createConcertHall).toThrow("Invalid Instagram handle. It should start with '@' and be between 2 and 30 characters long.");
-            });

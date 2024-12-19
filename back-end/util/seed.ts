@@ -21,6 +21,19 @@ const main = async () => {
         },
     });
 
+    const tester = await prisma.user.create({
+        data: {
+            email: 'tester@showtime.com',
+            password: await bcrypt.hash('tester123', 12),
+            firstName: 'Tester',
+            lastName: 'Tester',
+            username: 'tester',
+            phoneNumber: '0481234567',
+            accountStatus: true,
+            role: 'user'
+        }
+    })
+
     const concertHall1 = await prisma.concertHall.create({
         data: {
             location: '123 Main St, Cityville',
@@ -624,10 +637,333 @@ const main = async () => {
             },
         }
     });
+
+    const concertHall1Coldplay = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: artistColdplay.id }
+            }
+        }
+    });
+
+    const concertHall1TheWeeknd = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: artistTheWeeknd.id }
+            }
+        }
+    });
+
+    const concertHall1Adele = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: adele.id }
+            }
+        }
+    });
+
+    const concertHall1Drake = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: drake.id }
+            }
+        }
+    });
+
+    const concertHall1TaylorSwift = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: taylorSwift.id }
+            }
+        }
+    });
+
+    const concertHall1Eminem = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: eminem.id }
+            }
+        }
+    });
+
+    const concertHall2BillieEilish = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: artistBillieEilish.id }
+            }
+        }
+    });
+
+    const concertHall2Artist2 = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: artist2.id }
+            }
+        }
+    });
+
+    const concertHall2EdSheeran = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: edSheeran.id }
+            }
+        }
+    });
+
+    const concertHall2BrunoMars = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: brunoMars.id }
+            }
+        }
+    });
+
+    const concertHall2Beethoven = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: beethoven.id }
+            }
+        }
+    });
+
+    const concertHall2ArianaGrande = await prisma.concertHallArtist.create({
+        data: {
+            concertHall: {
+                connect: { id: concertHall1.id }
+            },
+            artist: {
+                connect: { id: arianaGrande.id }
+            }
+        }
+    });
+
+    await prisma.concertHall.update({
+        where: {
+            id: concertHall1.id,
+        },
+        data: {
+            artists: {
+                connect: [
+                    { id: concertHall1Adele.id },
+                    { id: concertHall1Coldplay.id },
+                    { id: concertHall1Drake.id },
+                    { id: concertHall1TaylorSwift.id },
+                    { id: concertHall1TheWeeknd.id },
+                    { id: concertHall1Eminem.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.concertHall.update({
+        where: {
+            id: concertHall2.id,
+        },
+        data: {
+            artists: {
+                connect: [
+                    { id: concertHall2ArianaGrande.id },
+                    { id: concertHall2Artist2.id },
+                    { id: concertHall2EdSheeran.id },
+                    { id: concertHall2BrunoMars.id },
+                    { id: concertHall2Beethoven.id },
+                    { id: concertHall2BillieEilish.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: artistTheWeeknd.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall1TheWeeknd.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: artistColdplay.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall1Coldplay.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: adele.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall1Adele.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: eminem.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall1Eminem.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: drake.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall1Drake.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: taylorSwift.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall1TaylorSwift.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: artistBillieEilish.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall2BillieEilish.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: artist2.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall2Artist2.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: edSheeran.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall2EdSheeran.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: brunoMars.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall2BrunoMars.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: beethoven.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall2Beethoven.id },
+                ]
+            }
+        }
+    });
+
+    await prisma.artist.update({
+        where: {
+            id: arianaGrande.id,
+        },
+        data: {
+            concertHalls: {
+                connect: [
+                    { id: concertHall2ArianaGrande.id },
+                ]
+            }
+        }
+    });
+
     console.log('Seeding completed!');
 };
-
-
 
 (async () => {
     try {

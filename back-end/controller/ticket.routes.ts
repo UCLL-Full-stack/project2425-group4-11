@@ -19,14 +19,14 @@
  *            status:
  *              type: string
  *              description: Ticket status.
- *            price:
+ *            eventId:
  *              type: number
- *              description: Ticket price.
- *            seat:
- *              type: string
- *              description: Ticket seat.
+ *              description: Event ID for which event the ticket is for.
+ *            userId:
+ *              type: number
+ *              nullable: true
+ *              description: User ID from the user that bought the ticket (optional).
  */
-
 import express, { NextFunction, Request, Response } from "express";
 import ticketService from "../service/ticket.service";
 import { TicketInput } from "../types";
@@ -79,7 +79,6 @@ ticketRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
  */
 ticketRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log("hallo")
         const user = await ticketService.getTicketById(Number(req.params.id));
         res.status(200).json(user);
     } catch (error) {
@@ -191,8 +190,6 @@ ticketRouter.put('/:id/:userId', async (req: Request, res: Response, next: NextF
     try {
         const ticketId = req.params.id;
         const userId = req.params.userId;
-        console.log("ticket ID: ",ticketId);
-        console.log("User Id: ", userId);
         const ticket = await ticketService.updateTicket(parseInt(ticketId), parseInt(userId));
         res.status(200).json(ticket);
     } catch (error) {

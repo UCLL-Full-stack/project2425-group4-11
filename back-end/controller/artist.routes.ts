@@ -32,6 +32,12 @@
  *              items:
  *                type: string
  *              description: Artist social media.
+ *            email:
+ *              type: string
+ *              description: Artist email address.
+ *            isVerified:
+ *              type: string
+ *              description: Artist verification status.
  *      AuthenticationRequest:
  *          type: object
  *          properties:
@@ -134,6 +140,12 @@ artistRouter.post('/login', async (req: Request, res: Response, next: NextFuncti
  *                              type: stringArray
  *                              description: The artists social media links.
  *                              example: "http://www.instagram.com/sqmmi3"
+ *                          email:
+ *                              type: string
+ *                              description: The artists email address.
+ *                          isVerified:
+ *                              type: string
+ *                              description: The artists verification status.
  *      responses:
  *          201:
  *              description: The created artist object.
@@ -178,7 +190,6 @@ artistRouter.put('/role', async (req: Request, res: Response, next: NextFunction
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { username, role } = request.auth;
-        console.log("username: ", username)
         const artist = await artistService.updateArtist( username, role );
         res.status(200).json(artist);
     } catch (error) {
@@ -206,12 +217,8 @@ artistRouter.put('/role', async (req: Request, res: Response, next: NextFunction
  */
 artistRouter.get('/role', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log("hallo")
         const request = req as Request & { auth: { role: Role } };
-        console.log("Role: ", request)
-        console.log("hi");
         const { role } = request.auth;
-        console.log("Role: ", role)
         const users = await artistService.getArtists({ role });
         res.status(200).json(users);
     } catch (error) {

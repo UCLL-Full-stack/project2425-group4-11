@@ -1,6 +1,7 @@
 .page {
   background-color: white;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;  
   height: 100vh;
@@ -22,7 +23,6 @@
   border: 5px solid #ccc;
   border-radius: 8px;
   text-align: center;
-  scale: 300%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,18 +45,6 @@
 }
 
 /* Responsive Styling */
-
-@media (max-width: 4500px) {
-  .loginContainer {
-    scale: 200%;
-  }
-}
-
-@media (max-width: 3060px) {
-  .loginContainer {
-    scale: 150%;
-  }
-}
 
 @media (max-width: 2550px) {
   .loginContainer {
@@ -124,4 +112,35 @@
 
 .statusMessageItem.success {
   color: green;
+}
+
+.simpleTableContainer {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 30px;
+}
+
+.title {
+  color: royalblue;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.simpleTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.simpleTable, .simpleTable th, .simpleTable td {
+  border: 1px solid #ddd;
+}
+
+.simpleTable th, .simpleTable td {
+  padding: 10px;
+  text-align: center;
+}
+
+.simpleTable th {
+  background-color: #f4f4f4;
 }

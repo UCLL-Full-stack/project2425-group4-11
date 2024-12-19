@@ -32,6 +32,15 @@
  *              items:
  *                type: string
  *              description: Concert hall contact information.
+ *            isVerified:
+ *              type: string
+ *              description: Concert hall verification status.
+ *            username:
+ *              type: string
+ *              description: Concert hall username.
+ *            password:
+ *              type: string
+ *              description: Concert hall password.
  *      AuthenticationRequest:
  *          type: object
  *          properties:
@@ -47,59 +56,6 @@ import concertHallService from '../service/concertHall.service';
 import { ConcertHallInput, Role } from '../types';
 
 const concertHallRouter = express.Router();
-
-// /**
-//  * @swagger
-//  * /concertHalls:
-//  *   get:
-//  *     summary: Get a list of all concert halls.
-//  *     responses:
-//  *       200:
-//  *         description: A list of concert halls.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: array
-//  *               items:
-//  *                  $ref: '#/components/schemas/ConcertHall'
-//  */
-// concertHallRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const concertHalls = await concertHallService.getAllConcertHalls();
-//         res.status(200).json(concertHalls);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-
-// /**
-//  * @swagger
-//  * /concertHalls/{id}:
-//  *  get:
-//  *      summary: Get a concert hall by id.
-//  *      parameters:
-//  *          - in: path
-//  *            name: id
-//  *            schema:
-//  *              type: integer
-//  *              required: true
-//  *              description: The concert hall id.
-//  *      responses:
-//  *          200:
-//  *              description: A concert hall object.
-//  *              content:
-//  *                  application/json:
-//  *                      schema:
-//  *                          $ref: '#/components/schemas/ConcertHall'
-//  */
-// concertHallRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const concertHall = await concertHallService.getConcertHallById(Number(req.params.id));
-//         res.status(200).json(concertHall);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
 
 /**
  * @swagger
@@ -149,41 +105,12 @@ const concertHallRouter = express.Router();
 concertHallRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const concertHall = <ConcertHallInput>req.body;
-        console.log(concertHall);
         const result = await concertHallService.createConcertHall(concertHall);
         res.status(201).json(result);
     } catch (error) {
         next(error);
     }
 });
-
-// /**
-//  * @swagger
-//  * /concertHalls/role:
-//  *   get:
-//  *     security:
-//  *       - bearerAuth: []
-//  *     summary: Get a list of all artists if the user is an admin.
-//  *     responses:
-//  *       200:
-//  *         description: A list of artists.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: array
-//  *               items:
-//  *                  $ref: '#/components/schemas/Artist'
-//  */
-// concertHallRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const request = req as Request & { auth: { role: Role } };
-//         const { role } = request.auth;
-//         const users = await concertHallService.getConcertHalls({ role });
-//         res.status(200).json(users);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
 
 /**
  * @swagger
@@ -236,10 +163,8 @@ concertHallRouter.post('/login', async (req: Request, res: Response, next: NextF
  */
 concertHallRouter.get('/username/:username', async (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.params;
-    console.log(username);
     try {
         const result = await concertHallService.getConcertHallByUsername({ username });
-        console.log(result.getId());
         res.status(200).json(result);
     } catch (error) {
         next(error);
@@ -268,9 +193,7 @@ concertHallRouter.get('/username/:username', async (req: Request, res: Response,
  */
 concertHallRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log(Number(req.params.id));
-        const result = await concertHallService.getConcertHallById(Number(req.params.id));
-        console.log(result);
+        const result = await concertHallService.getConcertHallById(Number(req.params.id));;
         res.status(200).json(result);
     } catch (error) {
         next(error);

@@ -35,6 +35,7 @@ model Artist {
     isVerified      String
     role            String
     events          Event[]
+    concertHalls    ConcertHallArtist[]
 }
 
 model ConcertHall {
@@ -49,6 +50,7 @@ model ConcertHall {
     isVerified      String
     events          Event[]
     role            String
+    artists         ConcertHallArtist[]
 }
 
 model Ticket {
@@ -73,6 +75,16 @@ model User {
     accountStatus   Boolean
     role            String  
     tickets         Ticket[]
+}
+
+model ConcertHallArtist {
+    id              Int          @id @default(autoincrement())
+    concertHall     ConcertHall  @relation(fields: [concertHallId], references: [id])
+    concertHallId   Int
+    artist          Artist       @relation(fields: [artistId], references: [id])
+    artistId        Int
+
+    @@unique([concertHallId, artistId]) // Ensures unique combinations of ConcertHall and Artist
 }
 
 enum Role {
