@@ -4,7 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router"
 import classNames from "classnames";
 import styles from "@/styles/Login.module.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "@/components/InputField";
 import ArtistService from "@/services/ArtistService";
 import { useTranslation } from "react-i18next";
@@ -28,6 +28,8 @@ const SignUpArtist: React.FC = () => {
     const [emailError, setEmailError] = useState<string | null>(null);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    const [isClient, setIsClient] = useState(false);
 
     const { t } = useTranslation();
 
@@ -167,6 +169,14 @@ const SignUpArtist: React.FC = () => {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        setIsClient(true);
+      }, []);
+
+    if (!isClient) {
+        return null;
+    }
     
 
     return (

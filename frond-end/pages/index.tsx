@@ -73,10 +73,13 @@ const Start: React.FC = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+          <br></br>
           <p>{t("index.main.heroSection.text")}</p>
         </section>
-
-        <h2>{t("index.main.body.title")}</h2>
+        <div className={styles.mainBodyTitle}>
+          <br />
+          <h2>{t("index.main.body.title")}</h2>
+        </div>
         <section className={styles.events}>
           {filteredEvents.map((event, index) => {
             const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -97,11 +100,13 @@ const Start: React.FC = () => {
             );
           })}
         </section>
+
+        <footer className={styles.footer}>
+          <p>Emma Liefsoens & Samip Shrestha: 2024-2025</p>
+        </footer>
       </main>
 
-      <footer className={styles.footer}>
-        <p>Emma Liefsoens & Samip Shrestha: 2024-2025</p>
-      </footer>
+
     </>
   );
 };

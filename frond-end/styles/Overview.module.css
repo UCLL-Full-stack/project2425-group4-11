@@ -1,89 +1,133 @@
 /* General Styles */
 .main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    min-height: 90vh;
-    background-color: #f9f9f9;
-    color: #333;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Heading and Button Container */
-  .headingContainer {
-    display: flex;
-    justify-content: space-between;  /* Distribute space between heading and button */
-    align-items: center;
-    width: 100%; /* Ensure it takes full width */
-    margin-bottom: 20px;
-    position: relative; /* To position the heading correctly */
-  }
-  
-  /* Heading */
-  .heading {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-    text-align: center;  /* Ensures the heading is centered */
-    position: absolute;  /* Absolute positioning to center the heading */
-    left: 50%;  /* Position the heading in the middle of the container */
-    transform: translateX(-50%); /* Move it back by half its width to truly center it */
-  }
-  
-  /* Button Styling */
-  .button-add-event {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #0071ff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-right: 20px; /* Adds margin to the right of the button */
-  }
-  
-  .button-add-event:hover {
-    background-color: #005bb5;
-  }
-  
-  /* Events Section */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  min-height: 90vh;
+  background-color: #f9f9f9;
+  color: #333;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Heading and Button Container */
+.headingContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Heading */
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  letter-spacing: 1px; 
+}
+
+/* Button Styling */
+.button-add-event {
+  padding: 12px 24px;
+  font-size: 1rem;
+  background-color: #0071ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-right: 20px;
+}
+
+.button-add-event:hover {
+  background-color: #005bb5;
+  transform: scale(1.05);
+}
+
+/* Events Section */
+.events2 {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 30px;
+  padding: 0 20px;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 3720px) {
   .events2 {
-    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 3190px) {
+  .events2 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 2650px) {
+  .events2 {
     grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    margin-top: 30px;
-    padding: 0 20px;
   }
-  
-  @media (max-width: 1500px) {
-    .events2 {
-      grid-template-columns: repeat(3, 1fr);
-    }
+}
+
+@media (max-width: 2110px) {
+  .events2 {
+    grid-template-columns: repeat(3, 1fr);
   }
-  
-  @media (max-width: 1300px) {
-    .events2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
+}
+
+@media (max-width: 1580px) {
+  .events2 {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  @media (max-width: 900px) {
-    .events2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
+}
+
+@media (max-width: 1090px) {
+  .events2 {
+    grid-template-columns: 1fr;
+    width: 100%;
   }
-  
-  @media (max-width: 700px) {
-    .events2 {
-      grid-template-columns: 1fr;
-      width: 100%;
-    }
-  }
-  
+}
+
+/* Card Styling for Event Frames */
+.event-frame {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-frame:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive font size for event titles */
+.event-frame .event-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.event-frame .event-info {
+  font-size: 1rem;
+  color: #555;
+}

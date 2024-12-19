@@ -1,0 +1,122 @@
+/* Signup Page Styling */
+.page {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: black;
+    padding: 2rem;
+    overflow: hidden;
+    box-sizing: border-box;
+    min-height: 100vh;
+  }
+  
+  /* Container to hold the signup form */
+  .signupContainer {
+    width: 75rem;
+    height: auto;
+    max-height: 80vh;
+    padding: 2rem;
+    margin: 1rem;
+    border: 5px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding-bottom: 75px;
+  }
+  
+  .formRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+  }
+  
+  .formLeftColumn {
+    flex: 1 1 45%;
+  }
+  
+  .formRightColumn {
+    flex: 1 1 45%;
+  }
+    
+  /* Individual Input Fields */
+  .inputField {
+    flex: 1;
+    min-width: 200px;
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Button Styling */
+  .signupButton {
+    margin-left: 0.5rem;
+    font-weight: bold;
+    width: 100%; /* Full width for the submit button */
+  }
+  
+  /* Title Styling */
+  .title {
+    color: royalblue;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  
+  /* Responsive Styling */
+  @media (max-width: 768px) {
+    .loginContainer {
+      width: 100%;
+      max-width: 90%;
+      padding: 1.5rem;
+      margin: 1rem;
+      border-radius: 0.8rem;
+    }
+  
+    .title {
+      font-size: 1.5rem;
+    }
+  
+    .formRow {
+      flex-direction: column; /* Stack elements vertically on smaller screens */
+    }
+  
+    .inputField,
+    .contactInfoBox {
+      width: 100%; /* Full width for input fields and contact box */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .loginContainer {
+      width: 100%;
+      max-width: 95%;
+      padding: 1.2rem;
+    }
+  
+    .title {
+      font-size: 1.2rem;
+    }
+  }
+  
+  /* For extreme zoom levels */
+  @media (max-width: 320px) {
+    .loginContainer {
+      max-width: 100%;
+      padding: 1rem;
+    }
+  
+    .title {
+      font-size: 1rem;
+    }
+  }
+  

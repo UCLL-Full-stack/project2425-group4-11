@@ -2,25 +2,33 @@
   background-color: white;
   display: flex;
   justify-content: center;
-  align-items: center;  /* Ensures vertical centering */
+  align-items: center;  
   height: 100vh;
   color: black;
   padding: 2rem;
-  overflow: hidden; /* Prevents scrolling when the container overflows */
+  overflow: hidden; 
+  box-sizing: border-box;
+  min-height: 100vh; 
 }
 
+/* Container to hold the login form */
 .loginContainer {
-  width: 350px;
+  width: 100%;
+  max-width: 400px; 
   height: auto;
+  max-height: 80vh; 
   padding: 2rem;
-  margin: 2rem;
+  margin: 1rem;
   border: 5px solid #ccc;
   border-radius: 8px;
   text-align: center;
-  border-radius: 0.8rem;
+  scale: 300%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: auto; 
+  box-sizing: border-box;
+  padding-bottom: 75px;
 }
 
 .signupButton {
@@ -34,4 +42,86 @@
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
+}
+
+/* Responsive Styling */
+
+@media (max-width: 4500px) {
+  .loginContainer {
+    scale: 200%;
+  }
+}
+
+@media (max-width: 3060px) {
+  .loginContainer {
+    scale: 150%;
+  }
+}
+
+@media (max-width: 2550px) {
+  .loginContainer {
+    scale: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1rem;
+  }
+
+  .loginContainer {
+    width: 100%;
+    max-width: 90%; 
+    padding: 1.5rem;
+    margin: 1rem;
+    border-radius: 0.8rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginContainer {
+    width: 100%;
+    max-width: 95%; 
+    padding: 1.2rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+}
+
+/* For extreme zoom levels */
+@media (max-width: 320px) {
+  .loginContainer {
+    max-width: 100%; 
+    padding: 1rem;  
+  }
+
+  .title {
+    font-size: 1rem; 
+  }
+}
+
+
+/* Status messages */
+.statusMessageList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.statusMessageItem {
+  margin-bottom: 0.5rem;
+}
+
+.statusMessageItem.error {
+  color: red;
+}
+
+.statusMessageItem.success {
+  color: green;
 }

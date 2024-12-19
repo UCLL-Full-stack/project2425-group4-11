@@ -1,9 +1,9 @@
 import Navbar from "@/components/navbar";
 import { StatusMessage } from "@/types";
 import { Box, Button, Typography } from "@mui/material";
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 import classNames from "classnames";
-import styles from "@/styles/Login.module.css";
+import styles from "@/styles/Signup.module.css";
 import React, { useState } from "react";
 import InputField from "@/components/InputField";
 import { useTranslation } from "react-i18next";
@@ -140,179 +140,163 @@ const SignUpArtist: React.FC = () => {
                         })
                     );
 
-                    setStatusMessages([
-                        {
-                            type: "success",
-                            message: t('CHSignup.statusMessages.success'),
-                        },
-                    ]);
+                    setStatusMessages([{
+                        type: "success",
+                        message: t('CHSignup.statusMessages.success'),
+                    }]);
 
                     setTimeout(() => {
                         router.push("/");
                     }, 2000);
                 } else {
-                    setStatusMessages([
-                        {
-                            message: t('CHSignup.statusMessages.loginFailed'),
-                            type: "error",
-                        },
-                    ]);
+                    setStatusMessages([{
+                        message: t('CHSignup.statusMessages.loginFailed'),
+                        type: "error",
+                    }]);
                 }
             } else {
                 const error = await registerResponse.json();
-                setStatusMessages([
-                    { message: error.message || t('CHSignup.statusMessages.failed'), type: "error" },
-                ]);
+                setStatusMessages([{
+                    message: error.message || t('CHSignup.statusMessages.failed'),
+                    type: "error",
+                }]);
             }
         } catch (error) {
             console.error(t('CHSignup.error.signupOrLoginError'), error);
-            setStatusMessages([
-                {
-                    message: t('CHSignup.statusMessages.error'),
-                    type: "error",
-                },
-            ]);
+            setStatusMessages([{
+                message: t('CHSignup.statusMessages.error'),
+                type: "error",
+            }]);
         } finally {
             setIsLoading(false);
         }
     };
-    
 
     return (
         <>
-          <Navbar />
-          <Box className={styles.page}>
-            <Box className={styles.loginContainer}>
-                <Typography variant="h4" gutterBottom align="center">
-                    {t('CHSignup.label.title')}
-                </Typography>
-                {statusMessages && (
-                    <ul className="list-none mb-3 mx-auto">
-                        {statusMessages.map(({ message, type }, index) => (
-                            <li
-                              key={index}
-                              className={classNames({
-                                "text-red-800": type === "error",
-                                "text-green-800": type === "success",
-                              })}
-                              >
-                                {message}
-                              </li>
-                        ))}
-                    </ul>
-                )}
-                <form onSubmit={handleSignUp}>
-                <InputField
-                    label={t('CHSignup.label.username')}
-                    margin="normal"
-                    value={username}
-                    error={!!usernameError}
-                    helperText={usernameError}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <InputField
-                    label={t('CHSignup.label.password')}
-                    margin="normal"
-                    value={password}
-                    error={!!passwordError}
-                    helperText={passwordError}
-                    secure={true}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <InputField
-                    label={t('CHSignup.label.name')}
-                    margin="normal"
-                    value={name}
-                    error={!!nameError}
-                    helperText={nameError}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <InputField
-                    label={t('CHSignup.label.location')}
-                    margin="normal"
-                    value={location}
-                    error={!!locationError}
-                    helperText={locationError}
-                    onChange={(e) => setLocation(e.target.value)}
-                />
-                <InputField
-                    label={t('CHSignup.label.capacity')}
-                    margin="normal"
-                    value={capacity}
-                    typeof="number"
-                    error={!!capacityError}
-                    helperText={capacityError}
-                    onChange={(e) => setCapacity(parseInt(e.target.value) || 0)}
-                />
-                <InputField
-                    label={t('CHSignup.label.facilities')}
-                    margin="normal"
-                    value={facilities}
-                    error={!!facilitiesError}
-                    helperText={facilitiesError}
-                    onChange={(e) => setFacilities(e.target.value)}
-                    inputProps={{ min: 0 }}
-
-                />
-                <Box mt={3} p={2} border={1} borderRadius={4} borderColor="grey.300">
-                    <Typography variant="h6" gutterBottom>
-                        {t('CHSignup.label.contactInfoTitle')}
+            <Navbar />
+            <Box className={styles.page}>
+                <Box className={styles.signupContainer}>
+                    <Typography variant="h4" gutterBottom align="center">
+                        {t('CHSignup.label.title')}
                     </Typography>
-                    <InputField
-                        label={t('CHSignup.label.contactEmail')}
-                        margin="normal"
-                        value={contactEmail}
-                        error={!!contactInfoError && !contactEmail.trim()}
-                        helperText={!!contactInfoError && !contactEmail.trim() ? contactInfoError : ''}
-                        onChange={(e) => setContactEmail(e.target.value)}
-                    />
-                    <InputField
-                        label={t('CHSignup.label.contactInstagram')}
-                        margin="normal"
-                        value={contactInstagram}
-                        error={!!contactInfoError && !contactInstagram.trim()}
-                        helperText={!!contactInfoError && !contactInstagram.trim() ? contactInfoError : ''}
-                        onChange={(e) => setContactInstagram(e.target.value)}
-                    />
-                    <InputField
-                        label={t('CHSignup.label.contactNumber')}
-                        margin="normal"
-                        value={contactNumber}
-                        error={!!contactInfoError && !contactNumber.trim()}
-                        helperText={!!contactInfoError && !contactNumber.trim() ? contactInfoError : ''}
-                        onChange={(e) => setContactNumber(e.target.value)}
-                    />
-                </Box>
+                    {statusMessages && (
+                        <ul className="list-none mb-3 mx-auto">
+                            {statusMessages.map(({ message, type }, index) => (
+                                <li key={index} className={classNames({
+                                    "text-red-800": type === "error",
+                                    "text-green-800": type === "success",
+                                })}>
+                                    {message}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    <form onSubmit={handleSignUp}>
+                        <div className={styles.formRow}>
+                            <Box className={styles.formLeftColumn}>
+                                <InputField
+                                    label={t('CHSignup.label.username')}
+                                    margin="normal"
+                                    value={username}
+                                    error={!!usernameError}
+                                    helperText={usernameError}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <InputField
+                                    label={t('CHSignup.label.password')}
+                                    margin="normal"
+                                    value={password}
+                                    error={!!passwordError}
+                                    helperText={passwordError}
+                                    secure={true}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <InputField
+                                    label={t('CHSignup.label.name')}
+                                    margin="normal"
+                                    value={name}
+                                    error={!!nameError}
+                                    helperText={nameError}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                                <InputField
+                                    label={t('CHSignup.label.location')}
+                                    margin="normal"
+                                    value={location}
+                                    error={!!locationError}
+                                    helperText={locationError}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                />
+                                <InputField
+                                    label={t('CHSignup.label.capacity')}
+                                    margin="normal"
+                                    value={capacity}
+                                    typeof="number"
+                                    error={!!capacityError}
+                                    helperText={capacityError}
+                                    onChange={(e) => setCapacity(parseInt(e.target.value) || 0)}
+                                />
+                                <InputField
+                                    label={t('CHSignup.label.facilities')}
+                                    margin="normal"
+                                    value={facilities}
+                                    error={!!facilitiesError}
+                                    helperText={facilitiesError}
+                                    onChange={(e) => setFacilities(e.target.value)}
+                                    inputProps={{ min: 0 }}
+                                />
+                            </Box>
+                            
+                            <Box className={styles.formRightColumn}>
+                                <Typography variant="h6" gutterBottom>
+                                    {t('CHSignup.label.contactInfoTitle')}
+                                </Typography>
+                                <InputField
+                                    label={t('CHSignup.label.contactEmail')}
+                                    margin="normal"
+                                    value={contactEmail}
+                                    error={!!contactInfoError && !contactEmail.trim()}
+                                    helperText={!!contactInfoError && !contactEmail.trim() ? contactInfoError : ''}
+                                    onChange={(e) => setContactEmail(e.target.value)}
+                                />
+                                <InputField
+                                    label={t('CHSignup.label.contactInstagram')}
+                                    margin="normal"
+                                    value={contactInstagram}
+                                    error={!!contactInfoError && !contactInstagram.trim()}
+                                    helperText={!!contactInfoError && !contactInstagram.trim() ? contactInfoError : ''}
+                                    onChange={(e) => setContactInstagram(e.target.value)}
+                                />
+                                <InputField
+                                    label={t('CHSignup.label.contactNumber')}
+                                    margin="normal"
+                                    value={contactNumber}
+                                    error={!!contactInfoError && !contactNumber.trim()}
+                                    helperText={!!contactInfoError && !contactNumber.trim() ? contactInfoError : ''}
+                                    onChange={(e) => setContactNumber(e.target.value)}
+                                />
+                            </Box>
+                        </div>
 
-                <Box display="flex" justifyContent="space-between" mt={2}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        type="submit"
-                        className={classNames(styles.button, {
-                        [styles.loading]: isLoading,
-                        })}
-                    >
-                        {isLoading ? t('CHSignup.buttin.loading') : t('CHSignup.button.signup')}
-                    </Button>
+                        <Box display="flex" justifyContent="space-between" mt={2}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                type="submit"
+                                className={classNames(styles.signupButton, {
+                                    [styles.loading]: isLoading,
+                                })}
+                            >
+                                {isLoading ? t('CHSignup.button.loading') : t('CHSignup.button.signup')}
+                            </Button>
+                        </Box>
+                    </form>
                 </Box>
-                </form>
             </Box>
-
-          </Box>
         </>
-    )
-}
-
-export const getServerSideProps = async (context) => {
-    const { locale } = context;
-  
-    return {
-        props: {
-            ...(await serverSideTranslations(locale ?? "en", ["common"])),
-        },
-    };
-  };
+    );
+};
 
 export default SignUpArtist;

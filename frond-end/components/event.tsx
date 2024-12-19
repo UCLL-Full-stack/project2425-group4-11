@@ -5,7 +5,6 @@ import ShowTimeService from "@/services/ShowTimeService";
 import { useEffect, useState } from "react";
 import { Ticket } from "@/types";
 
-
 type EventProps = {
   id?: string;
   title: string;
@@ -41,29 +40,61 @@ const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageU
   return (
     <Paper
       sx={{
-        padding: 2,
+        padding: 3,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: 230,
+        width: 300,
+        position: "relative",
+        borderRadius: 2,
+        boxShadow: 3,
+        marginBottom: 2, // Add some margin to space the event frames
       }}
     >
       {/* Event Details */}
-      <Typography variant="h6" sx={{ fontSize: "1rem", fontWeight: "bold", marginBottom: 1 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          fontSize: "1.25rem",
+          fontWeight: "bold",
+          marginBottom: 1,
+        }}
+      >
         {title}
       </Typography>
-      <Typography variant="h6" sx={{ fontSize: "1rem", marginBottom: 1 }}>
+
+      <Typography
+        variant="h6"
+        sx={{
+          fontSize: "1.125rem",
+          marginBottom: 1,
+        }}
+      >
         {genre}
       </Typography>
-      <Typography variant="body2" sx={{ marginBottom: 1 }}>
+
+      <Typography
+        variant="body2"
+        sx={{
+          fontSize: "1rem",
+          marginBottom: 1,
+        }}
+      >
         {date}, {time}
       </Typography>
-      
+
       {/* Ticket Availability */}
       {tickets.length > 0 && !allTicketsSoldOut ? (
         <>
           {fewTicketsLeft && (
-            <Typography variant="body2" color="warning" sx={{ marginBottom: 1, fontWeight: 'bold' }}>
+            <Typography
+              variant="body2"
+              color="warning"
+              sx={{
+                marginBottom: 1,
+                fontWeight: "bold",
+              }}
+            >
               {t('fewTicketsLeft')}
             </Typography>
           )}

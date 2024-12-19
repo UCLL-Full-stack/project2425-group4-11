@@ -143,10 +143,6 @@ const LoginArtist: React.FC = () => {
               helperText={passwordError}
               secure={true}
             />
-            <FormControlLabel
-              control={<Checkbox name="remember" color="primary" />}
-              label={t('loginCH.label.rememberMe')}
-            />
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Button
                 variant="contained"

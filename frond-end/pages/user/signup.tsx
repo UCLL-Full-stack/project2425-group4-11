@@ -221,7 +221,7 @@ const SignUp: React.FC = () => {
                   [styles.loading]: isLoading,
                 })}
               >
-                {isLoading ? t('signup.button.loading') : t('signup.button.signUp')}
+                {isLoading ? t('signup.button.loading') : t('signup.button.signup')}
               </Button>
             </Box>
           </form>

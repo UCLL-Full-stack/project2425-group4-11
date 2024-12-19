@@ -5,7 +5,6 @@ import ShowTimeService from "@/services/ShowTimeService";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
-
 type EventProps = {
   id?: number;
   title: string;
@@ -16,47 +15,49 @@ type EventProps = {
 };
 
 const MyEventFrame: React.FC<EventProps> = ({
-    id,
-    title,
-    genre,
-    date,
-    time,
-    imageUrl,
-  }) => {
-    const {t} = useTranslation();
-    const router = useRouter();
-    const handleDelete = async () => {
-      try {
-        const ticketResponse = await ShowTimeService.deleteTicket(Number(id));
-        if (!ticketResponse.ok) {
-          console.error(t('eventFrameCH.error.deleteTickete'));
-          return;
-        }
+  id,
+  title,
+  genre,
+  date,
+  time,
+  imageUrl,
+}) => {
+  const { t } = useTranslation();
+  const router = useRouter();
 
-        const eventResponse = await ShowTimeService.deleteEvent(Number(id));
-        if (!eventResponse.ok) {
-          console.error(t('eventFrameCH.error.deleteEvent'));
-          return;
-        }
-
-      } catch (error) {
-        console.error(t('eventFrameCH.error.deleteProcess'), error);
+  const handleDelete = async () => {
+    try {
+      const ticketResponse = await ShowTimeService.deleteTicket(Number(id));
+      if (!ticketResponse.ok) {
+        console.error(t("eventFrameCH.error.deleteTickete"));
+        return;
       }
-      router.reload()
-    };
-    
+
+      const eventResponse = await ShowTimeService.deleteEvent(Number(id));
+      if (!eventResponse.ok) {
+        console.error(t("eventFrameCH.error.deleteEvent"));
+        return;
+      }
+    } catch (error) {
+      console.error(t("eventFrameCH.error.deleteProcess"), error);
+    }
+    router.reload();
+  };
+
   return (
     <Paper
       sx={{
-        padding: 3,
+        padding: "2rem",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: 350,
+        width: "50vw", // Use viewport width for responsiveness
+        maxWidth: 500, // Maximum width of the frame
         position: "relative",
         borderRadius: 2,
         boxShadow: 3,
-        marginBottom: 2, // Add some margin to space the event frames
+        marginBottom: "2rem", // Add margin for spacing
+        transition: "all 0.3s ease", // Smooth transition for resizing
       }}
     >
       {/* Trash can button */}
@@ -64,10 +65,10 @@ const MyEventFrame: React.FC<EventProps> = ({
         onClick={handleDelete}
         sx={{
           position: "absolute",
-          top: 12,
-          right: 12,
+          top: "1rem",
+          right: "1rem",
           color: "red",
-          fontSize: "1.5rem",
+          fontSize: "2rem", // Use rem for scaling
         }}
       >
         <DeleteIcon />
@@ -77,9 +78,10 @@ const MyEventFrame: React.FC<EventProps> = ({
       <Typography
         variant="h6"
         sx={{
-          fontSize: "1.25rem",
+          fontSize: "1.25rem", // Use rem for text sizing
           fontWeight: "bold",
-          marginBottom: 1,
+          marginBottom: "0.5rem",
+          textAlign: "center", // Center the text
         }}
       >
         {title}
@@ -88,8 +90,9 @@ const MyEventFrame: React.FC<EventProps> = ({
       <Typography
         variant="h6"
         sx={{
-          fontSize: "1.125rem",
-          marginBottom: 1,
+          fontSize: "1.125rem", // Use rem for responsive font size
+          marginBottom: "0.5rem",
+          textAlign: "center", // Center the text
         }}
       >
         {genre}
@@ -98,8 +101,9 @@ const MyEventFrame: React.FC<EventProps> = ({
       <Typography
         variant="body2"
         sx={{
-          fontSize: "1rem",
-          marginBottom: 1,
+          fontSize: "1rem", // Use rem for font size
+          marginBottom: "0.5rem",
+          textAlign: "center", // Center the text
         }}
       >
         {date}, {time}

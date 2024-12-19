@@ -111,20 +111,21 @@ const Login: React.FC = () => {
             {t('login.title')}
           </Typography>
           {statusMessages && (
-            <ul className="list-none mb-3 mx-auto">
+            <ul className={styles.statusMessageList}>
               {statusMessages.map(({ message, type }, index) => (
                 <li
                   key={index}
-                  className={classNames({
-                    "text-red-800": type === "error",
-                    "text-green-800": type === "success",
-                  })}
+                  className={classNames(
+                    styles.statusMessageItem,
+                    type === "error" ? styles.error : styles.success
+                  )}
                 >
                   {message}
                 </li>
               ))}
             </ul>
           )}
+
           <form onSubmit={(event) => handleSubmit(event)}>
             <InputField
               label={t('login.label.username')}
@@ -142,10 +143,6 @@ const Login: React.FC = () => {
               error={!!passwordError}
               helperText={passwordError}
               secure={true}
-            />
-            <FormControlLabel
-              control={<Checkbox name="remember" color="primary" />}
-              label={t('login.label.rememberMe')}
             />
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Button
@@ -191,13 +188,6 @@ const Login: React.FC = () => {
               {t('login.label.concertHallButton')}
             </Button>
           </Typography>
-          <p>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-          </p>
         </Box>
       </Box>
     </>
