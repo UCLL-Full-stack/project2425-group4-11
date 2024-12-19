@@ -1,0 +1,89 @@
+/* General Styles */
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 90vh;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Heading and Button Container */
+  .headingContainer {
+    display: flex;
+    justify-content: space-between;  /* Distribute space between heading and button */
+    align-items: center;
+    width: 100%; /* Ensure it takes full width */
+    margin-bottom: 20px;
+    position: relative; /* To position the heading correctly */
+  }
+  
+  /* Heading */
+  .heading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    text-align: center;  /* Ensures the heading is centered */
+    position: absolute;  /* Absolute positioning to center the heading */
+    left: 50%;  /* Position the heading in the middle of the container */
+    transform: translateX(-50%); /* Move it back by half its width to truly center it */
+  }
+  
+  /* Button Styling */
+  .button-add-event {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #0071ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-right: 20px; /* Adds margin to the right of the button */
+  }
+  
+  .button-add-event:hover {
+    background-color: #005bb5;
+  }
+  
+  /* Events Section */
+  .events2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 0 20px;
+  }
+  
+  @media (max-width: 1500px) {
+    .events2 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (max-width: 1300px) {
+    .events2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .events2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 700px) {
+    .events2 {
+      grid-template-columns: 1fr;
+      width: 100%;
+    }
+  }
+  

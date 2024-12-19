@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Overview.module.css";
 import EventFrameArtist from "@/components/events/eventFrameArtist";
 import EventFrameUser from "@/components/events/eventFrameUser";
 import EventFrameCH from "@/components/events/eventFrameCH";
@@ -110,8 +110,10 @@ const OverviewMyEvent: React.FC = () => {
       </Head>
       <Navbar />
       <main className={styles.main}>
-        <h2>{t('overviewEvent.titel')}</h2>
-        {userRole === "concertHall" && (<ButtonAddEvent />)}
+      <section className={styles.headingContainer}>
+        <h2 className={styles.heading}>{t('overviewEvent.titel')}</h2>
+        {userRole === "concertHall" && <ButtonAddEvent />}
+      </section>
         <section className={styles.events2}>
           {events.map((event, index) => {
             const formattedDate = new Intl.DateTimeFormat("en-US", {
