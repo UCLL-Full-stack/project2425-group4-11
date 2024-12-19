@@ -11,9 +11,7 @@ import { useTranslation } from "react-i18next";
 const Start: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-
   const [isClient, setIsClient] = useState<boolean>(false);
-
   const { t } = useTranslation();
 
   const getEvents = async () => {
@@ -26,12 +24,23 @@ const Start: React.FC = () => {
         setEvents([]);
         return;
       }
-      const events = await response.json();
-      if (Array.isArray(events)) {
-        setEvents(events);
+
+      const eventsData = await response.json();
+      if (Array.isArray(eventsData)) {
+        const eventsWithConcertHalls = await Promise.all(
+          eventsData.map(async (event: Event) => {
+            const concertHallResponse = await ShowTimeService.getConcertHallById(event.concertHallId);
+            if (concertHallResponse.ok) {
+              const concertHallData = await concertHallResponse.json();
+              return { ...event, concertHallName: concertHallData.name };
+            }
+            return { ...event, concertHallName: "Unknown" };
+          })
+        );
+        setEvents(eventsWithConcertHalls);
       } else {
         setEvents([]);
-        console.error(t("index.error.mismatch"), events);
+        console.error(t("index.error.mismatch"), eventsData);
       }
     } catch (error) {
       console.error(t("index.error.fetchFail"), error);
@@ -73,7 +82,7 @@ const Start: React.FC = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <br></br>
+          <br />
           <p>{t("index.main.heroSection.text")}</p>
         </section>
         <div className={styles.mainBodyTitle}>
@@ -96,6 +105,7 @@ const Start: React.FC = () => {
                 time={event.time}
                 id={event.id}
                 genre={event.genre}
+                concertHallName={event.concertHallName}
               />
             );
           })}
@@ -105,8 +115,6 @@ const Start: React.FC = () => {
           <p>Emma Liefsoens & Samip Shrestha: 2024-2025</p>
         </footer>
       </main>
-
-
     </>
   );
 };

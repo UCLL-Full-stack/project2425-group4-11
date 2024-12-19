@@ -112,12 +112,12 @@ const SignUp: React.FC = () => {
           ...statusMessages,
           {
             type: "success",
-            message: t('signup.statusMessages.succes'),
+            message: t('signup.statusMessages.success'),
           },
         ]);
 
         setTimeout(() => {
-          router.push("/login");
+          router.push("/user/login");
         }, 2000);
       } else {
         const error = await response.json();
@@ -147,14 +147,14 @@ const SignUp: React.FC = () => {
             {t('signup.label.title')}
           </Typography>
           {statusMessages && (
-            <ul className="list-none mb-3 mx-auto">
+            <ul className={styles.statusMessageList}>
               {statusMessages.map(({ message, type }, index) => (
                 <li
                   key={index}
-                  className={classNames({
-                    "text-red-800": type === "error",
-                    "text-green-800": type === "success",
-                  })}
+                  className={classNames(
+                    styles.statusMessageItem,
+                    type === "error" ? styles.error : styles.success
+                  )}
                 >
                   {message}
                 </li>

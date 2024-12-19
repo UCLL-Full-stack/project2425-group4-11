@@ -188,18 +188,18 @@ const SignUpArtist: React.FC = () => {
                     {t('artistSignup.label.title')}
                 </Typography>
                 {statusMessages && (
-                    <ul className="list-none mb-3 mx-auto">
-                        {statusMessages.map(({ message, type }, index) => (
-                            <li
-                              key={index}
-                              className={classNames({
-                                "text-red-800": type === "error",
-                                "text-green-800": type === "success",
-                              })}
-                              >
-                                {message}
-                              </li>
-                        ))}
+                    <ul className={styles.statusMessageList}>
+                    {statusMessages.map(({ message, type }, index) => (
+                        <li
+                        key={index}
+                        className={classNames(
+                            styles.statusMessageItem,
+                            type === "error" ? styles.error : styles.success
+                        )}
+                        >
+                        {message}
+                        </li>
+                    ))}
                     </ul>
                 )}
                 <form onSubmit={handleSignUp}>

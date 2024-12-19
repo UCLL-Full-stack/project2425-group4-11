@@ -67,6 +67,14 @@ const createConcertHall = async ({
     return await concertHallDB.createConcertHall(concertHall);
 };
 
+const getConcertHallById = async (id: number): Promise<ConcertHall> => {
+    const concertHall = await concertHallDB.getConcertHallById({ id });
+    if (!concertHall) {
+        throw new Error(`Concert hall with id ${id} does not exist.`);
+    }
+    return concertHall;
+}
+
 // const getConcertHalls = async ({
 //     role,
 // }: {
@@ -85,4 +93,5 @@ export default {
     createConcertHall,
     authenticate,
     getConcertHallByUsername,
+    getConcertHallById,
 };

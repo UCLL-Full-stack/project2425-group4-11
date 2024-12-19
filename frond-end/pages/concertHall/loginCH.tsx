@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {
-  Checkbox,
-  FormControlLabel,
   Button,
   Typography,
   Box,
@@ -77,7 +75,7 @@ const LoginArtist: React.FC = () => {
         setStatusMessages([
           {
             type: "success",
-            message: t('loginCH.statusMessages.succes'),
+            message: t('loginCH.statusMessages.success'),
           },
         ]);
 
@@ -93,7 +91,7 @@ const LoginArtist: React.FC = () => {
     } catch (error) {
       setStatusMessages([
         {
-          message: t('loginArtist.error.errorStatus'),
+          message: t('loginCH.error.errorStatus'),
           type: "error",
         },
       ]);
@@ -111,14 +109,14 @@ const LoginArtist: React.FC = () => {
             {t('loginCH.title')}
           </Typography>
           {statusMessages && (
-            <ul className="list-none mb-3 mx-auto">
+            <ul className={styles.statusMessageList}>
               {statusMessages.map(({ message, type }, index) => (
                 <li
                   key={index}
-                  className={classNames({
-                    "text-red-800": type === "error",
-                    "text-green-800": type === "success",
-                  })}
+                  className={classNames(
+                    styles.statusMessageItem,
+                    type === "error" ? styles.error : styles.success
+                  )}
                 >
                   {message}
                 </li>

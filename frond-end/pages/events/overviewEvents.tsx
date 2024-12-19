@@ -45,11 +45,21 @@ const OverviewMyEvent: React.FC = () => {
             setTickets(ticketsData);
   
             // Fetch Events for Tickets
-            const eventPromises = ticketsData.map((ticket) =>
-              ShowTimeService.getEventById(ticket.eventId.toString()).then((res) =>
-                res.ok ? res.json() : null
-              )
-            );
+            const eventPromises = ticketsData.map(async (ticket) => {
+              const eventResponse = await ShowTimeService.getEventById(ticket.eventId.toString());
+              if (eventResponse.ok) {
+                const eventData: Event = await eventResponse.json();
+  
+                // Fetch Concert Hall for this event
+                const concertHallResponse = await ShowTimeService.getConcertHallById(eventData.concertHallId);
+                if (concertHallResponse.ok) {
+                  const concertHallData = await concertHallResponse.json();
+                  // Add concert hall name to the event data
+                  return { ...eventData, concertHallName: concertHallData.name };
+                }
+              }
+              return null;
+            });
             const eventsData = (await Promise.all(eventPromises)).filter(Boolean) as Event[];
             setEvents(eventsData);
           }
@@ -58,36 +68,58 @@ const OverviewMyEvent: React.FC = () => {
         console.error(t('overviewEvent.error.fetchFail2'), error);
       }
     }
-
+  
     if (userRole === "artist" && parsedUser) {
       try {
         const getUser = await ShowTimeService.getArtistByArtistName(parsedUser.username || "");
         if (getUser.ok) {
           const userData = await getUser.json();
           setUser(userData);
-
+  
           const eventResponse = await ShowTimeService.getEventsByArtistId(userData.id.toString());
           if (eventResponse.ok) {
             const eventData = await eventResponse.json();
-            setEvents(eventData);
+  
+            // Fetch Concert Hall for each event
+            const eventPromises = eventData.map(async (event: Event) => {
+              const concertHallResponse = await ShowTimeService.getConcertHallById(event.concertHallId);
+              if (concertHallResponse.ok) {
+                const concertHallData = await concertHallResponse.json();
+                return { ...event, concertHallName: concertHallData.name };
+              }
+              return event;
+            });
+            const eventsData = await Promise.all(eventPromises);
+            setEvents(eventsData);
           }
         }
       } catch (error) {
         console.error(t('overviewEvent.error.fetchFail'), error);
       }
     }
-
+  
     if (userRole === "concertHall" && parsedUser) {
       try {
         const getUser = await ShowTimeService.getConcertHallByUsername(parsedUser.username || "");
         if (getUser.ok) {
           const userData = await getUser.json();
           setUser(userData);
-
+  
           const eventResponse = await ShowTimeService.getEventsByConcertHallId(userData.id.toString());
           if (eventResponse.ok) {
             const eventData = await eventResponse.json();
-            setEvents(eventData);
+  
+            // Fetch Concert Hall name for each event
+            const eventPromises = eventData.map(async (event: Event) => {
+              const concertHallResponse = await ShowTimeService.getConcertHallById(event.concertHallId);
+              if (concertHallResponse.ok) {
+                const concertHallData = await concertHallResponse.json();
+                return { ...event, concertHallName: concertHallData.name };
+              }
+              return event;
+            });
+            const eventsData = await Promise.all(eventPromises);
+            setEvents(eventsData);
           }
         }
       } catch (error) {
@@ -95,6 +127,8 @@ const OverviewMyEvent: React.FC = () => {
       }
     }
   };
+  
+  
   
   useEffect(() => {
     fetchTicketsAndEvents();
@@ -125,13 +159,13 @@ const OverviewMyEvent: React.FC = () => {
             return (
               <>
               {userRole === "artist" && (
-                <EventFrameArtist key={index} title={event.title} genre={event.genre} date={formattedDate} time={event.time}/>
+                <EventFrameArtist key={index} id={Number(event.id)} title={event.title} genre={event.genre} date={formattedDate} time={event.time} concertHallName={event.concertHallName}/>
               )}
               {userRole === "user" && (
-                <EventFrameUser key={index} title={event.title} genre={event.genre} date={formattedDate} time={event.time}/>
+                <EventFrameUser key={index} id={Number(event.id)} title={event.title} genre={event.genre} date={formattedDate} time={event.time} concertHallName={event.concertHallName}/>
               )}
               {userRole === "concertHall" && (
-                <EventFrameCH key={index} title={event.title} genre={event.genre} date={formattedDate} time={event.time}/>
+                <EventFrameCH key={index} id={Number(event.id)} title={event.title} genre={event.genre} date={formattedDate} time={event.time} concertHallName={event.concertHallName}/>
               )}
               </>
             );

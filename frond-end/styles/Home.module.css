@@ -14,18 +14,14 @@
 }
 
 .footer {
-  width: 100%;  /* Ensures the footer takes up the entire width */
-  margin-top: 20px;
+  width: 100%;
   padding: 10px 0;
   background: #333;
   color: white;
   text-align: center;
   font-size: 0.9rem;
-  left: 0;
-  position: absolute;
-  bottom: 0;
+  position: relative; /* Ensure it doesn't overlap */
 }
-
 
 .footer p {
   margin: 0;
@@ -46,6 +42,10 @@
     .events {
       grid-template-columns: repeat(6, 1fr);
     }
+
+    .mainBodyTitle {
+      font-size: 1.75rem;
+    }
 }
 
 @media (max-width: 1900px) {
@@ -58,6 +58,10 @@
   .events {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  .mainBodyTitle {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 1275px) {
@@ -69,6 +73,16 @@
 @media (max-width: 960px) {
   .events {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mainBodyTitle {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainBodyTitle {
+    font-size: 1rem;
   }
 }
 
@@ -223,7 +237,6 @@
 /* Title before event - index */
 .mainBodyTitle {
   font-size: 2rem;
-  font-weight: 600;
   margin: 0;
   color: black;
   text-transform: uppercase;
@@ -235,11 +248,4 @@
 .mainBodyTitle:hover {
   color: #656565;
   /* text-decoration: underline; */
-}
-
-/* Optional responsive adjustments */
-@media (max-width: 700px) {
-  .mainBodyTitle {
-    font-size: 1.5rem;
-  }
 }

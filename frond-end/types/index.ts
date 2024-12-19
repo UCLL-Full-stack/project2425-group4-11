@@ -57,6 +57,7 @@ export type Artist = {
 }
 
 export type Event = {
+    concertHallName: string;
     id?: string;
     title: string;
     genre: string;

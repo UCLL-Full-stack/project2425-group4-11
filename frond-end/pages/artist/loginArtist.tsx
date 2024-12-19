@@ -112,14 +112,14 @@ const LoginArtist: React.FC = () => {
             {t('loginArtist.title')}
           </Typography>
           {statusMessages && (
-            <ul className="list-none mb-3 mx-auto">
+            <ul className={styles.statusMessageList}>
               {statusMessages.map(({ message, type }, index) => (
                 <li
                   key={index}
-                  className={classNames({
-                    "text-red-800": type === "error",
-                    "text-green-800": type === "success",
-                  })}
+                  className={classNames(
+                    styles.statusMessageItem,
+                    type === "error" ? styles.error : styles.success
+                  )}
                 >
                   {message}
                 </li>

@@ -62,8 +62,8 @@ const getTicketsByUserId = async (userId: string) => {
   });
 };
 
-const rescheduleEvent = async ({ id, date, time }: { id: number; date: string; time: string }) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${id}`, {
+const rescheduleEvent = async ({ eventId, date, time }: { eventId: string; date: string; time: string }) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${eventId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ date, time }),
@@ -106,6 +106,15 @@ const getEventsByConcertHallId = async (concertHallId: string) => {
   });
 };
 
+const getConcertHallById = async (id: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/concertHalls/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+}
+
 const ShowTimeService = {
     getAllEvents,
     getEventById,
@@ -120,7 +129,8 @@ const ShowTimeService = {
     getArtistByArtistName,
     getEventsByArtistId,
     getEventsByConcertHallId,
-    getConcertHallByUsername
+    getConcertHallByUsername,
+    getConcertHallById
 };
   
 export default ShowTimeService;

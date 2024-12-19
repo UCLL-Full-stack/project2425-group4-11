@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Paper, Typography } from "@mui/material";
-import ShowTimeService from "@/services/ShowTimeService";
 import { useTranslation } from "next-i18next";
-import { Ticket } from "@/types";
 
 type EventProps = {
   id?: number;
@@ -10,6 +8,7 @@ type EventProps = {
   genre: string;
   date: string;
   time: string;
+  concertHallName: string;
   imageUrl?: string;
 };
 
@@ -19,6 +18,7 @@ const UserEventFrame: React.FC<EventProps> = ({
   genre,
   date,
   time,
+  concertHallName,
   imageUrl,
 }) => {
   const { t } = useTranslation();
@@ -53,6 +53,9 @@ const UserEventFrame: React.FC<EventProps> = ({
       </Typography>
       <Typography variant="body2">
         {date}, {time}
+      </Typography>
+      <Typography variant="body2">
+        Concert Hall: {concertHallName}
       </Typography>
     </Paper>
   );

@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Paper, Typography, IconButton, TextField, Dialog, Button } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Typography,
+  IconButton,
+  TextField,
+  Dialog,
+  Button,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShowTimeService from "@/services/ShowTimeService";
@@ -7,11 +15,12 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 type EventProps = {
-  id?: number;
+  id: number;
   title: string;
   genre: string;
   date: string;
   time: string;
+  concertHallName: string;
   imageUrl?: string;
 };
 
@@ -19,16 +28,20 @@ const MyEventFrame: React.FC<EventProps> = ({
   id,
   title,
   genre,
-  date,
-  time,
+  date: initialDate,
+  time: initialTime,
+  concertHallName,
   imageUrl,
 }) => {
   const { t } = useTranslation();
   const router = useRouter();
 
+  const [date, setDate] = useState(initialDate);
+  const [time, setTime] = useState(initialTime);
+
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [newDate, setNewDate] = useState(date);
-  const [newTime, setNewTime] = useState(time);
+  const [newDate, setNewDate] = useState(initialDate);
+  const [newTime, setNewTime] = useState(initialTime);
 
   const handleDelete = async () => {
     try {
@@ -49,20 +62,26 @@ const MyEventFrame: React.FC<EventProps> = ({
   const handleEditSubmit = async () => {
     try {
       const rescheduleResponse = await ShowTimeService.rescheduleEvent({
-        id: Number(id),
+        eventId: id.toString(),
         date: newDate,
         time: newTime,
       });
 
       if (!rescheduleResponse.ok) {
         console.error(t("eventFrameArtist.error.rescheduleEvent"));
+        alert(t("eventFrameArtist.error.rescheduleEvent"));
         return;
       }
 
-      setEditDialogOpen(false);
-      router.reload();
+      // Update the displayed date and time only after a successful API call
+      setDate(newDate);
+      setTime(newTime);
+
+      handleEditClose();
+      alert(t("eventFrameArtist.success"));
     } catch (error) {
       console.error(t("eventFrameArtist.error.rescheduleProcess"), error);
+      alert(t("eventFrameArtist.error.rescheduleProcess"));
     }
   };
 
@@ -112,7 +131,10 @@ const MyEventFrame: React.FC<EventProps> = ({
         {genre}
       </Typography>
       <Typography variant="body2">
-        {newDate}, {newTime}
+        {date}, {time}
+      </Typography>
+      <Typography variant="body2">
+        Concert Hall: {concertHallName}
       </Typography>
 
       {/* Dialog for editing */}
@@ -138,7 +160,11 @@ const MyEventFrame: React.FC<EventProps> = ({
             <Button onClick={handleEditClose} sx={{ marginRight: 1 }}>
               {t("Cancel")}
             </Button>
-            <Button onClick={handleEditSubmit} variant="contained" color="primary">
+            <Button
+              onClick={handleEditSubmit}
+              variant="contained"
+              color="primary"
+            >
               {t("Save")}
             </Button>
           </Box>

@@ -246,4 +246,35 @@ concertHallRouter.get('/username/:username', async (req: Request, res: Response,
     }
 });
 
+/**
+ * @swagger
+ * /concertHalls/{id}:
+ *  get:
+ *      summary: Get a concert hall by id.
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: integer
+ *              required: true
+ *              description: The concert hall id.
+ *      responses:
+ *          200:
+ *              description: A concert hall object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/ConcertHall'
+ */
+concertHallRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        console.log(Number(req.params.id));
+        const result = await concertHallService.getConcertHallById(Number(req.params.id));
+        console.log(result);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+})
+
 export { concertHallRouter };

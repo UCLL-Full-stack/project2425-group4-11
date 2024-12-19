@@ -199,6 +199,7 @@ eventRouter.put("/:eventId", async (req: Request, res: Response, next: NextFunct
     try {
       console.log("hallo");
       const eventId = Number(req.params.eventId);
+      console.log(eventId)
       const { date, time } = req.body;
   
       await eventService.updateEventSchedule(eventId, { date, time });

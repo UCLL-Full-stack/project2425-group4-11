@@ -22,16 +22,25 @@ const PurchasePage: React.FC = () => {
   const { t } = useTranslation();
 
   const [event, setEvent] = useState<Event>();
+  const [concertHall, setConcertHall] = useState<string>('');  // Store the concert hall name
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const router = useRouter();
   const { eventId } = router.query;
 
+  // Fetch Event Data and Concert Hall Name
   const getEventById = async () => {
-    const eventResponse = await ShowTimeService.getEventById(
-      eventId as string
-    );
-    const eventData = await eventResponse.json();
-    setEvent(eventData);
+    try {
+      const eventResponse = await ShowTimeService.getEventById(eventId as string);
+      const eventData = await eventResponse.json();
+      setEvent(eventData);
+
+      // Fetch the Concert Hall Data
+      const concertHallResponse = await ShowTimeService.getConcertHallById(eventData.concertHallId);
+      const concertHallData = await concertHallResponse.json();
+      setConcertHall(concertHallData.name);  // Set concert hall name
+    } catch (error) {
+      console.error('Failed to fetch event or concert hall', error);
+    }
   };
 
   const getTicketsByEventId = async () => {
@@ -47,6 +56,7 @@ const PurchasePage: React.FC = () => {
   useEffect(() => {
     if (eventId) {
       getTicketsByEventId();
+      getEventById();
     }
   }, [eventId]);
 
@@ -67,7 +77,7 @@ const PurchasePage: React.FC = () => {
       console.error(t('eventPurchase.error.updateFail2'), error);
     }
   };
-  
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prev) => {
@@ -88,7 +98,7 @@ const PurchasePage: React.FC = () => {
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
-  
+
   useEffect(() => {
     const checkLoginStatus = () => {
       const loggedIn = Boolean(localStorage.getItem("loggedInUser"));
@@ -97,7 +107,6 @@ const PurchasePage: React.FC = () => {
 
     checkLoginStatus();
   })
-
 
   const handleCategoryChange = (category: string) => {
     setTicketCategory(category);
@@ -146,12 +155,6 @@ const PurchasePage: React.FC = () => {
     router.push("/");
   };
 
-  useEffect(() => {
-    if (eventId) {
-        getEventById();
-    }
-  }, [eventId]);
-
   if (!isLoggedIn) {
     return (
       <Box sx={{ backgroundColor: "#fff", minHeight: "100vh", padding: 3 }}>
@@ -162,7 +165,7 @@ const PurchasePage: React.FC = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/user/login")}
           >
             {t('eventPurchase.handlePurchase.noUser.label.login')}
           </Button>
@@ -170,8 +173,6 @@ const PurchasePage: React.FC = () => {
       </Box>
     );
   }
-
-  console.log(event);
 
   return (
     <>
@@ -239,10 +240,9 @@ const PurchasePage: React.FC = () => {
         <Box>
           <Typography variant="h6">{t('eventPurchase.handlePurchase.ticketSummary.title')}</Typography>
           <Typography>{t('eventPurchase.handlePurchase.ticketSummary.ticketGenAdmission')}</Typography>
-          <Typography>{t('eventPurchase.handlePurchase.ticketSummary.concertHall')}</Typography>
+          <Typography>{t('eventPurchase.handlePurchase.ticketSummary.concertHall')} {concertHall}</Typography>
 
           {/* Ticket Category Dropdown */}
-
           <FormControl fullWidth sx={{ marginTop: 2 }}>
             <InputLabel id="ticket-category-label">{t('eventPurchase.handlePurchase.label.category')}</InputLabel>
             <Select
@@ -259,7 +259,6 @@ const PurchasePage: React.FC = () => {
           </FormControl>
 
           {/* Ticket Quantity Dropdown */}
-
           <FormControl fullWidth sx={{ marginTop: 2 }}>
             <InputLabel id="ticket-quantity-label">{t('eventPurchase.handlePurchase.label.quantity')}</InputLabel>
             <Select

@@ -63,7 +63,20 @@ const createConcertHall = async (concertHall: ConcertHall): Promise<ConcertHall>
     }
 };
 
+const getConcertHallById = async ({ id }: {id: number }): Promise<ConcertHall | null> => {
+    try {
+        const concertHallPrisma = await database.concertHall.findFirst({
+            where: { id },
+        })
+        return concertHallPrisma ? ConcertHall.from(concertHallPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     createConcertHall,
-    getConcertHallByUsername
+    getConcertHallByUsername,
+    getConcertHallById
 };

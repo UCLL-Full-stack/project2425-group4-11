@@ -68,14 +68,14 @@
             "signup": "Sign up"
         },
         "statusMessages": {
-            "success":"Edit successful. Redirecting to login page...",
+            "success":"Login successful. Redirecting to login page...",
             "loginFailed": "Login Failed: "
         }
     },
 
     "loginCH": {
         "error": { 
-            "artistNameRequired": "artistName is required.", 
+            "usernameRequired": "Username is required.", 
             "passWordRequired": "Password is Required.",  
             "errorStatus": "An error has occurred. Please try again later."
         },
@@ -89,7 +89,7 @@
             "signup": "Sign up"
         },
         "statusMessages": {
-            "succes": "Login successful. Redirecting to login page...",
+            "success": "Login successful. Redirecting to login page...",
             "loginFailed": "Login Failed: "
         }
     },
@@ -107,7 +107,7 @@
             "invalidPhoneNumber": "Invalid phone number format."
         },
         "statusMessages":{
-            "succes": "Signup successful. Redirecting to login page...",
+            "success": "Signup successful. Redirecting to login page...",
             "failed": "Signup failed",
             "error": "An error has occurred. Please try again later.",
             "signupError": "Signup error: "
@@ -141,9 +141,10 @@
             "signupOrLoginError": "Signup or login error: "
         },
         "statusMessages":{
-            "succes": "Signup successful. Redirecting you...",
+            "success": "Signup successful. Redirecting you...",
             "failed": "Signup failed",
-            "error": "An error has occurred. Please try again later."
+            "error": "An error has occurred. Please try again later.",
+            "loginFailed": "Login Failed: "
         },
         "label":{
             "title": "Sign Up As Artist",
@@ -173,8 +174,9 @@
             "signupOrLoginError": "Signup or login error: "
         },
         "statusMessages":{
-            "succes": "Signup successful. Redirecting you...",
+            "success": "Signup successful. Redirecting you...",
             "failed": "Signup failed",
+            "loginFailed": "Login Failed: ",
             "error": "An error has occurred. Please try again later."
         },
         "label":{
@@ -210,10 +212,10 @@
         "ticketSold": "Ticket status updated to Sold.",
         "handlePurchase": {
             "console": {
-                "purchasingMessage": "Purchasing ticket for:",
+                "purchasingMessage": "Purchasing ticket for: ",
                 "name": "Name:",
                 "email": "Email",
-                "quantity": "Quantity:"
+                "quantity": "Quantity: "
             },
             "alert": {
                 "succesfullPurchase": "Succesfully purchased ticket.",
@@ -234,7 +236,7 @@
             "ticketSummary": {
                 "title": "Tickets",
                 "ticketGenAdmission": "General Admission Ticket",
-                "concertHall": "Concert Hall:"
+                "concertHall": "Concert Hall: "
             },
             "label": {
                 "category": "Category",
@@ -356,7 +358,8 @@
     "eventFrameArtist":{
         "title": "Reschedule events",
         "date": "Date",
-        "time": "Time"
+        "time": "Time",
+        "succes": "Event rescheduled successfully!"
     },
     "eventFrameCH":{
         "error":{

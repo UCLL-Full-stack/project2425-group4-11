@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper, Typography, IconButton } from "@mui/material";
+import { Paper, Typography, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShowTimeService from "@/services/ShowTimeService";
 import { useTranslation } from "next-i18next";
@@ -11,6 +11,7 @@ type EventProps = {
   genre: string;
   date: string;
   time: string;
+  concertHallName: string;
   imageUrl?: string;
 };
 
@@ -20,6 +21,7 @@ const MyEventFrame: React.FC<EventProps> = ({
   genre,
   date,
   time,
+  concertHallName,
   imageUrl,
 }) => {
   const { t } = useTranslation();
@@ -107,6 +109,10 @@ const MyEventFrame: React.FC<EventProps> = ({
         }}
       >
         {date}, {time}
+      </Typography>
+
+      <Typography variant="body2">
+        Concert Hall: {concertHallName}
       </Typography>
     </Paper>
   );

@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import PurchaseButton from "./Tickets/purchaseButton";
 import { useTranslation } from "next-i18next";
 import ShowTimeService from "@/services/ShowTimeService";
@@ -11,10 +11,11 @@ type EventProps = {
   genre: string;
   date: string;
   time: string;
+  concertHallName: string;
   imageUrl?: string;
 };
 
-const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageUrl }) => {
+const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, concertHallName, imageUrl }) => {
   const { t } = useTranslation();
   const [tickets, setTickets] = useState<Ticket[]>([]);
 
@@ -77,11 +78,22 @@ const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageU
         variant="body2"
         sx={{
           fontSize: "1rem",
-          marginBottom: 1,
+          marginBottom: 3,
         }}
       >
         {date}, {time}
       </Typography>
+      <Typography 
+        variant="body2"
+        sx={{
+          fontSize: "0.95rem",
+          marginBottom: 1,
+        }}
+      >
+        Concert Hall: {concertHallName}
+      </Typography>
+
+      <Box sx={{ flexGrow: 1 }} />
 
       {/* Ticket Availability */}
       {tickets.length > 0 && !allTicketsSoldOut ? (
@@ -98,7 +110,7 @@ const EventFrame: React.FC<EventProps> = ({ id, title, genre, date, time, imageU
               {t('fewTicketsLeft')}
             </Typography>
           )}
-          <PurchaseButton label={t('purchaseButton')} eventId={id} />
+          <PurchaseButton label={t('purchaseButton')} eventId={id}/>
         </>
       ) : (
         <Typography variant="h5" color="error" sx={{ fontWeight: 'bold' }}>
