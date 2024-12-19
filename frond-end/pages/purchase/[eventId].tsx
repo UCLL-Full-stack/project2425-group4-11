@@ -40,7 +40,7 @@ const PurchasePage: React.FC = () => {
     if (Array.isArray(ticketsData)) {
       setTickets(ticketsData);
     } else {
-      console.error('Expected an array of tickets, but received:', ticketsData);
+      console.error(t('eventPurchase.error.mismatch'), ticketsData);
     }
   };
 
@@ -58,13 +58,13 @@ const PurchasePage: React.FC = () => {
     try {
       const ticketResponse = await ShowTimeService.purchasedTicket(ticketId.toString(), userId.toString());
       if (ticketResponse.ok) {
-        console.log('Ticket status updated to Sold');
+        console.log(t('eventPurchase.ticketSold'));
         getEventById();
       } else {
-        console.error('Failed to update ticket status');
+        console.error(t('eventPurchase.error.updateFail'));
       }
     } catch (error) {
-      console.error('Error updating ticket status:', error);
+      console.error(t('eventPurchase.error.updateFail2'), error);
     }
   };
   
@@ -124,20 +124,20 @@ const PurchasePage: React.FC = () => {
       for (let i = 0; i < ticketQuantity; i++) {
         const ticketToPurchase = availableTickets[i];
         if (ticketToPurchase.id === undefined) {
-          console.error('Ticket ID is undefined');
+          console.error(t('eventPurchase.error.undefinedTID'));
           return;
         }
   
         await purchaseTicket(ticketToPurchase.id);
       }
-      console.log(t('handlePurchase.handle.console.purchasingMessage'), event);
+      console.log(t('eventPurchase.handlePurchase.console.purchasingMessage'), event);
       console.log(t('eventPurchase.handlePurchase.console.name'), name, t('eventPurchase.handlePurchase.console.email'), email, t('eventPurchase.handlePurchase.console.quantity'), ticketQuantity);
       alert(t('eventPurchase.handlePurchase.alert.succesfullPurchase'));
       setTimeout(() => {
         router.push("/");
       }, 2000);
     } catch (error) {
-      console.error('Error during purchase:', error);
+      console.error(t('eventPurchase.error.purchaseError'), error);
     }
   };
 
@@ -284,7 +284,7 @@ const PurchasePage: React.FC = () => {
           <Typography variant="h6">{t('eventPurchase.handlePurchase.label.totalPrice')}</Typography>
           {tickets.length > 0 ? (
             <Typography variant="h5" color="primary">
-              {((ticketPrice * ticketQuantity) === 0 ? "Sold out" : `€${ticketPrice * ticketQuantity}`)}
+              {((ticketPrice * ticketQuantity) === 0 ? t('eventPurchase.soldOut') : `€${ticketPrice * ticketQuantity}`)}
             </Typography>
           ) : (
             <Typography>{t('eventPurchase.handlePurchase.loadingMessage')}</Typography>

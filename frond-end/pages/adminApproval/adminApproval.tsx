@@ -8,7 +8,6 @@ import { Artist, ConcertHall } from "@/types";
 const AdminApprovalPage: React.FC = () => {
   const { t } = useTranslation();
 
-  // Defer rendering until the component mounts (prevents mismatch)
   const [isClient, setIsClient] = useState(false);
   const [pendingUsers, setPendingUsers] = useState<Artist[]>([]);
   const [concertHallUsers, setConcertHallUsers] = useState<ConcertHall[]>([]);
@@ -28,10 +27,10 @@ const AdminApprovalPage: React.FC = () => {
         setPendingUsers(artistsFound);
       } else {
         setPendingUsers([]);
-        console.error("Expected an array of artists but got: ", artistsFound);
+        console.error(t('adminApproval.error.mismatch'), artistsFound);
       }
     } catch (error) {
-      console.error("Failed to fetch artists: ", error);
+      console.error(t('adminApproval.error.fetchFail'), error);
       setPendingUsers([]);
     }
   };

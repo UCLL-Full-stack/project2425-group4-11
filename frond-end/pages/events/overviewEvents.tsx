@@ -14,7 +14,6 @@ import UserService from "@/services/UserService";
 
 const OverviewMyEvent: React.FC = () => {
   const [events, setEvents] = useState<Array<Event>>([]);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [parsedUser, setParsedUser] = useState<User>();
   const [user, setUser] = useState<any>();
@@ -56,7 +55,7 @@ const OverviewMyEvent: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error("Error fetching tickets and events: ", error);
+        console.error(t('overviewEvent.error.fetchFail2'), error);
       }
     }
 
@@ -74,7 +73,7 @@ const OverviewMyEvent: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error("Error fetching events: ", error);
+        console.error(t('overviewEvent.error.fetchFail'), error);
       }
     }
 
@@ -92,7 +91,7 @@ const OverviewMyEvent: React.FC = () => {
           }
         }
       } catch (error) {
-        console.error("Error fetching events: ", error);
+        console.error(t('overviewEvent.error.fetchFail'), error);
       }
     }
   };
@@ -112,43 +111,8 @@ const OverviewMyEvent: React.FC = () => {
       <Navbar />
       <main className={styles.main}>
         <h2>{t('overviewEvent.titel')}</h2>
-        {userRole} {user && (
-    <p>
-      Parsed User ID: {user.id}, Name: {user.username}
-      {user ? (user.id ? user.id.toString() : "") : ""}
-      {tickets.length > 0 ? (
-  <div>
-    <h2>Your Tickets:</h2>
-    <ul>
-      {tickets.map((ticket, index) => (
-        <li key={index}>
-          Event ID: {ticket.eventId} - Ticket ID: {ticket.id}
-        </li>
-      ))}
-    </ul>
-  </div>
-) : (
-  <p>You have no tickets yet.</p>
-)}
-{events.length > 0 ? (
-  <div>
-    <h2>Your Events:</h2>
-    <ul>
-      {events.map((event, index) => (
-        <li key={index}>
-          Event ID: {event.id} 
-        </li>
-      ))}
-    </ul>
-  </div>
-) : (
-  <p>You have no tickets yet.</p>
-)}
-    </p>
-
-        )}
-        <ButtonAddEvent />
-        <section className={styles.events}>
+        {userRole === "concertHall" && (<ButtonAddEvent />)}
+        <section className={styles.events2}>
           {events.map((event, index) => {
             const formattedDate = new Intl.DateTimeFormat("en-US", {
               weekday: "short",
@@ -157,10 +121,6 @@ const OverviewMyEvent: React.FC = () => {
             }).format(new Date(event.date));
 
             return (
-              //check for roles when rendering the event
-              // concert hall can delete
-              // artist can reschedule & delete
-              // user can view
               <>
               {userRole === "artist" && (
                 <EventFrameArtist key={index} title={event.title} genre={event.genre} date={formattedDate} time={event.time}/>

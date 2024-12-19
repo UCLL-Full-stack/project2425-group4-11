@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import InputField from "@/components/InputField";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 import Navbar from "@/components/navbar";
+import { User } from "@/types";
 
 interface Ticket {
   type: string;
@@ -34,6 +35,9 @@ interface Event {
   duration: number;
   description: string;
   status: string;
+  artistId?: string;
+  artistName: string;
+  concertHallId: string;
 }
 
 const AddEventPage: React.FC = () => {
@@ -46,12 +50,18 @@ const AddEventPage: React.FC = () => {
     duration: 0,
     description: "",
     status: "",
+    artistName: "",
+    concertHallId: ""
   });
 
   const [ticketCategories, setTicketCategories] = useState<Ticket[]>([]);
   const [newTicket, setNewTicket] = useState({ type: "", price: 0, amount: 0 });
   const [loading, setLoading] = useState(false);
   const [statusMessages, setStatusMessages] = useState<{ message: string; type: "error" | "success" }[]>([]);
+
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [parsedUser, setParsedUser] = useState<User>();
+  const [user, setUser] = useState<any>();
   
   // Error state management
   const [eventErrors, setEventErrors] = useState({
@@ -61,7 +71,8 @@ const AddEventPage: React.FC = () => {
     date: "",
     duration: "",
     description: "",
-    status: ""
+    status: "",
+    artistName: ""
   });
   const [ticketErrors, setTicketErrors] = useState({ type: "", price: "", amount: "" });
 
@@ -75,7 +86,8 @@ const AddEventPage: React.FC = () => {
       date: "",
       duration: "",
       description: "",
-      status: ""
+      status: "",
+      artistName: ""
     });
     setTicketErrors({ type: "", price: "", amount: "" });
     setStatusMessages([]);
@@ -113,6 +125,10 @@ const AddEventPage: React.FC = () => {
       errors.status = t('addEvents.error.statusRequired');
       valid = false;
     }
+    if (!eventData.artistName) {
+      errors.artistName = t('addEvents.error.artistNameRequired');
+      valid = false;
+    }
 
     setEventErrors(errors);
     return valid;
@@ -139,53 +155,74 @@ const AddEventPage: React.FC = () => {
     return valid;
   };
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("loggedInUser");
+      const parsedUser = user ? JSON.parse(user) : null;
+      setParsedUser(parsedUser);
+      setUserRole(parsedUser?.role || null);
+    }
+  }, []);
+
   const handleSubmit = async () => {
     clearErrors();
-
-    if (!validateEvent()) {
-      return;
-    }
-
-    const finalEvent: Event = { 
-      ...eventData, 
-      date: eventData.date instanceof Date ? eventData.date : new Date(eventData.date)
-    };
-    
-
+  
+    if (!validateEvent()) return;
+  
     try {
       setLoading(true);
-      const eventResponse = await ShowTimeService.createEvent(finalEvent);
-
-      if (!eventResponse.ok) {
-        const errorText = await eventResponse.text();
-        setStatusMessages([{ message: `${t('addEvents.error.creatingEvent')} ${errorText}`, type: "error" }]);
-        setLoading(false);
-        return;
-      }
-
-      const eventData = await eventResponse.json();
-
-      for (const ticketCategory of ticketCategories) {
-        for (let i = 0; i < ticketCategory.amount; i++) {
-          const ticketPayload = { ...ticketCategory, eventId: eventData.id };
-          const ticketResponse = await ShowTimeService.createTicket(ticketPayload);
-
-          if (!ticketResponse.ok) {
-            setStatusMessages([{ message: t('addEvent.error.createFail'), type: "error" }]);
-            setLoading(false);
+  
+      const userResponse = parsedUser
+        ? await ShowTimeService.getConcertHallByUsername(parsedUser.username || "")
+        : null;
+  
+      if (userResponse?.ok) {
+        const userData = await userResponse.json();
+        setUser(userData);
+  
+        const artistResponse = await ShowTimeService.getArtistByArtistName(eventData.artistName);
+        if (artistResponse.ok) {
+          const artistData = await artistResponse.json();
+          const finalEvent: Event = {
+            ...eventData,
+            date: eventData.date instanceof Date ? eventData.date : new Date(eventData.date),
+            concertHallId: userData.id,
+            artistId: artistData.id,
+          };
+  
+          const eventResponse = await ShowTimeService.createEvent(finalEvent);
+  
+          if (!eventResponse.ok) {
+            const errorText = await eventResponse.text();
+            setStatusMessages([{ message: `${t('addEvents.error.creatingEvent')} ${errorText}`, type: "error" }]);
             return;
           }
+  
+          const createdEvent = await eventResponse.json();
+  
+          for (const ticketCategory of ticketCategories) {
+            for (let i = 0; i < ticketCategory.amount; i++) {
+              const ticketPayload = { ...ticketCategory, eventId: createdEvent.id };
+              const ticketResponse = await ShowTimeService.createTicket(ticketPayload);
+  
+              if (!ticketResponse.ok) {
+                setStatusMessages([{ message: t('addEvents.error.createFail'), type: "error" }]);
+                return;
+              }
+            }
+          }
+  
+          setStatusMessages([{ message: t('addEvents.success.create'), type: "success" }]);
+          router.push("/");
         }
       }
-    
-      setStatusMessages([{ message: t('addEvent.succes.create'), type: "success" }]);
-      router.push("/");
     } catch (error) {
       setStatusMessages([{ message: t('addEvents.error.general'), type: "error" }]);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleTicketAdd = () => {
     if (validateTicket()) {
@@ -284,6 +321,15 @@ const AddEventPage: React.FC = () => {
             <MenuItem value="Past">{t('addEvents.label.past')}</MenuItem>
           </Select>
         </FormControl>
+
+        <InputField
+          label={t('addEvents.label.artistName')} 
+          value={eventData.artistName}
+          margin="normal"
+          error={!!eventErrors.artistName}
+          helperText={eventErrors.artistName} 
+          onChange={(e) => setEventData({ ...eventData, artistName: e.target.value })}
+        />
 
         {/* Add Ticket */}
         <Divider sx={{ marginY: 2 }} />

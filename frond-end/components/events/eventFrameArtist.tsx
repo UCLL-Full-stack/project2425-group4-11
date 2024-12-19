@@ -34,12 +34,12 @@ const MyEventFrame: React.FC<EventProps> = ({
     try {
       const eventResponse = await ShowTimeService.deleteEvent(Number(id));
       if (!eventResponse.ok) {
-        console.error(t("eventFrameCH.error.deleteEvent"));
+        console.error(t("eventFrameArtist.error.deleteEvent"));
         return;
       }
       router.reload();
     } catch (error) {
-      console.error(t("eventFrameCH.error.deleteProcess"), error);
+      console.error(t("eventFrameArtist.error.deleteProcess"), error);
     }
   };
 
@@ -55,14 +55,14 @@ const MyEventFrame: React.FC<EventProps> = ({
       });
 
       if (!rescheduleResponse.ok) {
-        console.error(t("eventFrameCH.error.rescheduleEvent"));
+        console.error(t("eventFrameArtist.error.rescheduleEvent"));
         return;
       }
 
       setEditDialogOpen(false);
       router.reload();
     } catch (error) {
-      console.error(t("eventFrameCH.error.rescheduleProcess"), error);
+      console.error(t("eventFrameArtist.error.rescheduleProcess"), error);
     }
   };
 
@@ -118,9 +118,9 @@ const MyEventFrame: React.FC<EventProps> = ({
       {/* Dialog for editing */}
       <Dialog open={editDialogOpen} onClose={handleEditClose}>
         <Box p={3}>
-          <Typography variant="h6">{t("Reschedule Event")}</Typography>
+          <Typography variant="h6">{t("eventFrameArtist.title")}</Typography>
           <TextField
-            label={t("Date")}
+            label={t("eventFrameArtist.date")}
             type="date"
             value={newDate}
             onChange={(e) => setNewDate(e.target.value)}
@@ -128,7 +128,7 @@ const MyEventFrame: React.FC<EventProps> = ({
             sx={{ marginBottom: 2 }}
           />
           <TextField
-            label={t("Time")}
+            label={t("eventFrameArtist.time")}
             type="time"
             value={newTime}
             onChange={(e) => setNewTime(e.target.value)}

@@ -89,7 +89,7 @@ const getEventsByArtistId = async (artistId: string) => {
 };
 
 const getConcertHallByUsername = async (username: string) => {
-  return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/username/${username}`, {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/concertHalls/username/${username}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -1,87 +1,272 @@
 {
     "app.title": "ShowTime",
+    "purchaseButton": "Kopen",
+    "noTicketsAvailable": "Uitverkocht",
+    "fewTicketsLeft": "Nog maar een paar tickets beschikbaar",
     "navbar": {
         "logo": "ShowTime",
         "welcome": "Welkom"
     },
     "index": {
         "error": {
-            "mismatch": "Verwachtte een array van events, maar kreeg:",
-            "fetchFail": "Mislukt bij het fetchen van events:"
+            "mismatch": "Verwachtte een array van evenementen, maar kreeg:",
+            "fetchFail": "Kon de evenementen niet ophalen:"
         },
         "main": {
             "heroSection": {
-                "slogan": "Ontgrendel het podium met onvergetelijke geluiden.",
-                "text": "Koop tickets voor optredens, feesten en festivals voor de beste prijs op de markt.",
+                "slogan": "Ontgrendel het podium voor onvergetelijke geluiden.",
+                "text": "Koop tickets voor concerten, feesten en festivals voor de beste prijs op de markt.",
                 "placeHolder": {
-                    "searchBar": "Zoeken naar evenement"
+                    "searchBar": "Zoek naar evenement"
                 }
             },
             "body": {
-                "title":  "Komende evenementen"
-            },
-            "filterButton": "Filter"
+                "title": "Aankomende Evenementen",
+                "filterButton": "Filter"
+            }
         }
     },
     
-    "login":{
+    "login": {
         "error": { 
-            "userNameRequired": "Gebruikersnaam is vereist.", 
-            "passWordRequired": "Wachtwoord is vereist.",  
-            "errorStatus": "Er is een fout opgetreden. Probeer het later nog eens."
+            "userNameRequired": "Gebruikersnaam is verplicht.", 
+            "passWordRequired": "Wachtwoord is verplicht.",  
+            "errorStatus": "Er is een fout opgetreden. Probeer het later opnieuw."
         },
-        "title": "Aanmelden",
-        "label":{
+        "statusMessages": {
+            "success": "Inloggen succesvol. Wordt doorgestuurd naar de inlogpagina...",
+            "loginFailed": "Inloggen mislukt: "
+        },
+        "title": "Inloggen",
+        "label": {
             "username": "Gebruikersnaam",
             "password": "Wachtwoord",
-            "rememberMe": "Herinner mij",
-            "loginButton": "Aanmelden",
+            "rememberMe": "Onthoud mij",
+            "loginButton": "Inloggen",
             "account": "Heb je geen account?",
-            "signup": "Registreren",
+            "signup": "Registreer je",
             "artist": "Artiest?",
-            "artistButton": "Hier aanmelden",
-            "concertHall": "Halbeheerder?",
-            "concertHallButton": "Hier aanmelden"
+            "artistButton": "Log hier in",
+            "concertHall": "Zaalbeheerder?",
+            "concertHallButton": "Log hier in"
         }
-        
     },
-    "signup":{
-        "error":{
-            "emailRequired": "E-mail is vereist.",
-            "invalidEmail": "Ongeldig e-mailformaat.",
-            "passWordRequired": "Wachtwoord is vereist.",
-            "passwordLength": "Het wachtwoord moet minstens 8 tekens lang zijn.",
-            "firstNameRequired": "Voornaam is vereist.",
-            "lastNameRequired": "Achternaam is vereist.",
-            "userNameRequired": "Gebruikersnaam is vereist.",
-            "phoneNumRequired": "Telefoonnummer is vereist.",
-            "invalidPhoneNumber": "Ongeldig formaat telefoonnummer."
+
+    "loginArtist": {
+        "error": { 
+            "artistNameRequired": "Artiestnaam is verplicht.", 
+            "passWordRequired": "Wachtwoord is verplicht.",  
+            "errorStatus": "Er is een fout opgetreden. Probeer het later opnieuw."
         },
-        "statusMessages":{
-            "succes": "Registreren gelukt. Doorverwijzen naar aanmeldpagina...",
-            "failed": "Registreren mislukt",
-            "error": "Er is een fout opgetreden. Probeer het later nog eens."
+        "title": "Inloggen als artiest",
+        "label": {
+            "artistName": "Artiestnaam",
+            "password": "Wachtwoord",
+            "rememberMe": "Onthoud mij",
+            "loginButton": "Inloggen",
+            "account": "Heb je geen account?",
+            "signup": "Registreer je"
         },
-        "label":{
-            "title": "Registreren",
+        "statusMessages": {
+            "success": "Bewerking succesvol. Wordt doorgestuurd naar de inlogpagina...",
+            "loginFailed": "Inloggen mislukt: "
+        }
+    },
+
+    "loginCH": {
+        "error": { 
+            "artistNameRequired": "Artiestnaam is verplicht.", 
+            "passWordRequired": "Wachtwoord is verplicht.",  
+            "errorStatus": "Er is een fout opgetreden. Probeer het later opnieuw."
+        },
+        "title": "Inloggen als zaalbeheerder",
+        "label": {
+            "username": "Gebruikersnaam",
+            "password": "Wachtwoord",
+            "rememberMe": "Onthoud mij",
+            "loginButton": "Inloggen",
+            "account": "Heb je geen account?",
+            "signup": "Registreer je"
+        },
+        "statusMessages": {
+            "succes": "Inloggen succesvol. Wordt doorgestuurd naar de inlogpagina...",
+            "loginFailed": "Inloggen mislukt: "
+        }
+    },
+
+    "signup": {
+        "error": {
+            "emailRequired": "E-mail is verplicht.",
+            "invalidEmail": "Ongeldige e-mailindeling.",
+            "passWordRequired": "Wachtwoord is verplicht.",
+            "passwordLength": "Wachtwoord moet minstens 8 tekens lang zijn.",
+            "firstNameRequired": "Voornaam is verplicht.",
+            "lastNameRequired": "Achternaam is verplicht.",
+            "userNameRequired": "Gebruikersnaam is verplicht.",
+            "phoneNumRequired": "Telefoonnummer is verplicht.",
+            "invalidPhoneNumber": "Ongeldige telefoonnummerindeling."
+        },
+        "statusMessages": {
+            "succes": "Registratie succesvol. Wordt doorgestuurd naar de inlogpagina...",
+            "failed": "Registratie mislukt",
+            "error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+            "signupError": "Registratiefout: "
+        },
+        "label": {
+            "title": "Registreer",
             "email": "E-mail",
             "username": "Gebruikersnaam",
             "password": "Wachtwoord",
             "firstName": "Voornaam",
             "lastName": "Achternaam",
-            "phoneNumber": "Telefoonnummer" 
+            "phoneNumber": "Telefoonnummer"
         },
         "button": {
-            "signup": "Registreren",
-            "loading": "Registreren..."
-        }        
+            "signup": "Registreer",
+            "loading": "Bezig met registreren..."
+        }         
     },
-    "editProfile":{
-        "error":{
-            "emailRequired": "E-mail is vereist."
+
+    "artistSignup": {
+        "error": {
+            "emailRequired": "E-mail is verplicht.",
+            "invalidEmail": "Ongeldige e-mailindeling.",
+            "passWordRequired": "Wachtwoord is verplicht.",
+            "passwordLength": "Wachtwoord moet minstens 8 tekens lang zijn.",
+            "genresRequired": "Genres zijn verplicht.",
+            "bookingFeeRequired": "Boekingvergoeding is verplicht.",
+            "artistNameRequired": "Artiestnaam is verplicht.",
+            "biographyRequired": "Biografie is verplicht.",
+            "socialMediaRequired": "Sociale media is verplicht.",
+            "signupOrLoginError": "Registratie- of inlogfout: "
         },
-        "label":{
-            "title": "Profiel bewerken",
+        "statusMessages": {
+            "succes": "Registratie succesvol. Wordt doorgestuurd...",
+            "failed": "Registratie mislukt",
+            "error": "Er is een fout opgetreden. Probeer het later opnieuw."
+        },
+        "label": {
+            "title": "Registreer als Artiest",
+            "email": "E-mail",
+            "artistName": "Artiestnaam",
+            "password": "Wachtwoord",
+            "genres": "Genres",
+            "biography": "Biografie",
+            "bookingFee": "Boekingvergoeding",
+            "socialMedia": "Sociale Media"
+        },
+        "button": {
+            "signup": "Registreer",
+            "loading": "Bezig met registreren..."
+        }         
+    },
+
+    "CHSignup": {
+        "error": {
+            "locationRequired": "Locatie is verplicht.",
+            "passWordRequired": "Wachtwoord is verplicht.",
+            "passwordLength": "Wachtwoord moet minstens 8 tekens lang zijn.",
+            "capacityRequired": "Capaciteit is verplicht",
+            "nameRequired": "Naam van de concertzaal is verplicht.",
+            "facilitiesRequired": "Faciliteiten zijn verplicht.",
+            "usernameRequired": "Gebruikersnaam is verplicht.",
+            "signupOrLoginError": "Registratie- of inlogfout: "
+        },
+        "statusMessages": {
+            "succes": "Registratie succesvol. Wordt doorgestuurd...",
+            "failed": "Registratie mislukt",
+            "error": "Er is een fout opgetreden. Probeer het later opnieuw."
+        },
+        "label": {
+            "title": "Registreer als Concertzaalbeheerder",
+            "location": "Locatie",
+            "capacity": "Capaciteit",
+            "password": "Wachtwoord",
+            "name": "Naam van de concertzaal",
+            "facilities": "Faciliteiten",
+            "username": "Gebruikersnaam",
+            "contactCountryCode": "Landcode",
+            "contactEmail": "E-mail",
+            "contactInstagram": "Instagram",
+            "contactNumber": "Telefoonnummer",
+            "contactInfoTitle": "Contactinformatie"
+        },
+        "button": {
+            "signup": "Registreer",
+            "loading": "Bezig met registreren..."
+        }         
+    },
+    
+    "eventPurchase": {
+        "error": {
+            "fetchFail": "Kon de evenementen niet ophalen:",
+            "mismatch": "Verwachtte een array van tickets, maar kreeg: ",
+            "updateFail": "Kon de ticketstatus niet bijwerken",
+            "updateFail2": "Fout bij het bijwerken van de ticketstatus: ",
+            "undefinedTID": "Ticket-ID is niet gedefinieerd",
+            "purchaseError": "Fout tijdens aankoop: "
+        },
+        "soldOut": "Uitverkocht",
+        "ticketSold": "Ticketstatus bijgewerkt naar Verkocht.",
+        "handlePurchase": {
+            "console": {
+                "purchasingMessage": "Ticket kopen voor:",
+                "name": "Naam:",
+                "email": "E-mail",
+                "quantity": "Aantal:"
+            },
+            "alert": {
+                "succesfullPurchase": "Ticket succesvol gekocht.",
+                "cancelPurchase": "Ticket aankoop geannuleerd."
+            },
+            "noUser": {
+                "message": "Je moet je registreren of inloggen om een ticket te kopen.",
+                "label": {
+                    "login": "Inloggen"
+                }
+            },
+            "loadingMessage": "Bezig met laden...",
+            "reserveMessage": "Je tickets zijn gereserveerd!",
+            "fewClicksMessage": "Het kost nu nog maar een paar klikken om je bestelling te voltooien.",
+            "countdown": {
+                "remainingTime": "Overige tijd:"
+            },
+            "ticketSummary": {
+                "title": "Tickets",
+                "ticketGenAdmission": "Algemene Toegangs Ticket",
+                "concertHall": "Concertzaal:"
+            },
+            "label": {
+                "category": "Categorie",
+                "regular": "Regulier",
+                "vip": "VIP",
+                "student": "Student",
+                "quantity": "Aantal",
+                "totalPrice": "Totaal",
+                "catagoryLabel": "Categorie"
+            },
+            "button": {
+                "label": {
+                    "proceed": "Doorgaan"
+                }
+            }
+        }
+    },
+
+    "editProfile": {
+        "error": {
+            "emailRequired": "E-mail is verplicht.",
+            "invalidEmail": "Ongeldige e-mailindeling.",
+            "firstNameRequired": "Voornaam is verplicht.",
+            "lastNameRequired": "Achternaam is verplicht.",
+            "phoneNumRequired": "Telefoonnummer is verplicht.",
+            "invalidPhoneNumber": "Ongeldige telefoonnummerindeling.",
+            "passWordRequired": "Wachtwoord is verplicht.",
+            "passwordLength": "Wachtwoord moet minstens 8 tekens lang zijn.",
+            "usernameRequired": "Gebruikersnaam is verplicht."
+        },
+        "label": {
+            "title": "Profiel Bewerken",
             "email": "E-mail",
             "firstName": "Voornaam",
             "lastName": "Achternaam",
@@ -89,90 +274,31 @@
             "phoneNumber": "Telefoonnummer",
             "username": "Gebruikersnaam"
         },
-        "button": "Profiel bijwerken"
-    },
-    "overviewEvent":{
-        "error":{
-            "fetchFail": "Mislukt bij het fetchen van events:",
-            "expected":"Verwachtte een array van events, maar kreeg:"
-        },
-        "titel": "Mijn evenementen" 
-    },
-    "dropdownMenu":{
-        "menuItem": {
-            "events": "Mijn evenementen bekijken",
-            "editProfile": "Profiel bewerken",
-            "logout": "Afmelden",
-            "login": "Aanmelden"          
+        "button": "Profiel bijwerken",
+        "statusMessages": {
+            "error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+            "failed": "Profiel bewerken mislukt",
+            "success": "Bewerking succesvol. Wordt doorgestuurd naar de inlogpagina..."
         }
     },
-    
-    "purchaseButton": "Koop",
 
-    "eventPurchase": {
-        "error": {
-            "fetchFail": "Mislukt bij het fetchen van events:"
-        },
-        "handlePurchase": {
-            "console": {
-                "purchasingMessage": "Kaartje kopen voor:",
-                "name": "Naam:",
-                "email": "E-mail",
-                "quantity": "Hoeveelheid:"
-            },
-            "alert": {
-                "succesfullPurchase": "Succesvol ticket gekocht.",
-                "cancelPurchase": "De ticketaankoop is geannuleerd."
-            },
-            "noUser": {
-                "message": "Je moet je registreren of inloggen om een ticket te kopen.",
-                "label": {
-                    "login": "Aanmelden"
-                }
-            },
-            "loadingMessage": "Aan het laden...",
-            "reserveMessage": "Uw tickets zijn gereserveerd!",
-            "fewClicksMessage": "Nu kost het maar een paar klikken om je bestelling af te ronden.",
-            "countdown": {
-                "remainingTime": "Resterende tijd:"
-            },
-            "ticketSummary": {
-                "title": "Tickets",
-                "ticketGenAdmission": "Algemeen toegangskaartje",
-                "concertHall": "Concertzaal:"
-            },
-            "label": {
-                "category": "Categorie",
-                "regular": "Regular",
-                "vip": "VIP",
-                "student": "Student",
-                "quantity": "Hoeveelheid",
-                "totalPrice": "Totaal"
-            },
-            "button": {
-                "label": {
-                    "proceed": "Ga verder"
-                }
-            }
-        }
-    },
     "addEvents": {
         "error": {
-            "titleRequired": "Titel is vereist.",
-            "genreRequired": "Genre is vereist.",
-            "timeRequired": "Tijd is vereist.",
-            "dateRequired": "Datum is vereist.",
-            "durationGreater": "De duur moet groter zijn dan 0.",
-            "descriptionRequired": "Beschrijving is vereist.",
-            "statusRequired": "Status is vereist.",
-            "categoryRequired": "Categorie is vereist.",
-            "priceGreater": "De prijs moet groter zijn dan 0.",
-            "amountGreater": "Het aantal moet groter zijn dan 0.",
+            "titleRequired": "Titel is verplicht.",
+            "genreRequired": "Genre is verplicht.",
+            "timeRequired": "Tijd is verplicht.",
+            "dateRequired": "Datum is verplicht.",
+            "durationGreater": "Duur moet groter zijn dan 0.",
+            "descriptionRequired": "Beschrijving is verplicht.",
+            "statusRequired": "Status is verplicht.",
+            "categoryRequired": "Categorie is verplicht.",
+            "priceGreater": "Prijs moet groter zijn dan 0.",
+            "amountGreater": "Aantal moet groter zijn dan 0.",
             "creatingEvent": "Fout bij het aanmaken van evenement: ",
-            "createFail": "Het aanmaken van een of meer tickets is mislukt",
+            "createFail": "Kon een of meer tickets niet aanmaken",
             "general": "Er is een fout opgetreden. Probeer het later opnieuw.",
             "duplicateCategory": "Deze categorie is al toegevoegd.",
-            "invalidDateFormat": "Ongeldig datumnotatie."
+            "invalidDateFormat": "Ongeldig datumformaat."
         },
         "succes": {
             "create": "Evenement en tickets succesvol aangemaakt!"
@@ -180,30 +306,23 @@
         "title": "Nieuw Evenement Toevoegen",
         "label": {
             "title": "Titel",
-            "genre": "Genre",
+            "description": "Beschrijving",
             "time": "Tijd",
             "date": "Datum",
-            "duration": "Duur (minuten)",
-            "description": "Beschrijving",
-            "status": "Status",
-            "upcoming": "Aankomend",
-            "ongoing": "Bezig",
-            "past": "Verleden",
-            "ticketCategories": "Ticketcategorieën",
+            "duration": "Duur",
             "category": "Categorie",
-            "regular": "Regulier",
-            "vip": "VIP",
-            "student": "Student",
-            "price": "Prijs (€)",
-            "amount": "Aantal"
+            "price": "Prijs",
+            "amount": "Aantal",
+            "status": "Status",
+            "genre": "Genre",
+            "userCategory": "Categorie",
+            "userStatus": "Status",
+            "userAvailability": "Beschikbaarheid",
+            "userAddress": "Adres",
+            "userTags": "Tags"
         },
         "button": {
-            "create": "Evenement Aanmaken",
-            "loading": "Evenement Aanmaken...",
-            "addTicket": "+"
-        },
-        "displayTickets": {
-            "added": "Toegevoegde Tickets:"
+            "add": "Evenement Toevoegen"
         }
-    }    
+    }
 }

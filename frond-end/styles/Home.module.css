@@ -1,10 +1,11 @@
+/* General Styles */
 .main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  min-height: 100vh;
+  min-height: 90vh;
   background-color: whitesmoke;
   color: black;
 }
@@ -12,6 +13,14 @@
 .events {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 75%;
+  padding: 20px;
+}
+
+.events2 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   width: 75%;
   padding: 20px;
@@ -61,7 +70,7 @@
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
   border: 1px solid rgba(var(--card-border-rgb), 0);
-  transition: background 200ms, border 200ms;
+  transition: background 500ms, border 500ms, transform 500ms;
 }
 
 .card span {
@@ -80,6 +89,16 @@
   font-size: 0.9rem;
   line-height: 1.5;
   max-width: 30ch;
+}
+
+.card:hover {
+  background: rgba(var(--card-rgb), 0.1);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  transform: translateY(-5px);
+}
+
+.card:hover span {
+  transform: translateX(4px);
 }
 
 .center {
@@ -117,7 +136,7 @@
 .logo {
   position: relative;
 }
-/* Enable hover only on non-touch devices */
+
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     background: rgba(var(--card-rgb), 0.1);
@@ -213,6 +232,12 @@
 }
 
 /* Tablet and Smaller Desktop */
+@media (max-width: 1300px) {
+  .event2 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
@@ -238,25 +263,28 @@
   }
 }
 
-/* Hero Section */
 .heroSection {
-  width: 100vw; 
+  width: 100vw;
   height: 40vh;
   position: relative;
-  left: 50%; 
+  left: 50%;
   transform: translateX(-50%);
   background-image: url('/images/stage-background.jpg');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed; /* Keeps the background image fixed */
   color: white;
   padding: 50px 0;
   text-align: center;
 }
 
+
 .heroSection h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
+  transition: font-size 0.6s ease-in-out; /* Slow down the font size transition */
 }
+
 
 .searchContainer {
   display: flex;
@@ -265,13 +293,25 @@
   margin: 20px 0;
 }
 
+
 .searchBar {
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   border-radius: 5px 0 0 5px;
   width: 300px;
   background-color: transparent;
+  transition: width 0.3s ease-in-out;
+}
+
+.searchBar:hover {
+  width: 350px; /* Increase width on hover */
+}
+
+.searchBar:focus {
+  outline: none;
+  border-color: #0071ff;
+  width: 320px; /* Focus state width */
 }
 
 .searchButton {
@@ -282,7 +322,35 @@
   border: none;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
-  background-color: white;
+  transition: background-color 0.3s;
+}
+
+.searchButton:hover {
+  background-color: #e04e2b;
+}
+
+@media (max-width: 700px) {
+  .heroSection {
+    height: 30vh;
+    padding: 30px 0;
+  }
+
+  .heroSection h1 {
+    font-size: 1rem;
+  }
+
+  .searchBar {
+    width: 200px;
+  }
+
+  .searchBar:focus {
+    width: 220px;
+  }
+
+  .searchButton {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
 }
 
 /* Categories */
@@ -300,12 +368,23 @@
   border-radius: 5px;
   cursor: pointer;
   background-color: #f5f5f5;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .categoryButton:hover {
   background-color: #e0e0e0;
+  transform: translateY(-3px);
 }
 
+.footer {
+  margin-top: 20px;
+  padding: 10px 0;
+  background: #333;
+  color: white;
+  text-align: center;
+  font-size: 0.9rem;
+}
 
-
+.footer p {
+  margin: 0;
+}

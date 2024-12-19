@@ -1,25 +1,37 @@
 .navbar {
-  background-color: white !important; /* White background */
-  color: royalblue !important; /* Ensures text inside navbar is blue */
-  box-shadow: none !important; /* Removes the default MUI shadow */
+  background-color: white !important;
+  color: royalblue !important;
+  box-shadow: none !important;
+  border-bottom: 4px solid royalblue; /* Adds a royal blue line beneath the navbar */
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: royalblue !important; /* Blue logo text */
-  text-decoration: none !important; /* No underline */
+  color: royalblue !important;
+  text-decoration: none !important;
+  transition: transform 0.3s ease; /* Add transition for smooth scaling */
+}
+
+.logo:hover {
+  transform: scale(0.9); /* Scale down to 90% of original size */
 }
 
 .welcomeMessage {
-  color: royalblue; /* Ensures welcome message text is black */
+  color: royalblue;
   margin-left: 16px;
   font-weight: bold;
-
 }
 
 .searchContainer {
   flex: 1;
   max-width: 300px;
   margin: 0 1rem;
+}
+
+.languageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
 }

@@ -77,7 +77,7 @@ const LoginArtist: React.FC = () => {
         setStatusMessages([
           {
             type: "success",
-            message: "Login successful. Redirecting to homepage...",
+            message: t('loginCH.statusMessages.succes'),
           },
         ]);
 
@@ -87,7 +87,7 @@ const LoginArtist: React.FC = () => {
       } else {
         const error = await response.json();
         setStatusMessages([
-          { message: error.message || "Login failed", type: "error" },
+          { message: error.message || t('loginCH.statusMessages.loginFailed'), type: "error" },
         ]);
       }
     } catch (error) {

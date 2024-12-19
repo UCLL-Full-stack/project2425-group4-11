@@ -126,7 +126,7 @@ const SignUp: React.FC = () => {
         ]);
       }
     } catch (error) {
-      console.log("Signup error", error);
+      console.log(t('signup.statusMessages.signupError'), error);
       setStatusMessages([
         {
           message: t('signup.statusMessages.error'),

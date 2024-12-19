@@ -77,7 +77,7 @@ const Login: React.FC = () => {
         setStatusMessages([
           {
             type: "success",
-            message: "Login successful. Redirecting to homepage...",
+            message: t('login.statusMessages.success'),
           },
         ]);
 
@@ -87,7 +87,7 @@ const Login: React.FC = () => {
       } else {
         const error = await response.json();
         setStatusMessages([
-          { message: error.message || "Login failed", type: "error" },
+          { message: error.message || t('login.statusMessages.loginFailed'), type: "error" },
         ]);
       }
     } catch (error) {
@@ -107,7 +107,7 @@ const Login: React.FC = () => {
       <Navbar />
       <Box className={styles.page}>
         <Box className={styles.loginContainer}>
-          <Typography variant="h4" gutterBottom align="center">
+          <Typography variant="h4" gutterBottom align="center" className={styles.title}>
             {t('login.title')}
           </Typography>
           {statusMessages && (
@@ -162,7 +162,7 @@ const Login: React.FC = () => {
             {t('login.label.account')}{" "}
             <Button
               color="primary"
-              href="/signup"
+              href="/user/signup"
               variant="outlined"
               className={styles.signupButton}
             >
@@ -191,6 +191,13 @@ const Login: React.FC = () => {
               {t('login.label.concertHallButton')}
             </Button>
           </Typography>
+          <p>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+          </p>
         </Box>
       </Box>
     </>

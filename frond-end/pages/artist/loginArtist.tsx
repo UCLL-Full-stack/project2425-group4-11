@@ -77,7 +77,7 @@ const LoginArtist: React.FC = () => {
         setStatusMessages([
           {
             type: "success",
-            message: "Login successful. Redirecting to homepage...",
+            message: t('loginArtist.statusMessages.success'),
           },
         ]);
 
@@ -87,7 +87,7 @@ const LoginArtist: React.FC = () => {
       } else {
         const error = await response.json();
         setStatusMessages([
-          { message: error.message || "Login failed", type: "error" },
+          { message: error.message || t('loginArtist.statusMessages.loginFailed'), type: "error" },
         ]);
       }
     } catch (error) {
@@ -105,6 +105,7 @@ const LoginArtist: React.FC = () => {
   return (
     <>
       <Navbar />
+      <main style={{backgroundColor: "white"}}>
       <Box className={styles.page}>
         <Box className={styles.loginContainer}>
           <Typography variant="h4" gutterBottom align="center">
@@ -171,6 +172,7 @@ const LoginArtist: React.FC = () => {
           </Typography>
         </Box>
       </Box>
+      </main>
     </>
   );
 };

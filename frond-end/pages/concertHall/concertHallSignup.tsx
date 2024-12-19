@@ -165,7 +165,7 @@ const SignUpArtist: React.FC = () => {
                 ]);
             }
         } catch (error) {
-            console.error("Signup or login error", error);
+            console.error(t('CHSignup.error.signupOrLoginError'), error);
             setStatusMessages([
                 {
                     message: t('CHSignup.statusMessages.error'),

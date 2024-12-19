@@ -148,7 +148,6 @@ const concertHallRouter = express.Router();
  */
 concertHallRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log("hallo");
         const concertHall = <ConcertHallInput>req.body;
         console.log(concertHall);
         const result = await concertHallService.createConcertHall(concertHall);
@@ -207,7 +206,6 @@ concertHallRouter.post('/signup', async (req: Request, res: Response, next: Next
  */
 concertHallRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log("hallo");
         const concertHallInput = <ConcertHallInput>req.body;
         const concertHall = await concertHallService.authenticate(concertHallInput);
         res.status(200).json({ message: 'Authentication succesful', ...concertHall});
@@ -238,10 +236,10 @@ concertHallRouter.post('/login', async (req: Request, res: Response, next: NextF
  */
 concertHallRouter.get('/username/:username', async (req: Request, res: Response, next: NextFunction) => {
     const { username } = req.params;
-    console.log("hallo");
     console.log(username);
     try {
         const result = await concertHallService.getConcertHallByUsername({ username });
+        console.log(result.getId());
         res.status(200).json(result);
     } catch (error) {
         next(error);

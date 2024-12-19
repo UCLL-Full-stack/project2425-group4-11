@@ -1,4 +1,6 @@
+import { Select, MenuItem, Box } from "@mui/material";
 import { useRouter } from "next/router";
+import styles from "@/styles/Navbar.module.css";
 
 const Language: React.FC = () => {
   const router = useRouter();
@@ -11,17 +13,36 @@ const Language: React.FC = () => {
   };
 
   return (
-    <div className="ml-6">
-      <select
-        id="language"
-        className="ml-2 p-1"
+    <div className={styles.languageContainer}>
+      <Select
         value={locale}
         onChange={handleLanguageChange}
+        displayEmpty
+        sx={{
+          height: "32px",
+          minWidth: "100px",
+          fontSize: "0.875rem",
+          backgroundColor: "white",
+          border: "1px solid royalblue",
+          borderRadius: "4px",
+          padding: "0 8px",
+          "& .MuiSelect-icon": { color: "royalblue", fontSize: "1rem" },
+          "&:hover": { borderColor: "dodgerblue" },
+        }}
       >
-        <option value="en">EN</option>
-        <option value="nl">NL</option>
-      </select>
+        <MenuItem value="en">
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            EN
+          </Box>
+        </MenuItem>
+        <MenuItem value="nl">
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            NL
+          </Box>
+        </MenuItem>
+      </Select>
     </div>
+
   );
 };
 

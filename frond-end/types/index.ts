@@ -66,6 +66,9 @@ export type Event = {
     duration: number;
     description: string;
     status: string;
+    artistId?: string;
+    artistName: string;
+    concertHallId: string;
 }
 
 export type SocialMedia = {

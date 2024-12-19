@@ -99,7 +99,7 @@ const Start: React.FC = () => {
         </section>
       </main>
 
-      <footer>
+      <footer className={styles.footer}>
         <p>Emma Liefsoens & Samip Shrestha: 2024-2025</p>
       </footer>
     </>
