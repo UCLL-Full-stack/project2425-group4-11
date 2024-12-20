@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Typography,
@@ -14,6 +14,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import ConcertHallService from "@/services/ConcertHallService";
 import SimpleTable from "@/components/table";
+import ShowTimeService from "@/services/ShowTimeService";
 
 const LoginArtist: React.FC = () => {
   const router = useRouter();
@@ -24,7 +25,23 @@ const LoginArtist: React.FC = () => {
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [parsedUser, setParsedUser] = useState<User>();
+  const verified = parsedUser?.isVerified;
+
   const { t } = useTranslation();
+
+  const getConcertHall = async () => {
+    if (typeof window !== "undefined") {
+      const concertHallResponse = await ShowTimeService.getConcertHallByUsername(username);
+      if (concertHallResponse.ok){
+        const user = await concertHallResponse.json();
+        setParsedUser(user);
+      }
+    }};
+
+    useEffect(() => {
+      getConcertHall();
+    }, [username]);
 
   const clearErrors = () => {
     setNameError(null);
@@ -65,7 +82,7 @@ const LoginArtist: React.FC = () => {
       if (response.status === 200) {
         const user = await response.json();
 
-        if (user.isVerified !== "Verified") {
+        if (verified !== "Verified") {
           setStatusMessages([
             { message: t('loginCH.error.notVerified'), type: "error" },
           ]);

@@ -262,7 +262,7 @@ const EditProfilePage: React.FC = () => {
                         helperText={errors.username}
                         onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     />
-                    <Box display="flex" justifyContent="space-between" mt={2}>
+                    {/* <Box display="flex" justifyContent="space-between" mt={2}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -271,7 +271,7 @@ const EditProfilePage: React.FC = () => {
                         >
                             {t('editProfile.button')}
                         </Button>
-                    </Box>
+                    </Box> */}
                 </form>
                 </Box>
             </Box>

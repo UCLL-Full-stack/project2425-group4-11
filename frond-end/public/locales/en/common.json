@@ -271,7 +271,7 @@
             "usernameRequired":"Username is required."
         },
         "label":{
-            "title": "Edit Profile",
+            "title": "Profile",
             "email": "Email",
             "firstName": "First Name",
             "lastName": "Last Name",
@@ -352,17 +352,20 @@
     "dropdownMenu":{
         "menuItem": {
             "events": "View My Events",
-            "editProfile": "Edit Profile",
+            "editProfile": "Profile",
             "logout": "Log Out",
             "login": "Log In",
             "adminDashboard": "Dashboard"        
         }
     },
     "eventFrameArtist":{
+        "error": {
+            "rescheduleEvent": "An error has occurred"
+        },
         "title": "Reschedule events",
         "date": "Date",
         "time": "Time",
-        "succes": "Event rescheduled successfully!"
+        "success": "Event rescheduled successfully!"
     },
     "eventFrameCH":{
         "error":{
@@ -397,6 +400,4 @@
         "approveSuccess": "Approved",
         "denySuccess": "Denied"
     }
-
-       
 }

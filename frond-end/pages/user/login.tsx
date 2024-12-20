@@ -111,7 +111,7 @@ const Login: React.FC = () => {
             <SimpleTable
               data={[
                 ['admin', 'admin123', 'admin'],
-                ['tester', 'tester123', 'user']
+                ['samipsamip', 'samip123', 'user']
               ]}
               label={t('login.label.username')}
             />

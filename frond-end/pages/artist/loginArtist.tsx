@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Checkbox,
   FormControlLabel,
@@ -9,13 +9,14 @@ import {
 import { useRouter } from "next/router";
 import styles from "@/styles/Login.module.css";
 import Navbar from "../../components/navbar";
-import { StatusMessage } from "../../types";
+import { StatusMessage, User } from "../../types";
 import classNames from "classnames";
 import InputField from "@/components/InputField";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import ArtistService from "@/services/ArtistService";
 import SimpleTable from "@/components/table";
+import ShowTimeService from "@/services/ShowTimeService";
 
 const LoginArtist: React.FC = () => {
   const router = useRouter();
@@ -25,6 +26,9 @@ const LoginArtist: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [parsedUser, setParsedUser] = useState<User>();
+  const verified = parsedUser?.isVerified;
 
   const { t } = useTranslation();
 
@@ -47,6 +51,19 @@ const LoginArtist: React.FC = () => {
     return result;
   };
 
+  const getArtist = async () => {
+    if (typeof window !== "undefined") {
+      const artistResponse = await ShowTimeService.getArtistByArtistName(username);
+      if (artistResponse.ok){
+        const user = await artistResponse.json();
+        setParsedUser(user);
+      }
+    }};
+
+    useEffect(() => {
+      getArtist();
+    }, [username]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -66,8 +83,7 @@ const LoginArtist: React.FC = () => {
 
       if (response.status === 200) {
         const user = await response.json();
-        
-        if (user.isVerified !== "Verified") {
+        if (verified !== "Verified") {
           setStatusMessages([
             { message: t('loginArtist.error.notVerified'), type: "error" },
           ]);
@@ -120,7 +136,7 @@ const LoginArtist: React.FC = () => {
           <div className={styles.simpleTableContainer}>
             <SimpleTable
               data={[
-                ['Bruno Mars', 'bruno123', 'artist'],
+                ['KSI', 'help123', 'artist'],
                 ['Taylor Swift', 'taylor123', 'artist']
               ]}
               label={t('loginArtist.label.artistName')}

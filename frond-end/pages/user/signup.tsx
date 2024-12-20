@@ -109,7 +109,6 @@ const SignUp: React.FC = () => {
 
       if (response.status === 201) {
         setStatusMessages([
-          ...statusMessages,
           {
             type: "success",
             message: t('signup.statusMessages.success'),

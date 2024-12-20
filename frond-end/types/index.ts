@@ -21,6 +21,7 @@ export type User = {
     username?: string;
     phoneNumber?: string;
     accountStatus?: boolean;
+    isVerified?: string;
 }
 
 export type Ticket = {
