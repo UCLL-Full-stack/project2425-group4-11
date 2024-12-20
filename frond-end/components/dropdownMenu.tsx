@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 interface DropdownMenuProps {
   loggedInUser: string | null;
@@ -14,6 +15,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -57,6 +59,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               onClick={() => {
                 handleLogout();
                 handleClose();
+                router.push("/")
               }}
               style={{ color: "red" }}
             >

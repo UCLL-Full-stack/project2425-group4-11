@@ -5,7 +5,26 @@ import bcrypt from 'bcrypt';
 import { generateJwtToken } from "../util/jwt";
 import { UnauthorizedError } from "express-jwt";
 
-const getAllArtists = async (): Promise<Artist[]> => artistDb.getAllArtists();
+// const getAllArtists = async (): Promise<Artist[]> => artistDb.getAllArtists();
+
+const artistRedactor = (artist: Artist): Artist => {
+    return new Artist({
+        id: artist.getId(),
+        artistName: artist.getArtistName(),
+        email: artist.getEmail(),
+        password: '[REDACTED]',
+        role: artist.getRole(),
+        genres: artist.getGenres(),
+        socialMedia: artist.getSocialMedia(),
+        isVerified: artist.getIsVerified(),
+        biography: artist.getBiography(),
+        bookingFee: artist.getBookingFee(),
+    });
+};
+
+const artistsRedactor = (artists: Artist[]): Artist[] => {
+    return artists.map((artist) => artistRedactor(artist));
+};
 
 const getArtists = async ({
     role,
@@ -19,6 +38,14 @@ const getArtists = async ({
             message: 'You are not authorized to access this resource.',
         });
     }
+};
+
+const getAllArtists = async (auth?: { role: string }): Promise<Artist[]> => {
+    const artists = await artistDb.getAllArtists();
+    if (auth?.role === 'admin') {
+        return artistsRedactor(artists);
+    }
+    return artists;
 };
 
 const getArtistByArtistName = async ({ artistName }: { artistName: string }): Promise<Artist> => {
@@ -64,33 +91,21 @@ const createArtist = async ({
     return await artistDb.createArtist(artist);
 }
 
-const updateArtist = async (username: string, role: Role): Promise<Artist> => {
-    const artist = await artistDb.getArtistByArtistName({ artistName: username });
+const updateArtist = async (id: number, isVerified: string): Promise<Artist> => {
+    const artist = await artistDb.getArtistById({ id });
     if (!artist) {
-        throw new Error(`Artist with username ${username} does not exist.`);
+        throw new Error(`Artist with id ${id} does not exist.`);
     }
-
-    if (role !== 'admin') {
-        throw new UnauthorizedError('credentials_required', {
-            message: 'You are not authorized to access this resource.',
-        });
-    };
-
-    const artistId = artist.getId();
-    if (artistId === undefined) {
-        throw new Error('Artist ID is missing. Cannot update artist.');
-    }
-
     const updatedArtist: Partial<ArtistInput> = {
         email: artist.getEmail(),
-        artistName: username,
+        artistName: artist.getArtistName(),
         genres: artist.getGenres(),
         biography: artist.getBiography(),
         bookingFee: artist.getBookingFee(),
         socialMedia: artist.getSocialMedia(),
-        isVerified: "Verified",
+        isVerified: isVerified,
     }
-    return await artistDb.updateArtist(artistId, updatedArtist);
+    return await artistDb.updateArtist(id, updatedArtist);
 }
 
 export default {

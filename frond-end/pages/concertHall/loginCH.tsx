@@ -64,6 +64,15 @@ const LoginArtist: React.FC = () => {
 
       if (response.status === 200) {
         const user = await response.json();
+
+        if (user.isVerified !== "Verified") {
+          setStatusMessages([
+            { message: t('loginCH.error.notVerified'), type: "error" },
+          ]);
+          setIsLoading(false);
+          return;
+        }
+  
         localStorage.setItem(
           "loggedInUser",
           JSON.stringify({

@@ -113,7 +113,25 @@ const getConcertHallById = async (id: string) => {
       "Content-Type": "application/json",
     }
   })
-}
+};
+
+const getAllArtists = async (role: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/artists/${role}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+};
+
+const getAllConcertHalls = async (role: string) => {
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/concertHalls/role/${role}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+};
 
 const ShowTimeService = {
     getAllEvents,
@@ -130,7 +148,9 @@ const ShowTimeService = {
     getEventsByArtistId,
     getEventsByConcertHallId,
     getConcertHallByUsername,
-    getConcertHallById
+    getConcertHallById,
+    getAllArtists,
+    getAllConcertHalls
 };
   
 export default ShowTimeService;

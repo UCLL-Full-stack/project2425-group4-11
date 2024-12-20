@@ -91,4 +91,5 @@ enum Role {
     ADMIN
     USER
     ARTIST
+    CONCERTHALL
 }

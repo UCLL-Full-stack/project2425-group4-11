@@ -75,23 +75,24 @@ const getConcertHallById = async (id: number): Promise<ConcertHall> => {
     return concertHall;
 }
 
-// const getConcertHalls = async ({
-//     role,
-// }: {
-//     role: Role;
-// }): Promise<ConcertHall[]> => {
-//     if (role === 'admin') {
-//         return concertHallDB.getAllConcertHalls();
-//     } else {
-//         throw new UnauthorizedError('credentials_required', {
-//             message: 'You are not authorized to access this resource.',
-//         });
-//     }
-// };
+const getConcertHalls = async ({
+    role,
+}: {
+    role: Role;
+}): Promise<ConcertHall[]> => {
+    if (role === 'admin') {
+        return concertHallDB.getAllConcertHalls();
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
 
 export default {
     createConcertHall,
     authenticate,
     getConcertHallByUsername,
     getConcertHallById,
+    getConcertHalls,
 };

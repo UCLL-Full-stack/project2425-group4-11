@@ -200,4 +200,31 @@ concertHallRouter.get('/:id', async (req: Request, res: Response, next: NextFunc
     }
 })
 
+/**
+ * @swagger
+ * /concertHalls/role/{role}:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get a list of all artists if the user is an admin.
+ *     responses:
+ *       200:
+ *         description: A list of artists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Artist'
+ */
+concertHallRouter.get('/role/:role', async (req: Request, res: Response, next: NextFunction) => {
+    const role = req.params.role as Role;
+    try {
+        const users = await concertHallService.getConcertHalls({ role });
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { concertHallRouter };

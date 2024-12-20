@@ -9,8 +9,10 @@ import { ticketRouter } from './controller/ticket.routes';
 import { artistRouter } from './controller/artist.routes';
 import { eventRouter } from './controller/event.routes';
 import { concertHallRouter } from './controller/concertHall.routes';
+import helmet from 'helmet';
 
 const app = express();
+app.use(helmet())
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 

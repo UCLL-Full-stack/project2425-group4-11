@@ -1,13 +1,15 @@
-const updateArtistVerified = async (artistId: string, verified: string) => {
-
-}
-
-const updateConcerHallVerified = async (concertHallId: string, verified: string) => {
-
-}
+const updateArtistStatus = async (id: string, status: string) => {
+       return fetch(process.env.NEXT_PUBLIC_API_URL + `/artists/${id}/isVerified`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      });
+};
 
 const getAllArtists = async () => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/artists/role", {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/artists", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -26,7 +28,8 @@ const getAllConcertHals = async () => {
 
 const AdminService = {
     getAllArtists,
-    getAllConcertHals
+    getAllConcertHals,
+    updateArtistStatus
 };
 
 export default AdminService;

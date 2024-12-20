@@ -54,6 +54,7 @@ export type Artist = {
     socialMedia?: string[];
     email?: string;
     role?: Role;
+    isVerified?: string;
 }
 
 export type Event = {

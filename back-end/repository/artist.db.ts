@@ -24,7 +24,6 @@ const createArtist = async (artist: Artist): Promise<Artist> => {
                 socialMedia: artist.getSocialMedia(),
                 isVerified: artist.getIsVerified(),
                 email: artist.getEmail(),
-                
                 role: artist.getRole(),
             },
         });
@@ -64,9 +63,23 @@ const updateArtist = async (id: number, artistData: Partial<ArtistInput>): Promi
     }
 };
 
+const getArtistById = async ({ id} : {id: number}): Promise<Artist | null> => {
+    try {
+        const artistPrisma = await database.artist.findUnique({
+            where: { id },
+        });
+
+        return artistPrisma ? Artist.from(artistPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllArtists,
     createArtist,
     getArtistByArtistName,
-    updateArtist
+    updateArtist,
+    getArtistById
 }
