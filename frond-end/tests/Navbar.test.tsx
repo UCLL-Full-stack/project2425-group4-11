@@ -11,6 +11,13 @@ jest.mock("next-i18next", () => ({
   }),
 }));
 
+jest.mock("next-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+
 beforeAll(() => {
   global.open = jest.fn();
 });
