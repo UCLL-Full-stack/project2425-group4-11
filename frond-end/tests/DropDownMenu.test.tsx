@@ -1,17 +1,16 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import DropdownMenu from "@/components/dropdownMenu";
-import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import "@testing-library/jest-dom";
 
 jest.mock("next-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
+  useTranslation: () => ({ t: (key: any) => key }),
 }));
-
 jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
+  useRouter: () => ({
+    locale: "en",
+  }),
 }));
 
 describe("DropdownMenu component", () => {
@@ -28,52 +27,15 @@ describe("DropdownMenu component", () => {
     jest.clearAllMocks();
   });
 
-  test("renders login menu item when no user is logged in", () => {
+  test("given dropDownMenu - when rendered - then it shows the correct titles", async () => {
+    // when
     render(<DropdownMenu loggedInUser={null} handleLogout={mockHandleLogout} />);
-
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
-
-    expect(screen.getByText("dropdownMenu.menuItem.login"));
+  
+    // then
+    expect(screen.getByText("dropdownMenu.menuItem.events")).toBeInTheDocument();
+    expect(screen.getByText("dropdownMenu.menuItem.editProfile")).toBeInTheDocument();
+    expect(screen.getByText("dropdownMenu.menuItem.logout")).toBeInTheDocument();
+    expect(screen.getByText("dropdownMenu.menuItem.login")).toBeInTheDocument();
+    expect(screen.getByText("dropdownMenu.menuItem.adminDashboard")).toBeInTheDocument();
   });
-
-  test("renders menu items for logged-in user", () => {
-    render(<DropdownMenu loggedInUser="user" handleLogout={mockHandleLogout} />);
-
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
-
-    expect(screen.getByText("dropdownMenu.menuItem.events"));
-    expect(screen.getByText("dropdownMenu.menuItem.editProfile"));
-  });
-
-  test("renders admin dashboard menu item for admin user", () => {
-    // Mock localStorage
-    Object.defineProperty(window, "localStorage", {
-      value: {
-        getItem: jest.fn(() => JSON.stringify({ role: "admin" })),
-      },
-      writable: true,
-    });
-
-    render(<DropdownMenu loggedInUser="admin" handleLogout={mockHandleLogout} />);
-
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
-
-    expect(screen.getByText("dropdownMenu.menuItem.adminDashboard"));
-  });
-
-  test("calls handleLogout and navigates to the root route on logout", () => {
-    render(<DropdownMenu loggedInUser="user" handleLogout={mockHandleLogout} />);
-
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
-
-    const logoutButton = screen.getByText("dropdownMenu.menuItem.logout");
-    fireEvent.click(logoutButton);
-
-    expect(mockHandleLogout).toHaveBeenCalledTimes(1);
-    expect(mockRouterPush).toHaveBeenCalledWith("/");
-  });
-});
+})

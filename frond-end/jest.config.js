@@ -1,11 +1,15 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} **/
 module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1', // Maps @/ to the root directory
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mocks CSS imports
+    "^@/(.*)$": "<rootDir>/$1",
+    "\\.(css|scss|sass)$": "identity-obj-proxy",
   },
-  testEnvironment: 'jsdom',
   transform: {
-  '\\.[jt]sx?$': 'esbuild-jest',
+    "^.+\\.tsx?$": "ts-jest",
   },
-  }
+  transformIgnorePatterns: [
+    "node_modules/(?!(module-to-transform)/)", // Adjust if you need specific modules transformed
+  ],
+};
